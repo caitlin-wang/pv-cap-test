@@ -13,26 +13,22 @@ form.header("Inputs:")
 
 uploaded_files = form.file_uploader("Upload MET Data", accept_multiple_files=True)
 for uploaded_file in uploaded_files:
-    bytes_data = uploaded_file.read()
-    form.write("filename:", uploaded_file.name)
-    form.write(bytes_data)
+    dataframe = pd.read_csv(uploaded_file)
+    st.write(dataframe)
 
 uploaded_files = form.file_uploader("Upload Inverter Data", accept_multiple_files=True)
 for uploaded_file in uploaded_files:
-    bytes_data = uploaded_file.read()
-    form.write("filename:", uploaded_file.name)
-    form.write(bytes_data)
+    dataframe = pd.read_csv(uploaded_file)
+    st.write(dataframe)
 
 uploaded_files = form.file_uploader("Upload Meter Data", accept_multiple_files=True)
 for uploaded_file in uploaded_files:
-    bytes_data = uploaded_file.read()
-    form.write("filename:", uploaded_file.name)
-    form.write(bytes_data)
+    dataframe = pd.read_csv(uploaded_file)
+    st.write(dataframe)
 
 uploaded_files = form.file_uploader("Upload Column Groups", accept_multiple_files=True)
 for uploaded_file in uploaded_files:
-    bytes_data = uploaded_file.read()
-    form.write("filename:", uploaded_file.name)
-    form.write(bytes_data)
+    dataframe = pd.read_csv(uploaded_file)
+    st.write(dataframe)
 
 form.form_submit_button("Submit Files")
