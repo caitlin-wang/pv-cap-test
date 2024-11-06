@@ -3,14 +3,33 @@ import datetime
 import pandas as pd
 from zipfile import ZipFile
 
+
+# Page Setup
+
 st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="centered")
 st.logo("long_logo.jpg", icon_image="icon.jpg")
-st.sidebar.subheader(" ")
+
+st.sidebar.subheader("Next Steps:")
+st.sidebar.write("- figure out how to process ZIP file")
+st.sidebar.subheader("Edit Log:")
+st.sidebar.write("- 11/6/24: added inputs tab")
+st.sidebar.write("- 11/5/24: created page")
+
 st.title("PV Cap Test")
+tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
-tab1, tab2, tab3 = st.tabs(['Inputs', 'Data Upload', 'Report'])
+# Tab 1: Data Upload
 
-form1 = tab1.form("inputs form")
+uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
+column_groups = tab1.file_uploader("Upload column groups", type=['csv','xlsx'])
+pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['csv'])
+
+if uploaded_zip is not None:
+    ZipFile(uploaded_zip.name, 'r').extractall()
+
+# Tab 2: Inputs
+
+form1 = tab2.form("inputs form")
 
 form1.subheader("Irradiance Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
@@ -48,9 +67,7 @@ system_size_dc = form1.number_input("System Size DC", value=134046, min_value=0,
 
 form1.form_submit_button("Submit Inputs")
 
-uploaded_zip = tab2.file_uploader("Upload raw data", type='zip')
-column_groups = tab2.file_uploader("Upload column groups", type=['csv','xlsx'])
-pvsyst_test_model_path = tab2.file_uploader("Upload PVSyst test model", type=['csv'])
+# Tab 3: Report
 
-if uploaded_zip is not None:
-    ZipFile(uploaded_zip.name, 'r').extractall()
+tab3.write("congrats you passed 🎉")
+tab3.link_button("Download report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
