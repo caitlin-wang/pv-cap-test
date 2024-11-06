@@ -70,4 +70,5 @@ form1.form_submit_button("Submit Inputs")
 # Tab 3: Report
 
 tab3.write("congrats you passed 🎉")
+tab3.write("click button below to access in-depth report :)")
 tab3.link_button("Download report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
