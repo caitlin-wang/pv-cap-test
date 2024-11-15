@@ -1,2 +1,11 @@
 streamlit
 pandas
+plotly
+datetime
+numpy
+scipy
+os
+glob
+dask
+tqdm
+warnings
