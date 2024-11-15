@@ -3,149 +3,91 @@ import pandas as pd
 import math
 from pathlib import Path
 
-# Set the title and favicon that appear in the Browser's tab bar.
-st.set_page_config(
-    page_title='GDP dashboard',
-    page_icon=':earth_americas:', # This is an emoji shortcode. Could be a URL too.
-)
+import streamlit as st
+import pandas as pd
+import plotly.io as pio
+import plotly.graph_objects as go
+import datetime
+import numpy as np
+from scipy import stats
+#import os
+import plotly.graph_objs as go
+from plotly.offline import init_notebook_mode, iplot
+#from glob import glob
+#import dask.dataframe as dd
+#from tqdm import tqdm
+#import warnings
+#warnings.filterwarnings("ignore")
+from zipfile import ZipFile
 
-# -----------------------------------------------------------------------------
-# Declare some useful functions.
+# Page Setup
 
-@st.cache_data
-def get_gdp_data():
-    """Grab GDP data from a CSV file.
+st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="centered")
+st.logo("long_logo.jpg", icon_image="icon.jpg")
 
-    This uses caching to avoid having to read the file every time. If we were
-    reading from an HTTP endpoint instead of a file, it's a good idea to set
-    a maximum age to the cache with the TTL argument: @st.cache_data(ttl='1d')
-    """
+st.sidebar.subheader("Next Steps:")
+st.sidebar.write("- figure out how to process ZIP file")
+st.sidebar.subheader("Edit Log:")
+st.sidebar.write("- 11/6/24: added inputs tab")
+st.sidebar.write("- 11/5/24: created page")
 
-    # Instead of a CSV on disk, you could read from an HTTP endpoint here too.
-    DATA_FILENAME = Path(__file__).parent/'data/gdp_data.csv'
-    raw_gdp_df = pd.read_csv(DATA_FILENAME)
+st.title("PV Cap Test")
+tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
-    MIN_YEAR = 1960
-    MAX_YEAR = 2022
+# Tab 1: Data Upload
 
-    # The data above has columns like:
-    # - Country Name
-    # - Country Code
-    # - [Stuff I don't care about]
-    # - GDP for 1960
-    # - GDP for 1961
-    # - GDP for 1962
-    # - ...
-    # - GDP for 2022
-    #
-    # ...but I want this instead:
-    # - Country Name
-    # - Country Code
-    # - Year
-    # - GDP
-    #
-    # So let's pivot all those year-columns into two: Year and GDP
-    gdp_df = raw_gdp_df.melt(
-        ['Country Code'],
-        [str(x) for x in range(MIN_YEAR, MAX_YEAR + 1)],
-        'Year',
-        'GDP',
-    )
+uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
+column_groups = tab1.file_uploader("Upload column groups", type=['csv','xlsx'])
+pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['csv'])
 
-    # Convert years from string to integers
-    gdp_df['Year'] = pd.to_numeric(gdp_df['Year'])
+if uploaded_zip is not None:
+    ZipFile(uploaded_zip.name, 'r').extractall()
 
-    return gdp_df
+# data = zip.read(name_of_file_to_read)
+# zip.extract('python_files/python_wiki.txt')
 
-gdp_df = get_gdp_data()
+# Tab 2: Inputs
 
-# -----------------------------------------------------------------------------
-# Draw the actual page
+form1 = tab2.form("inputs form")
 
-# Set the title that appears at the top of the page.
-'''
-# :earth_americas: GDP dashboard
+form1.subheader("Irradiance Inputs:")
+form1_col1, form1_col2 = form1.columns(2)
+test_start_date = form1_col1.date_input("Start Date", 'today', format='MM/DD/YYYY')
+test_end_date = form1_col2.date_input("End Date", 'today', format='MM/DD/YYYY')
+minimum_irradiance = form1_col1.number_input("Minimum Irradiance (W/m^2):", min_value=0, value=400, step=100)
+max_irradiance = form1_col2.number_input("Maximum Irradiance (W/m^2):", min_value=minimum_irradiance, value=1500, step=100)
+temporal_stability_thresold = form1_col1.number_input("Temporal Stability Threshold:", min_value=0, value=20, step=1)
+spatial_stability_thresold = form1_col2.number_input("Spatial Stability Threshold:", min_value=0.0, value=0.20, step=0.10)
 
-Browse GDP data from the [World Bank Open Data](https://data.worldbank.org/) website. As you'll
-notice, the data only goes to 2022 right now, and datapoints for certain years are often missing.
-But it's otherwise a great (and did I mention _free_?) source of data.
-'''
+form1.subheader("Grid Inputs:")
+form1_col1, form1_col2 = form1.columns(2)
+minimum_grid = form1_col1.number_input("Minimum Grid Value:", value=0, step=100)
+max_gridlimit = form1_col2.number_input("Maximum Grid Value:", value=99600, step=100)
+grid_clipping_thresold = form1.number_input("Grid Clipping Threshold:", value=0.98, step=0.01)
+grid_clipping = grid_clipping_thresold * max_gridlimit
 
-# Add some spacing
-''
-''
+form1.subheader("RC Inputs:")
+form1_col1, form1_col2 = form1.columns(2)
+percentile = form1_col1.number_input("Percentile:", min_value=0.0, max_value=1.0, value=0.50, step=0.10)
+reporting_condition_thresold = form1_col2.number_input("Reporting Condition Threshold:", value=0.20, min_value=0.0, step=0.01)
 
-min_value = gdp_df['Year'].min()
-max_value = gdp_df['Year'].max()
+form1.subheader("Inverter Inputs:")
+form1_col1, form1_col2 = form1.columns(2)
+inverter_rating = form1_col1.number_input("Inverter Rating:", min_value=0, value=3600, step=100)
+Inverter_limit = form1_col2.number_input("Inverter Limit:", min_value=0, value=118800, step=100)
+inverter_clipping_thresold = form1_col1.number_input("Inverter Clipping Threshold:", min_value=0.0, value=0.98, max_value=1.0, step=0.01)
+inverter_clipping = inverter_rating * inverter_clipping_thresold
 
-from_year, to_year = st.slider(
-    'Which years are you interested in?',
-    min_value=min_value,
-    max_value=max_value,
-    value=[min_value, max_value])
+form1.subheader("Other Inputs:")
+pvsyst_shading = form1.number_input("PVSyst Shading:", min_value=0, value=1, step=1)
+bifaciality = form1.number_input("Bifaciality", value=0.7, min_value=0.0, max_value=1.0, step=0.1)
+availability_min_fpoa = form1.number_input("Availability Minimum FPOA", value=50, min_value=0, step=1)
+system_size_dc = form1.number_input("System Size DC", value=134046, min_value=0, step=1)
 
-countries = gdp_df['Country Code'].unique()
+form1.form_submit_button("Submit Inputs")
 
-if not len(countries):
-    st.warning("Select at least one country")
+# Tab 3: Report
 
-selected_countries = st.multiselect(
-    'Which countries would you like to view?',
-    countries,
-    ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
-
-''
-''
-''
-
-# Filter the data
-filtered_gdp_df = gdp_df[
-    (gdp_df['Country Code'].isin(selected_countries))
-    & (gdp_df['Year'] <= to_year)
-    & (from_year <= gdp_df['Year'])
-]
-
-st.header('GDP over time', divider='gray')
-
-''
-
-st.line_chart(
-    filtered_gdp_df,
-    x='Year',
-    y='GDP',
-    color='Country Code',
-)
-
-''
-''
-
-
-first_year = gdp_df[gdp_df['Year'] == from_year]
-last_year = gdp_df[gdp_df['Year'] == to_year]
-
-st.header(f'GDP in {to_year}', divider='gray')
-
-''
-
-cols = st.columns(4)
-
-for i, country in enumerate(selected_countries):
-    col = cols[i % len(cols)]
-
-    with col:
-        first_gdp = first_year[first_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-        last_gdp = last_year[last_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-
-        if math.isnan(first_gdp):
-            growth = 'n/a'
-            delta_color = 'off'
-        else:
-            growth = f'{last_gdp / first_gdp:,.2f}x'
-            delta_color = 'normal'
-
-        st.metric(
-            label=f'{country} GDP',
-            value=f'{last_gdp:,.0f}B',
-            delta=growth,
-            delta_color=delta_color
-        )
+tab3.write("congrats you passed 🎉")
+tab3.write("click button below to access in-depth report :)")
+tab3.link_button("Download report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
