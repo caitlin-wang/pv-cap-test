@@ -4,8 +4,7 @@ plotly
 datetime
 numpy
 scipy
-#os
 #glob
 #dask
-#tqdm
+tqdm
 #warnings

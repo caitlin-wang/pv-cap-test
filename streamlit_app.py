@@ -1,10 +1,6 @@
 import streamlit as st
 import pandas as pd
 import math
-from pathlib import Path
-
-import streamlit as st
-import pandas as pd
 import plotly.io as pio
 import plotly.graph_objects as go
 import datetime
@@ -35,6 +31,11 @@ st.title("PV Cap Test")
 tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
 # Tab 1: Data Upload
+
+# Specify the main directory containing folders of daily CSV files
+#main_directory = tab1.text_input("Main Directory", "2.Raw Data")
+#metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
+#date_format = tab1.text_input("Date Format", "%Y-%m-%d %H:%M:%S.%f")
 
 uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
 column_groups = tab1.file_uploader("Upload column groups", type=['csv','xlsx'])
