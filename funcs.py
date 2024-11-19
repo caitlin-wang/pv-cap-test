@@ -16,7 +16,7 @@ from plotly.offline import init_notebook_mode, iplot
 from zipfile import ZipFile
 
 # Function to filter rows based on t_stamp format
-def filter_and_parse_dates(df):
+def filter_and_parse_dates(df, date_format):
     # Convert t_stamp with strict parsing and drop invalid rows
     df['t_stamp'] = pd.to_datetime(df['t_stamp'], format=date_format, errors='coerce')
     df = df.dropna(subset=['t_stamp'])  # Keep only rows with valid dates
