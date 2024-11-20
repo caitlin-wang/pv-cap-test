@@ -16,6 +16,9 @@ from tqdm import tqdm
 #warnings.filterwarnings("ignore")
 from zipfile import ZipFile
 
+# Initialize Plotly's notebook mode
+pio.renderers.default = 'notebook_connected'  # For interactive plots
+
 # Specify the main directory containing folders of daily CSV files
 main_directory = "2.Raw Data"
 metadata_file_path = 'SCADA Tags_Liberty.xlsx'  # Path to your metadata file
