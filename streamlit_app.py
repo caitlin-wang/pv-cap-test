@@ -64,10 +64,10 @@ files_met = [
 # List of file names for Inverter Data 
 files_inverter = [
 
-'2.Raw Data\\2024.10.10\\Inverter 10.10.24.csv',
-  '2.Raw Data\\2024.10.11\\Inverter 10.11.24.csv',    
-   '2.Raw Data\\2024.10.12\\Inverter 10.12.2024.csv',
-    '2.Raw Data\\2024.10.13\\Inverter 10.13.24.csv',
+'2.Raw Data/2024.10.10/Inverter 10.10.24.csv',
+  '2.Raw Data/2024.10.11/Inverter 10.11.24.csv',    
+   '2.Raw Data/2024.10.12/Inverter 10.12.2024.csv',
+    '2.Raw Data/2024.10.13/Inverter 10.13.24.csv',
      
 ]
 
@@ -77,10 +77,10 @@ files_inverter = [
 # List of file names for Meter Data 
 files_meter = [
 
-'2.Raw Data\\2024.10.10\\Meter 10.10.24.csv',    
-  '2.Raw Data\\2024.10.11\\Meter 10.11.24.csv' ,
-    '2.Raw Data\\2024.10.12\\Meter 10.12.2024.csv' ,
-     '2.Raw Data\\2024.10.13\\Meter 10.13.24.csv',
+'2.Raw Data/2024.10.10/Meter 10.10.24.csv',    
+  '2.Raw Data/2024.10.11/Meter 10.11.24.csv' ,
+    '2.Raw Data/2024.10.12/Meter 10.12.2024.csv' ,
+     '2.Raw Data/2024.10.13/Meter 10.13.24.csv',
    
 ]
 
