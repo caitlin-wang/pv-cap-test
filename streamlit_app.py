@@ -14,7 +14,7 @@ from plotly.offline import init_notebook_mode, iplot
 #from tqdm import tqdm
 #import warnings
 #warnings.filterwarnings("ignore")
-from zipfile import ZipFile
+import zipfile
 
 # Page Setup
 
@@ -33,19 +33,141 @@ tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 # Tab 1: Data Upload
 
 # Specify the main directory containing folders of daily CSV files
-#main_directory = tab1.text_input("Main Directory", "2.Raw Data")
-#metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
-#date_format = tab1.text_input("Date Format", "%Y-%m-%d %H:%M:%S.%f")
+main_directory = tab1.text_input("Main Directory", "2.Raw Data")
+metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
+date_format = tab1.text_input("Date Format", "%Y-%m-%d %H:%M:%S.%f")
 
 uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
 column_groups = tab1.file_uploader("Upload column groups", type=['csv','xlsx'])
 pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['csv'])
 
 if uploaded_zip is not None:
-    ZipFile(uploaded_zip.name, 'r').extractall()
+    with zipfile.ZipFile(uploaded_zip, "r") as z:
+        z.extractall(".")
+else:
+    st.stop()
 
-# data = zip.read(name_of_file_to_read)
-# zip.extract('python_files/python_wiki.txt')
+# List of file names for MET Data 
+files_met = [
+
+'2.Raw Data\\2024.10.10\\MET STD10.10.24.csv',
+    '2.Raw Data\\2024.10.11\\MET STD 10.11.24.csv',
+    '2.Raw Data\\2024.10.12\\MET STD 10.12.2024.csv',
+     '2.Raw Data\\2024.10.13\\MET STD 10.13.24.csv',
+   
+            ]
+
+
+
+
+# List of file names for Inverter Data 
+files_inverter = [
+
+'2.Raw Data\\2024.10.10\\Inverter 10.10.24.csv',
+  '2.Raw Data\\2024.10.11\\Inverter 10.11.24.csv',    
+   '2.Raw Data\\2024.10.12\\Inverter 10.12.2024.csv',
+    '2.Raw Data\\2024.10.13\\Inverter 10.13.24.csv',
+     
+]
+
+
+
+
+# List of file names for Meter Data 
+files_meter = [
+
+'2.Raw Data\\2024.10.10\\Meter 10.10.24.csv',    
+  '2.Raw Data\\2024.10.11\\Meter 10.11.24.csv' ,
+    '2.Raw Data\\2024.10.12\\Meter 10.12.2024.csv' ,
+     '2.Raw Data\\2024.10.13\\Meter 10.13.24.csv',
+   
+]
+
+
+# 
+
+
+# Function to load and select columns from a list of files
+def load_and_select(files, columns):
+    dfs = [pd.read_csv(file)[ columns] for file in files]
+    return pd.concat(dfs)
+
+# Load and select columns for MET files 
+
+df1_combined = load_and_select(files_met, ['t_stamp',
+'LBSP1/Device/WeatherStation/MET05/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET15/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET21/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET29/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET05/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET15/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET21/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET29/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET05/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET15/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET21/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET29/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET05/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET15/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET21/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET29/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct',])
+
+
+# Load and select columns for Inverter files 
+
+df2_combined = load_and_select(files_inverter, ['t_stamp',
+'LBSP1/Device/Inverter/INV-PB-01/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-02/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-03/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-04/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-05/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-06/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-07/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-08/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-09/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-10/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-11/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-12/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-13/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-14/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-15/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-16/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-17/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-18/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-19/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-20/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-21/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-22/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-23/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-24/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-25/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-26/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-27/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-28/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-29/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-30/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-31/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-32/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-33/p3_kW',
+])
+
+# Load and select columns for Meter files 
+
+df3_combined = load_and_select(files_meter, ['t_stamp',
+'LBSP1/Device/PowerMeter/MTR/p3_kW'])
+
+# Merge the combined dataframes 
+merged_df = pd.merge(df1_combined, df2_combined)
+merged_df=pd.merge(merged_df,df3_combined)
+
+tab3.write(merged_df)
+
+# Save the merged dataframe to a new CSV file
+# merged_df.to_csv('Liberty_9.14.2024 to 9.23.2024-3.csv', index=False)   ## change the name of the files as required.
 
 # Tab 2: Inputs
 
