@@ -47,6 +47,8 @@ if uploaded_zip is not None:
         z.extractall(".")
         tab1.write(os.listdir('2.Raw Data'))
 else:
+    tab2.write('Upload files to proceed.')
+    tab3.write('Upload files to proceed.')
     st.stop()
 
 # Load and select columns for MET, Inverter, Meter files 
