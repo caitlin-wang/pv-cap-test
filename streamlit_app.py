@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import datetime
 import numpy as np
 from scipy import stats
-#import os
+import os
 import plotly.graph_objs as go
 from plotly.offline import init_notebook_mode, iplot
 #from glob import glob
@@ -44,6 +44,7 @@ pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['c
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
         z.extractall(".")
+        tab1.write(os.listdir('2.Raw Data'))
 else:
     st.stop()
 
