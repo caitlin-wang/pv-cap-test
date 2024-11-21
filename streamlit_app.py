@@ -49,29 +49,19 @@ if uploaded_zip is not None:
 else:
     st.stop()
 
-# Load and select columns for MET files 
+# Load and select columns for MET, Inverter, Meter files 
 df1_combined = funcs.load_and_select(vars.files_met, vars.met_cols)
-
-# Load and select columns for Inverter files 
 df2_combined = funcs.load_and_select(vars.files_inverter, vars.inverter_cols)
-
-# Load and select columns for Meter files 
 df3_combined = funcs.load_and_select(vars.files_meter, vars.meter_cols)
 
 # Merge the combined dataframes 
 merged_df = pd.merge(df1_combined, df2_combined)
-merged_df=pd.merge(merged_df,df3_combined)
-
-# Save the merged dataframe to a new CSV file
-# merged_df.to_csv('Liberty_9.14.2024 to 9.23.2024-3.csv', index=False)   ## change the name of the files as required.
+merged_df=pd.merge(merged_df, df3_combined)
 
 # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
 fig = go.Figure()
-
 for col in vars.y_columns:
     fig.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
-
-# Update layout
 fig.update_layout(
     title='Weather Station and Inverter Data',
     xaxis_title='Timestamp',
