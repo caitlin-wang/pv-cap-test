@@ -51,7 +51,7 @@ else:
 # List of file names for MET Data 
 files_met = [
 
-'2.Raw Data\2024.10.10\MET STD10.10.24.csv',
+'2.Raw Data/2024.10.10/MET STD10.10.24.csv',
     '2.Raw Data\\2024.10.11\\MET STD 10.11.24.csv',
     '2.Raw Data\\2024.10.12\\MET STD 10.12.2024.csv',
      '2.Raw Data\\2024.10.13\\MET STD 10.13.24.csv',
