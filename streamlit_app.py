@@ -42,6 +42,8 @@ uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
 column_groups = tab1.file_uploader("Upload column groups", type=['csv','xlsx'])
 pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['csv'])
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend begin ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
         z.extractall(".")
@@ -69,6 +71,8 @@ fig.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified')
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 2: Inputs
 
@@ -109,6 +113,45 @@ availability_min_fpoa = form1.number_input("Availability Minimum FPOA", value=50
 system_size_dc = form1.number_input("System Size DC", value=134046, min_value=0, step=1)
 
 form1.form_submit_button("Submit Inputs")
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend begin ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+merged_df['t_stamp'] = pd.to_datetime(merged_df['t_stamp'])
+merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
+
+# Apply the function to each row and create a new column 'average_fpoa'
+merged_df['average_fpoa'] = merged_df.apply(lambda row: funcs.average_if(row, vars.fpoa_data), axis=1)
+
+# Apply the function to each row and create a new column 'average_temp'
+merged_df['average_rpoa'] = merged_df.apply(lambda row: funcs.average_if(row, vars.rpoa_data), axis=1)
+
+# Apply the function to each row and create a new column 'average_poa_total'
+merged_df['average_poa_total'] = (merged_df['average_fpoa']+(merged_df['average_rpoa']*bifaciality))
+
+# Apply the function to each row and create a new column 'average_temp'
+merged_df['average_temp'] = merged_df.apply(lambda row: funcs.average_if(row, vars.temp_data), axis=1)
+
+# Apply the function to each row and create a new column 'average_temp'
+merged_df['average_wind'] = merged_df.apply(lambda row: funcs.average_if(row, vars.wind_data), axis=1)
+
+merged_df['sp. yield']=(merged_df[vars.meter_data]/system_size_dc)
+# Display the DataFrame
+
+# Apply the function to each row and create a new column 'average_fpoa'
+merged_df['average_soiling'] = merged_df.apply(lambda row: funcs.average_if(row, vars.soiling_data), axis=1)
+
+avg_soiling=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['average_soiling'])).mean()
+tab3.write(avg_soiling)
+avg_soiling_met5=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct'])).mean()
+tab3.write(f"Average soiling for met 5   :{avg_soiling_met5}")
+avg_soiling_met15=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct'])).mean()
+tab3.write(f"Average soiling for met 15   :{avg_soiling_met15}")
+avg_soiling_met21=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct'])).mean()
+tab3.write(f"Average soiling for met 21   :{avg_soiling_met21}")
+avg_soiling_met29=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])).mean()
+tab3.write(f"Average soiling for met 29   :{avg_soiling_met29}")
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
 
