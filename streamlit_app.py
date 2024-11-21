@@ -49,44 +49,22 @@ else:
     st.stop()
 
 # List of file names for MET Data 
-files_met = [
-
-'2.Raw Data/2024.10.10/MET STD10.10.24.csv',
-    '2.Raw Data/2024.10.11/MET STD 10.11.24.csv',
-    '2.Raw Data/2024.10.12/MET STD 10.12.2024.csv',
-     '2.Raw Data/2024.10.13/MET STD 10.13.24.csv',
-   
-            ]
-
-
-
+files_met = ['2.Raw Data/2024.10.10/MET STD10.10.24.csv',
+             '2.Raw Data/2024.10.11/MET STD 10.11.24.csv',
+             '2.Raw Data/2024.10.12/MET STD 10.12.2024.csv',
+             '2.Raw Data/2024.10.13/MET STD 10.13.24.csv']
 
 # List of file names for Inverter Data 
-files_inverter = [
-
-'2.Raw Data/2024.10.10/Inverter 10.10.24.csv',
-  '2.Raw Data/2024.10.11/Inverter 10.11.24.csv',    
-   '2.Raw Data/2024.10.12/Inverter 10.12.2024.csv',
-    '2.Raw Data/2024.10.13/Inverter 10.13.24.csv',
-     
-]
-
-
-
+files_inverter = ['2.Raw Data/2024.10.10/Inverter 10.10.24.csv',
+                  '2.Raw Data/2024.10.11/Inverter 10.11.24.csv',    
+                  '2.Raw Data/2024.10.12/Inverter 10.12.2024.csv',
+                  '2.Raw Data/2024.10.13/Inverter 10.13.24.csv']
 
 # List of file names for Meter Data 
-files_meter = [
-
-'2.Raw Data/2024.10.10/Meter 10.10.24.csv',    
-  '2.Raw Data/2024.10.11/Meter 10.11.24.csv' ,
-    '2.Raw Data/2024.10.12/Meter 10.12.2024.csv' ,
-     '2.Raw Data/2024.10.13/Meter 10.13.24.csv',
-   
-]
-
-
-# 
-
+files_meter = ['2.Raw Data/2024.10.10/Meter 10.10.24.csv',    
+               '2.Raw Data/2024.10.11/Meter 10.11.24.csv' ,
+               '2.Raw Data/2024.10.12/Meter 10.12.2024.csv' ,
+               '2.Raw Data/2024.10.13/Meter 10.13.24.csv']
 
 # Function to load and select columns from a list of files
 def load_and_select(files, columns):
@@ -115,8 +93,7 @@ df1_combined = load_and_select(files_met, ['t_stamp',
 'LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct',
 'LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct',
 'LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct',])
-
+'LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])
 
 # Load and select columns for Inverter files 
 
@@ -153,8 +130,7 @@ df2_combined = load_and_select(files_inverter, ['t_stamp',
 'LBSP1/Device/Inverter/INV-PB-30/p3_kW',
 'LBSP1/Device/Inverter/INV-PB-31/p3_kW',
 'LBSP1/Device/Inverter/INV-PB-32/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-33/p3_kW',
-])
+'LBSP1/Device/Inverter/INV-PB-33/p3_kW'])
 
 # Load and select columns for Meter files 
 
