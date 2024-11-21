@@ -14,6 +14,8 @@ import plotly.graph_objs as go
 #import warnings
 #warnings.filterwarnings("ignore")
 import zipfile
+import vars
+import funcs
 
 # Page Setup
 
@@ -47,94 +49,14 @@ if uploaded_zip is not None:
 else:
     st.stop()
 
-# List of file names for MET Data 
-files_met = ['2.Raw Data/2024.10.10/MET STD10.10.24.csv',
-             '2.Raw Data/2024.10.11/MET STD 10.11.24.csv',
-             '2.Raw Data/2024.10.12/MET STD 10.12.2024.csv',
-             '2.Raw Data/2024.10.13/MET STD 10.13.24.csv']
-
-# List of file names for Inverter Data 
-files_inverter = ['2.Raw Data/2024.10.10/Inverter 10.10.24.csv',
-                  '2.Raw Data/2024.10.11/Inverter 10.11.24.csv',    
-                  '2.Raw Data/2024.10.12/Inverter 10.12.2024.csv',
-                  '2.Raw Data/2024.10.13/Inverter 10.13.24.csv']
-
-# List of file names for Meter Data 
-files_meter = ['2.Raw Data/2024.10.10/Meter 10.10.24.csv',    
-               '2.Raw Data/2024.10.11/Meter 10.11.24.csv' ,
-               '2.Raw Data/2024.10.12/Meter 10.12.2024.csv' ,
-               '2.Raw Data/2024.10.13/Meter 10.13.24.csv']
-
-# Function to load and select columns from a list of files
-def load_and_select(files, columns):
-    dfs = [pd.read_csv(file)[ columns] for file in files]
-    return pd.concat(dfs)
-
 # Load and select columns for MET files 
-
-df1_combined = load_and_select(files_met, ['t_stamp',
-'LBSP1/Device/WeatherStation/MET05/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET15/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET21/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET29/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET05/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET15/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET21/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET29/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET05/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET15/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET21/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET29/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET05/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET15/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET21/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET29/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])
+df1_combined = funcs.load_and_select(vars.files_met, vars.met_cols)
 
 # Load and select columns for Inverter files 
-
-df2_combined = load_and_select(files_inverter, ['t_stamp',
-'LBSP1/Device/Inverter/INV-PB-01/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-02/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-03/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-04/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-05/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-06/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-07/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-08/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-09/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-10/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-11/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-12/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-13/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-14/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-15/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-16/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-17/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-18/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-19/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-20/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-21/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-22/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-23/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-24/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-25/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-26/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-27/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-28/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-29/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-30/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-31/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-32/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-33/p3_kW'])
+df2_combined = funcs.load_and_select(vars.files_inverter, vars.inverter_cols)
 
 # Load and select columns for Meter files 
-
-df3_combined = load_and_select(files_meter, ['t_stamp',
-'LBSP1/Device/PowerMeter/MTR/p3_kW'])
+df3_combined = funcs.load_and_select(vars.files_meter, vars.meter_cols)
 
 # Merge the combined dataframes 
 merged_df = pd.merge(df1_combined, df2_combined)
@@ -146,127 +68,7 @@ merged_df=pd.merge(merged_df,df3_combined)
 # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
 fig = go.Figure()
 
-fpoa_data=['LBSP1/Device/WeatherStation/MET05/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET15/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET21/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET29/FPOA/Irrad_wpm2']
-# 
-rpoa_data=['LBSP1/Device/WeatherStation/MET05/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET15/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET21/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET29/RPOA/Irrad_wpm2']
-# 
-temp_data=['LBSP1/Device/WeatherStation/MET05/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET15/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET21/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET29/WS/Temp_C']
-# 
-wind_data=['LBSP1/Device/WeatherStation/MET05/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET15/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET21/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET29/WS/Wind_Speed_mps',
-]
-# 
-soiling_data=['LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct']
-
-inverter_data=['LBSP1/Device/Inverter/INV-PB-01/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-02/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-03/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-04/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-05/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-06/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-07/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-08/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-09/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-10/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-11/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-12/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-13/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-14/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-15/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-16/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-17/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-18/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-19/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-20/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-21/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-22/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-23/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-24/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-25/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-26/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-27/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-28/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-29/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-30/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-31/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-32/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-33/p3_kW']
-
-meter_data=['LBSP1/Device/PowerMeter/MTR/p3_kW']
-
-
-# List of columns you want to plot on the y-axis
-y_columns = ['LBSP1/Device/PowerMeter/MTR/p3_kW',
-'LBSP1/Device/WeatherStation/MET05/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET15/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET21/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET29/FPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET05/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET15/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET21/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET29/RPOA/Irrad_wpm2',
-'LBSP1/Device/WeatherStation/MET05/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET15/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET21/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET29/WS/Temp_C',
-'LBSP1/Device/WeatherStation/MET05/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET15/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET21/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET29/WS/Wind_Speed_mps',
-'LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct',
-'LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct', 
-'LBSP1/Device/Inverter/INV-PB-01/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-02/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-03/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-04/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-05/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-06/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-07/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-08/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-09/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-10/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-11/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-12/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-13/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-14/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-15/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-16/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-17/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-18/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-19/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-20/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-21/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-22/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-23/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-24/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-25/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-26/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-27/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-28/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-29/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-30/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-31/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-32/p3_kW',
-'LBSP1/Device/Inverter/INV-PB-33/p3_kW']  # Replace with your column names
-
-
-for col in y_columns:
+for col in vars.y_columns:
     fig.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
 
 # Update layout
@@ -274,8 +76,7 @@ fig.update_layout(
     title='Weather Station and Inverter Data',
     xaxis_title='Timestamp',
     yaxis_title='Values',
-    hovermode='x unified'
-)
+    hovermode='x unified')
 
 # Tab 2: Inputs
 

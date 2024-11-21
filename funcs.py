@@ -15,6 +15,11 @@ from plotly.offline import init_notebook_mode, iplot
 #warnings.filterwarnings("ignore")
 from zipfile import ZipFile
 
+# Function to load and select columns from a list of files
+def load_and_select(files, columns):
+    dfs = [pd.read_csv(file)[ columns] for file in files]
+    return pd.concat(dfs)
+
 # Function to filter rows based on t_stamp format
 def filter_and_parse_dates(df, date_format):
     # Convert t_stamp with strict parsing and drop invalid rows
