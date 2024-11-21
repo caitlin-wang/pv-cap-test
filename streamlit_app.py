@@ -8,7 +8,6 @@ import numpy as np
 from scipy import stats
 import os
 import plotly.graph_objs as go
-from plotly.offline import init_notebook_mode, iplot
 #from glob import glob
 #import dask.dataframe as dd
 #from tqdm import tqdm
@@ -145,9 +144,6 @@ tab3.write(merged_df)
 
 # Save the merged dataframe to a new CSV file
 # merged_df.to_csv('Liberty_9.14.2024 to 9.23.2024-3.csv', index=False)   ## change the name of the files as required.
-
-# Initialize notebook mode
-init_notebook_mode(connected=True)
 
 # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
 fig = go.Figure()
