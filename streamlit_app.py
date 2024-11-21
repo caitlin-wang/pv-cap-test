@@ -146,6 +146,146 @@ tab3.write(merged_df)
 # Save the merged dataframe to a new CSV file
 # merged_df.to_csv('Liberty_9.14.2024 to 9.23.2024-3.csv', index=False)   ## change the name of the files as required.
 
+# Initialize notebook mode
+init_notebook_mode(connected=True)
+
+# Assuming merged_df is your DataFrame and t_stamp is your x-axis column
+fig = go.Figure()
+
+fpoa_data=['LBSP1/Device/WeatherStation/MET05/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET15/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET21/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET29/FPOA/Irrad_wpm2']
+# 
+rpoa_data=['LBSP1/Device/WeatherStation/MET05/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET15/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET21/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET29/RPOA/Irrad_wpm2']
+# 
+temp_data=['LBSP1/Device/WeatherStation/MET05/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET15/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET21/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET29/WS/Temp_C']
+# 
+wind_data=['LBSP1/Device/WeatherStation/MET05/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET15/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET21/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET29/WS/Wind_Speed_mps',
+]
+# 
+soiling_data=['LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct']
+
+inverter_data=['LBSP1/Device/Inverter/INV-PB-01/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-02/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-03/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-04/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-05/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-06/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-07/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-08/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-09/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-10/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-11/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-12/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-13/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-14/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-15/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-16/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-17/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-18/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-19/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-20/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-21/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-22/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-23/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-24/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-25/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-26/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-27/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-28/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-29/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-30/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-31/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-32/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-33/p3_kW']
+
+meter_data=['LBSP1/Device/PowerMeter/MTR/p3_kW']
+
+
+# List of columns you want to plot on the y-axis
+y_columns = ['LBSP1/Device/PowerMeter/MTR/p3_kW',
+'LBSP1/Device/WeatherStation/MET05/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET15/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET21/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET29/FPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET05/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET15/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET21/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET29/RPOA/Irrad_wpm2',
+'LBSP1/Device/WeatherStation/MET05/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET15/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET21/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET29/WS/Temp_C',
+'LBSP1/Device/WeatherStation/MET05/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET15/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET21/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET29/WS/Wind_Speed_mps',
+'LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct',
+'LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct', 
+'LBSP1/Device/Inverter/INV-PB-01/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-02/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-03/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-04/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-05/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-06/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-07/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-08/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-09/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-10/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-11/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-12/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-13/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-14/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-15/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-16/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-17/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-18/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-19/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-20/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-21/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-22/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-23/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-24/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-25/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-26/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-27/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-28/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-29/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-30/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-31/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-32/p3_kW',
+'LBSP1/Device/Inverter/INV-PB-33/p3_kW']  # Replace with your column names
+
+
+for col in y_columns:
+    fig.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
+
+# Update layout
+fig.update_layout(
+    title='Interactive Graph',
+    xaxis_title='Timestamp',
+    yaxis_title='Values',
+    hovermode='x unified'
+)
+
+# Show the plot
+tab3.plotly_chart(fig)
+
 # Tab 2: Inputs
 
 form1 = tab2.form("inputs form")
