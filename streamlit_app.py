@@ -17,7 +17,7 @@ import zipfile
 
 # Page Setup
 
-st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="centered")
+st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="wide")
 st.logo("long_logo.jpg", icon_image="icon.jpg")
 
 st.sidebar.subheader("Next Steps:")
@@ -139,8 +139,6 @@ df3_combined = load_and_select(files_meter, ['t_stamp',
 # Merge the combined dataframes 
 merged_df = pd.merge(df1_combined, df2_combined)
 merged_df=pd.merge(merged_df,df3_combined)
-
-tab3.write(merged_df)
 
 # Save the merged dataframe to a new CSV file
 # merged_df.to_csv('Liberty_9.14.2024 to 9.23.2024-3.csv', index=False)   ## change the name of the files as required.
@@ -273,14 +271,11 @@ for col in y_columns:
 
 # Update layout
 fig.update_layout(
-    title='Interactive Graph',
+    title='Weather Station and Inverter Data',
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified'
 )
-
-# Show the plot
-tab3.plotly_chart(fig)
 
 # Tab 2: Inputs
 
@@ -323,6 +318,9 @@ system_size_dc = form1.number_input("System Size DC", value=134046, min_value=0,
 form1.form_submit_button("Submit Inputs")
 
 # Tab 3: Report
+
+tab3.write(merged_df) # merged_df
+tab3.plotly_chart(fig) # initial data plot
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
