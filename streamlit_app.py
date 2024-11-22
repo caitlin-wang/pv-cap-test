@@ -197,8 +197,38 @@ count_inverter_filter_data=(merged_df['inverter_clipping_check']&merged_df['inve
 # count_grid_inverter_filter_data=(merged_df['inverter_clipping_check']&merged_df['inverter_blank']&merged_df['meter>0']&merged_df['grid_clipping']).value_counts().rename(index={True:"Including",False:"Excluding"})
 # print(count_grid_inverter_filter_data.to_string(dtype=False))
 
+## Applying conditions on irradiance, temp and wind data
 
+merged_df['fpoa_blank']=~(merged_df[vars.fpoa_data]).isnull().any(axis=1)
+count_fpoa_blank=merged_df['fpoa_blank'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['fpoa_zero']=~(merged_df[vars.fpoa_data]==0).any(axis=1)
+count_fpoa_zero=merged_df['fpoa_zero'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['rpoa_blank']=~(merged_df[vars.rpoa_data]).isnull().any(axis=1)
+count_rpoa_blank=merged_df['rpoa_blank'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['rpoa_zero']=~(merged_df[vars.rpoa_data]==0).any(axis=1)
+count_rpoa_zero=merged_df['rpoa_zero'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['temp_blank']=~(merged_df[vars.temp_data]).isnull().any(axis=1)
+count_temp_blank=merged_df['temp_blank'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['temp_zero']=~(merged_df[vars.temp_data]==0).any(axis=1)
+count_temp_zero=merged_df['temp_zero'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['wind_blank']=~(merged_df[vars.wind_data]).isnull().any(axis=1)
+count_wind_blank=merged_df['wind_blank'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['wind_zero']=~(merged_df[vars.wind_data]==0).any(axis=1)
+count_wind_zero=merged_df['wind_zero'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['fpoa_QC']=merged_df['average_fpoa'].between(minimum_irradiance,max_irradiance)    ## Checking if avg poa value are between 400 to 1200 or based on inputs 
 merged_df
+count_fpoa_qc=merged_df['fpoa_QC'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+count_after_all_met_data_filters=(merged_df['fpoa_blank']&merged_df['fpoa_zero']&merged_df['rpoa_blank']&merged_df['rpoa_zero']&merged_df['temp_blank']&
+                                  merged_df['temp_zero']&merged_df['wind_blank']&merged_df['wind_zero']&merged_df['fpoa_QC']).value_counts().rename(index={True:"Including",False:"Excluding"})
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -227,6 +257,18 @@ tab3.write(count_inverter_clipping_check.to_string(dtype=False))
 tab3.write(count_inverter_blank.to_string(dtype=False))
 tab3.write(count_inverter_zero.to_string(dtype=False))
 tab3.write(count_inverter_filter_data.to_string(dtype=False))
+
+tab3.subheader("MET Filters")
+tab3.write(count_fpoa_blank.to_string(dtype=False))
+tab3.write(count_fpoa_zero.to_string(dtype=False))
+tab3.write(count_rpoa_blank.to_string(dtype=False))
+tab3.write(count_rpoa_zero.to_string(dtype=False))
+tab3.write(count_temp_blank.to_string(dtype=False))
+tab3.write(count_temp_zero.to_string(dtype=False))
+tab3.write(count_wind_blank.to_string(dtype=False))
+tab3.write(count_wind_zero.to_string(dtype=False))
+tab3.write(count_fpoa_qc.to_string(dtype=False))
+tab3.write(count_after_all_met_data_filters.to_string(dtype=False))
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
