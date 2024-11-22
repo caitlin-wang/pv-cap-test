@@ -149,7 +149,6 @@ avg_soiling_met21=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1
 avg_soiling_met29=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])).mean()
 
 count_avail_poa=((merged_df['average_fpoa']>=availability_min_fpoa)*merged_df['t_stamp_check']).sum()
-st.write(count_avail_poa)
 counts = {}
 
 # Loop through each inverter column
@@ -165,6 +164,41 @@ for key in counts:
 # Convert the counts dictionary to a dataframe for better readability
 avail_counts_df = pd.DataFrame(list(counts.items()), columns=['Inverter', 'Availabiliy'])
 avail_average=avail_counts_df['Availabiliy'].mean()
+
+## Applying filters to remove all data where meter value is positive and not clipping 
+
+merged_df['meter>0']=merged_df[vars.meter_data]>minimum_grid       ## Using this to filter value greater than zero
+
+count_meter_greaterzero=merged_df['meter>0'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['grid_clipping']=merged_df[meter_data]<grid_clipping        ##Removing all data points at grid clipping to have stable point
+count_grid_clipping=merged_df['grid_clipping'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+count_meter_filter_data=(merged_df['meter>0']&merged_df['grid_clipping']).value_counts().rename(index={True:"Including",False:"Excluding"})
+
+## Applying filters to remove all data when there is zero or blank inverter data and also removing value where any inverter is clipping , 
+#around 0.98 to 1 of inverter rated capacity
+
+# Convert inverter_data to a DataFrame
+inverter_df = merged_df[inverter_data]
+
+merged_df['inverter_clipping_check'] = inverter_df.apply(lambda row: row.max() < inverter_clipping, axis=1)
+
+count_inverter_clipping_check=(~merged_df['inverter_clipping_check']).value_counts().rename(index={True:"Including",False:"Excluding"})    ##count when there is no blank data in inverter
+
+merged_df['inverter_blank']=~(merged_df[inverter_data]).isnull().any(axis=1)      ##Note: Checking if there are any blank data for inverter. We are reversing the value so True means all inverter data are available, False means there are some data missing
+count_inverter_blank=(merged_df['inverter_blank']).value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['inverter_zero']=~(merged_df[inverter_data]==0).any(axis=1)            ##Note: If values are True means inverter data are non zero since we reverse the data
+count_inverter_zero=(~merged_df['inverter_zero']).value_counts().rename(index={True:"Including",False:"Excluding"})        ##count when there is no blank data in inverter
+
+count_inverter_filter_data=(merged_df['inverter_clipping_check']&merged_df['inverter_blank']).value_counts().rename(index={True:"Including",False:"Excluding"})
+
+# count_grid_inverter_filter_data=(merged_df['inverter_clipping_check']&merged_df['inverter_blank']&merged_df['meter>0']&merged_df['grid_clipping']).value_counts().rename(index={True:"Including",False:"Excluding"})
+# print(count_grid_inverter_filter_data.to_string(dtype=False))
+
+
+merged_df
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -184,6 +218,15 @@ tab3.subheader("Average Availability")
 tab3.write(f"Number of events POA is greater then minimum irradiance :{count_avail_poa}")
 tab3.write(avail_counts_df)
 tab3.write(f"Average Availability of the project is : {avail_average}")
+
+tab3.subheader("Inverter Filters")
+tab3.write(count_meter_greaterzero.to_string(dtype=False))
+tab3.write(count_grid_clipping.to_string(dtype=False))
+tab3.write(count_meter_filter_data.to_string(dtype=False))
+tab3.write(count_inverter_clipping_check.to_string(dtype=False))
+tab3.write(count_inverter_blank.to_string(dtype=False))
+tab3.write(count_inverter_zero.to_string(dtype=False))
+tab3.write(count_inverter_filter_data.to_string(dtype=False))
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
