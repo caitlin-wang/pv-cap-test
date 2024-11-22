@@ -171,7 +171,7 @@ merged_df['meter>0']=merged_df[vars.meter_data]>minimum_grid       ## Using this
 
 count_meter_greaterzero=merged_df['meter>0'].value_counts().rename(index={True:"Including",False:"Excluding"})
 
-merged_df['grid_clipping']=merged_df[meter_data]<grid_clipping        ##Removing all data points at grid clipping to have stable point
+merged_df['grid_clipping']=merged_df[vars.meter_data]<grid_clipping        ##Removing all data points at grid clipping to have stable point
 count_grid_clipping=merged_df['grid_clipping'].value_counts().rename(index={True:"Including",False:"Excluding"})
 
 count_meter_filter_data=(merged_df['meter>0']&merged_df['grid_clipping']).value_counts().rename(index={True:"Including",False:"Excluding"})
@@ -180,16 +180,16 @@ count_meter_filter_data=(merged_df['meter>0']&merged_df['grid_clipping']).value_
 #around 0.98 to 1 of inverter rated capacity
 
 # Convert inverter_data to a DataFrame
-inverter_df = merged_df[inverter_data]
+inverter_df = merged_df[vars.inverter_data]
 
 merged_df['inverter_clipping_check'] = inverter_df.apply(lambda row: row.max() < inverter_clipping, axis=1)
 
 count_inverter_clipping_check=(~merged_df['inverter_clipping_check']).value_counts().rename(index={True:"Including",False:"Excluding"})    ##count when there is no blank data in inverter
 
-merged_df['inverter_blank']=~(merged_df[inverter_data]).isnull().any(axis=1)      ##Note: Checking if there are any blank data for inverter. We are reversing the value so True means all inverter data are available, False means there are some data missing
+merged_df['inverter_blank']=~(merged_df[vars.inverter_data]).isnull().any(axis=1)      ##Note: Checking if there are any blank data for inverter. We are reversing the value so True means all inverter data are available, False means there are some data missing
 count_inverter_blank=(merged_df['inverter_blank']).value_counts().rename(index={True:"Including",False:"Excluding"})
 
-merged_df['inverter_zero']=~(merged_df[inverter_data]==0).any(axis=1)            ##Note: If values are True means inverter data are non zero since we reverse the data
+merged_df['inverter_zero']=~(merged_df[vars.inverter_data]==0).any(axis=1)            ##Note: If values are True means inverter data are non zero since we reverse the data
 count_inverter_zero=(~merged_df['inverter_zero']).value_counts().rename(index={True:"Including",False:"Excluding"})        ##count when there is no blank data in inverter
 
 count_inverter_filter_data=(merged_df['inverter_clipping_check']&merged_df['inverter_blank']).value_counts().rename(index={True:"Including",False:"Excluding"})
