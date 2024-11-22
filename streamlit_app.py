@@ -142,15 +142,15 @@ merged_df['sp. yield']=(merged_df[vars.meter_data]/system_size_dc)
 # Apply the function to each row and create a new column 'average_fpoa'
 merged_df['average_soiling'] = merged_df.apply(lambda row: funcs.average_if(row, vars.soiling_data), axis=1)
 
-avg_soiling=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['average_soiling'])).mean()
+avg_soiling=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['average_soiling'])).mean()
 tab3.write(avg_soiling)
-avg_soiling_met5=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct'])).mean()
+avg_soiling_met5=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct'])).mean()
 tab3.write(f"Average soiling for met 5   :{avg_soiling_met5}")
-avg_soiling_met15=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct'])).mean()
+avg_soiling_met15=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct'])).mean()
 tab3.write(f"Average soiling for met 15   :{avg_soiling_met15}")
-avg_soiling_met21=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct'])).mean()
+avg_soiling_met21=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct'])).mean()
 tab3.write(f"Average soiling for met 21   :{avg_soiling_met21}")
-avg_soiling_met29=((merged_df['average_fpoa']>vars.min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])).mean()
+avg_soiling_met29=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])).mean()
 tab3.write(f"Average soiling for met 29   :{avg_soiling_met29}")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
