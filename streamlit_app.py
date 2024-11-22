@@ -149,6 +149,7 @@ avg_soiling_met21=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1
 avg_soiling_met29=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])).mean()
 
 count_avail_poa=((merged_df['average_fpoa']>=availability_min_fpoa)*merged_df['t_stamp_check']).sum()
+st.write(count_avail_poa)
 counts = {}
 
 # Loop through each inverter column
@@ -179,7 +180,8 @@ tab3.write(f"Average soiling for met 15   : {avg_soiling_met15}")
 tab3.write(f"Average soiling for met 21   : {avg_soiling_met21}")
 tab3.write(f"Average soiling for met 29   : {avg_soiling_met29}")
 
-tab3.write(f"Number of events POA is greater then minimum irradaiance :{count_avail_poa}")
+tab3.subheader("Average Availability")
+tab3.write(f"Number of events POA is greater then minimum irradiance :{count_avail_poa}")
 tab3.write(avail_counts_df)
 tab3.write(f"Average Availability of the project is : {avail_average}")
 
