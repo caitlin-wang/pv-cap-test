@@ -311,7 +311,7 @@ tab3.subheader("Spatial Stability Counts")
 tab3.write(spatial_stability_counts.to_string(dtype=False))
 
 tab3.subheader("Primary Filters per Day")
-print(count_primary_filters_per_day)
+tab3.write(count_primary_filters_per_day)
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
