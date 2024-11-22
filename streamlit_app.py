@@ -156,7 +156,7 @@ tab3.write(merged_df) # merged_df
 tab3.plotly_chart(fig) # initial data plot
 
 tab3.subheader("Average Soiling")
-tab3.write("Average Soiling: " + avg_soiling)
+tab3.write("Average Soiling: " + str(avg_soiling))
 tab3.write(f"Average soiling for met 5   : {avg_soiling_met5}")
 tab3.write(f"Average soiling for met 15   : {avg_soiling_met15}")
 tab3.write(f"Average soiling for met 21   : {avg_soiling_met21}")
