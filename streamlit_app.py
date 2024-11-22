@@ -111,6 +111,8 @@ pvsyst_shading = form1.number_input("PVSyst Shading:", min_value=0, value=1, ste
 bifaciality = form1.number_input("Bifaciality", value=0.7, min_value=0.0, max_value=1.0, step=0.1)
 availability_min_fpoa = form1.number_input("Availability Minimum FPOA", value=50, min_value=0, step=1)
 system_size_dc = form1.number_input("System Size DC", value=134046, min_value=0, step=1)
+min_poa_soiling = form1.number_input("Min POA Soiling:", min_value=0, value=150, step=1)
+soiling_with_iv_curve = form1.number_input("Soiling with IV Curve:", min_value=0, value=1.52, step=0.01) ## from EPC 
 
 form1.form_submit_button("Submit Inputs")
 
