@@ -229,6 +229,25 @@ count_fpoa_qc=merged_df['fpoa_QC'].value_counts().rename(index={True:"Including"
 count_after_all_met_data_filters=(merged_df['fpoa_blank']&merged_df['fpoa_zero']&merged_df['rpoa_blank']&merged_df['rpoa_zero']&merged_df['temp_blank']&
                                   merged_df['temp_zero']&merged_df['wind_blank']&merged_df['wind_zero']&merged_df['fpoa_QC']).value_counts().rename(index={True:"Including",False:"Excluding"})
 
+merged_df['average_fpoa_pct_change']=merged_df['average_fpoa'].pct_change()*100
+merged_df['temporal_stability_check']=merged_df['average_fpoa_pct_change'].abs()<=temporal_stability_thresold
+
+# Calculate standard deviation and mean for each row across the fpoa_data columns
+merged_df['fpoa_spatial_std'] = merged_df[vars.fpoa_data].std(axis=1)
+merged_df['fpoa_spatial_mean'] = merged_df[vars.fpoa_data].mean(axis=1)
+
+# Calculate spatial stability by dividing standard deviation by mean
+merged_df['fpoa_spatial_stability'] = merged_df['fpoa_spatial_std'] / merged_df['fpoa_spatial_mean']
+
+# Check if the absolute value of fpoa_spatial_stability is less than 0.10
+merged_df['spatial_stability_check'] = abs(merged_df['fpoa_spatial_stability']) <=spatial_stability_thresold
+
+# Count the number of True and False values in the new column
+spatial_stability_counts = merged_df['spatial_stability_check'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+merged_df['average_inverter_pct_change']=merged_df['average_fpoa'].pct_change()*100
+merged_df['temporal_stability_check']=merged_df['average_fpoa_pct_change'].abs()<=temporal_stability_thresold
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -268,6 +287,9 @@ tab3.write(count_wind_blank.to_string(dtype=False))
 tab3.write(count_wind_zero.to_string(dtype=False))
 tab3.write(count_fpoa_qc.to_string(dtype=False))
 tab3.write(count_after_all_met_data_filters.to_string(dtype=False))
+
+tab3.subheader("Spatial Stability Counts")
+tab3.write(spatial_stability_counts.to_string(dtype=False))
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
