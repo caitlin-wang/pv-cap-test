@@ -148,6 +148,23 @@ avg_soiling_met15=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1
 avg_soiling_met21=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct'])).mean()
 avg_soiling_met29=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])).mean()
 
+count_avail_poa=((merged_df['average_fpoa']>=availability_min_fpoa)*merged_df['t_stamp_check']).sum()
+counts = {}
+
+# Loop through each inverter column
+for column in merged_df.columns:
+    if 'LBSP1/Device/Inverter' in column and 'p3_kW' in column:
+        
+        # Calculate the difference and count the occurrences where the difference is greater than 150
+        counts[column] = (((merged_df[column] > 50) & (merged_df['average_fpoa'] > availability_min_fpoa))*merged_df['t_stamp_check']).sum()
+
+# Divide the counts by count_avail_poa
+for key in counts:
+    counts[key] /= count_avail_poa
+# Convert the counts dictionary to a dataframe for better readability
+avail_counts_df = pd.DataFrame(list(counts.items()), columns=['Inverter', 'Availabiliy'])
+avail_average=avail_counts_df['Availabiliy'].mean()
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -161,6 +178,10 @@ tab3.write(f"Average soiling for met 5   : {avg_soiling_met5}")
 tab3.write(f"Average soiling for met 15   : {avg_soiling_met15}")
 tab3.write(f"Average soiling for met 21   : {avg_soiling_met21}")
 tab3.write(f"Average soiling for met 29   : {avg_soiling_met29}")
+
+tab3.write(f"Number of events POA is greater then minimum irradaiance :{count_avail_poa}")
+tab3.write(avail_counts_df)
+tab3.write(f"Average Availability of the project is : {avail_average}")
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
