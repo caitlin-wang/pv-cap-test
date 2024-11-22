@@ -262,10 +262,24 @@ merged_df['primary_filters']=(merged_df['t_stamp_check']*
 # 
 count_primary_filters=merged_df['primary_filters'].value_counts().rename(index={True:"Including",False:"Excluding"})       ##Note: Counting number of primary filters, this should be minimum number of points 
 
-# csv_file_name='measured_filtered_data-10-14-1.csv'                           ## Note: Can save the primary filtes as csv as well 
-# merged_df.to_csv(csv_file_name,index=False)
-
 count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
+
+rc_conditions=merged_df[merged_df['primary_filters']==True]    ## Note: Reporting conditions are calculated only on True values on primary filters 
+
+## Calculating RC conditions on fpoa, rpoa, temp and wind by taking average values
+rc_avg_poa_total=rc_conditions['average_poa_total'].mean()
+rc_avg_fpoa=rc_conditions['average_fpoa'].mean()             
+rc_avg_rpoa=rc_conditions['average_rpoa'].mean()
+rc_avg_temp=rc_conditions['average_temp'].mean()
+rc_avg_wind=rc_conditions['average_wind'].mean()
+
+## Calculating RC conditions on fpoa, rpoa, temp and wind by taking percentile values
+
+percentile_avg_poa_total=rc_conditions['average_poa_total'].quantile(percentile)
+percentile_avg_fpoa=rc_conditions['average_fpoa'].quantile(percentile)
+percentile_avg_rpoa=rc_conditions['average_rpoa'].quantile(percentile)
+percentile_avg_temp=rc_conditions['average_temp'].quantile(percentile)
+percentile_avg_wind=rc_conditions['average_wind'].quantile(percentile)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -312,6 +326,20 @@ tab3.write(spatial_stability_counts.to_string(dtype=False))
 
 tab3.subheader("Primary Filters per Day")
 tab3.write(count_primary_filters_per_day)
+
+tab3.subheader("RC Conditions")
+tab3.write(rc_avg_poa_total)
+tab3.write(rc_avg_fpoa)
+tab3.write(rc_avg_rpoa)
+tab3.write(rc_avg_temp)
+tab3.write(rc_avg_wind)
+tab3.write(percentile_avg_poa_total)
+tab3.write(percentile_avg_fpoa)
+tab3.write(percentile_avg_rpoa)
+tab3.write(percentile_avg_temp)
+tab3.write(percentile_avg_wind)
+# tab3.write(rc_wind_fixed)
+tab3.write(count_primary_filters.to_string(dtype=False))
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
