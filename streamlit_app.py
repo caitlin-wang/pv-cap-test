@@ -281,6 +281,42 @@ percentile_avg_rpoa=rc_conditions['average_rpoa'].quantile(percentile)
 percentile_avg_temp=rc_conditions['average_temp'].quantile(percentile)
 percentile_avg_wind=rc_conditions['average_wind'].quantile(percentile)
 
+## Checking secondary consditions by taking irradiance threshold on primary filters
+
+# rc_poa_total=rc_avg_poa_total 
+# rc_fpoa=rc_avg_fpoa 
+# rc_rpoa=rc_avg_rpoa 
+# rc_temp=rc_avg_temp 
+# rc_wind=rc_avg_wind 
+
+rc_poa_total=percentile_avg_poa_total
+rc_fpoa=percentile_avg_fpoa
+rc_rpoa=percentile_avg_rpoa
+rc_temp=percentile_avg_temp
+# rc_wind=percentile_avg_wind
+
+# rc_poa_total=700
+# rc_fpoa=650
+# rc_rpoa=50
+# rc_temp=25
+rc_wind=1
+
+reporting_condition_thresold_min=(1-reporting_condition_thresold)*rc_poa_total
+reporting_condition_thresold_min
+reporting_condition_thresold_max=(1+reporting_condition_thresold)*rc_poa_total
+reporting_condition_thresold_max
+
+merged_df['rc_check']=merged_df['average_poa_total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
+
+## Checking the secondary filter where the number of data should be 750 or based on contract with EPC
+
+merged_df['secondary_filter']=merged_df['primary_filters']*merged_df['rc_check']
+merged_df
+count_rc_condition_thresold=merged_df['secondary_filter'].value_counts().rename(index={True:"Including",False:"Excluding"})
+
+secondary_above_rc_perc=(((merged_df['secondary_filter']==True)&(merged_df['average_poa_total']>=rc_poa_total)).sum()/((merged_df['secondary_filter']==True)).sum()*100)
+secondary_below_rc_perc=100-secondary_above_rc_perc
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -340,6 +376,11 @@ tab3.write(percentile_avg_temp)
 tab3.write(percentile_avg_wind)
 # tab3.write(rc_wind_fixed)
 tab3.write(count_primary_filters.to_string(dtype=False))
+
+tab3.subheader("Secondary Filters")
+tab3.write(count_rc_condition_thresold.to_string(dtype=False))
+tab3.write(secondary_above_rc_perc)
+tab3.write(secondary_below_rc_perc)
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
