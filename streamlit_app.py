@@ -248,6 +248,25 @@ spatial_stability_counts = merged_df['spatial_stability_check'].value_counts().r
 merged_df['average_inverter_pct_change']=merged_df['average_fpoa'].pct_change()*100
 merged_df['temporal_stability_check']=merged_df['average_fpoa_pct_change'].abs()<=temporal_stability_thresold
 
+##Calculating Reporting Conditions 
+
+##Note: Adding another coloumn as primary filters where taking all True value from all filters from above 
+
+merged_df['primary_filters']=(merged_df['t_stamp_check']*
+    merged_df['meter>0']*merged_df['grid_clipping']
+                                *merged_df['fpoa_QC']*merged_df['temporal_stability_check']*merged_df['spatial_stability_check']
+                                *merged_df['inverter_clipping_check']
+                                *merged_df['inverter_blank']*merged_df['inverter_zero']
+                              *merged_df['fpoa_blank']*merged_df['temp_blank']
+                                *merged_df['wind_blank']*merged_df['temp_zero']*merged_df['fpoa_zero']*merged_df['wind_zero'])
+# 
+count_primary_filters=merged_df['primary_filters'].value_counts().rename(index={True:"Including",False:"Excluding"})       ##Note: Counting number of primary filters, this should be minimum number of points 
+
+# csv_file_name='measured_filtered_data-10-14-1.csv'                           ## Note: Can save the primary filtes as csv as well 
+# merged_df.to_csv(csv_file_name,index=False)
+
+count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -290,6 +309,9 @@ tab3.write(count_after_all_met_data_filters.to_string(dtype=False))
 
 tab3.subheader("Spatial Stability Counts")
 tab3.write(spatial_stability_counts.to_string(dtype=False))
+
+tab3.subheader("Primary Filters per Day")
+print(count_primary_filters_per_day)
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
