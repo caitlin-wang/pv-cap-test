@@ -50,7 +50,7 @@ if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
         z.extractall(".")
         tab1.write(os.listdir('2.Raw Data'))
-else:
+if uploaded_zip is None or pvsyst_test_model_path is None:
     tab2.write('Upload files to proceed.')
     tab3.write('Upload files to proceed.')
     st.stop()
