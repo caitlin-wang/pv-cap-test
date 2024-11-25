@@ -389,7 +389,7 @@ fig3.update_layout(
 
 pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
 #pvsyst_test_model_df["date"] = pd.to_datetime(pvsyst_test_model_df["date"]).apply(lambda x: x + relativedelta(years=34))
-pvsyst_test_model_df["date"] = pd.to_datetime(pvsyst_test_model_df["date"]) + datetime.timedelta(years=34)
+pvsyst_test_model_df["date"] = pd.to_datetime(pvsyst_test_model_df["date"]) + datetime.timedelta(days=34*365)
 
 midpoint_date = test_start_date + (test_end_date - test_start_date) / 2
 pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
