@@ -9,7 +9,7 @@ import numpy as np
 from scipy import stats
 import os
 import plotly.graph_objs as go
-#import statsmodels.api as sm
+import statsmodels.api as sm
 import plotly.express as px
 #from glob import glob
 #import dask.dataframe as dd
@@ -430,6 +430,29 @@ rc_pvsyst_percentile_rpoa=pvsyst_filtered_df['GlobBak'].quantile(percentile)
 rc_pvsyst_percentileg_temp=pvsyst_filtered_df['T_Amb'].quantile(percentile)
 rc_pvsyst_percentile_wind=pvsyst_filtered_df['WindVel'].quantile(percentile)
 
+reporting_condition_thresold_min=(1-reporting_condition_thresold)*rc_poa_total
+reporting_condition_thresold_max=(1+reporting_condition_thresold)*rc_poa_total
+pvsyst_filtered_df.loc[:,'rc_pvsyst_check']=pvsyst_filtered_df['POA_Total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
+expected_regression_df=pvsyst_filtered_df[pvsyst_filtered_df['rc_pvsyst_check']==True]
+
+X=expected_regression_df[['POA_Total','POA_Total*POA_Total','POA_Total*Temp','POA_Total*Wind']]
+y=expected_regression_df['E_Grid']
+
+coefficients, residuals, rank, s = np.linalg.lstsq(X, y, rcond=None)
+final_coefficients = coefficients[::-1]
+
+pvsyst_fpoa_wind, pvsyst_fpoa_temp, pvsyst_fpoa_poa_poa, pvsyst_fpoa = final_coefficients
+
+expected_energy_monofacial=(pvsyst_fpoa+pvsyst_fpoa_poa_poa*rc_fpoa+pvsyst_fpoa_temp*rc_temp+pvsyst_fpoa_wind*rc_wind)*rc_fpoa
+expected_energy_bifacial=(pvsyst_fpoa+pvsyst_fpoa_poa_poa*rc_poa_total+pvsyst_fpoa_temp*rc_temp+pvsyst_fpoa_wind*rc_wind)*rc_poa_total
+
+expected_regression_df.loc[:,"Energy Predicted"]=expected_regression_df['POA_Total']*((fpoa)+fpoa_poa_poa*expected_regression_df['POA_Total']+fpoa_temp*expected_regression_df['T_Amb']+fpoa_wind*expected_regression_df['WindVel'])
+# Assuming expected_regression_df is already defined and contains columns 'Energy Predicted' and 'E_Grid'
+fig4 = px.scatter(expected_regression_df, x='Energy Predicted', y='E_Grid', title='Scatter plot between Energy P and E_G')
+
+# Customize the hover data
+fig4.update_traces(marker=dict(size=10), selector=dict(mode='markers'))
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -526,6 +549,17 @@ tab3.write(rc_pvsyst_percentile_fpoa)
 tab3.write(rc_pvsyst_percentile_rpoa)
 tab3.write(rc_pvsyst_percentileg_temp)
 tab3.write(rc_pvsyst_percentile_wind)
+
+tab3.write("PVSyst Coefficients in the order {4;3;2;1}:")
+tab3.write(f"fpoa: {pvsyst_fpoa}")
+tab3.write(f"fpoa_poa_poa: {pvsyst_fpoa_poa_poa}")
+tab3.write(f"fpoa_temp: {pvsyst_fpoa_temp}")
+tab3.write(f"fpoa_wind: {pvsyst_fpoa_wind}")
+
+tab3.subheader("Expected Energy")
+tab3.write("Bifacial: " + str(expected_energy_monofacial))
+tab3.write("Monofacial: " + str(expected_energy_bifacial))
+tab3.plotly_chart(fig4)
 
 tab3.subheader("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
