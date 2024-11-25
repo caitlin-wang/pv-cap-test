@@ -23,14 +23,7 @@ import funcs
 # Page Setup
 
 st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="wide")
-st.logo("long_logo.jpg")
-#st.logo("long_logo.jpg", icon_image="icon.jpg")
-
-#st.sidebar.subheader("Next Steps:")
-#st.sidebar.write("- figure out how to process ZIP file")
-#st.sidebar.subheader("Edit Log:")
-#st.sidebar.write("- 11/6/24: added inputs tab")
-#st.sidebar.write("- 11/5/24: created page")
+#st.logo("long_logo.jpg")
 
 st.title("PV Cap Test")
 tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
