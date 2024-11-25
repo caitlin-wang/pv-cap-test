@@ -673,9 +673,16 @@ Here are list of inverters availability for the test period:
 
 # Tab 3: Report
 
-tab3.write("Test Start Date: ", test_start_date)
-tab3.write("Test End Date : ", test_end_date)
-tab3.write("Number of Days: ", test_end_date-test_start_date)
+tab3.write(f"""
+Detailed Report:
+Test Start Date: {test_start_date}
+Test End Date : {test_end_date}
+Number of Days: {test_end_date-test_start_date}
+""")
+
+#tab3.write("Test Start Date: ", test_start_date)
+#tab3.write("Test End Date : ", test_end_date)
+#tab3.write("Number of Days: ", test_end_date-test_start_date)
 
 # add: table of inputs
 
