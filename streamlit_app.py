@@ -374,7 +374,7 @@ fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 measured_energy_bifacial=rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
 measured_energy_monofacial=rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
 
-measured_regression_df["Energy Predicted"]=measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
+measured_regression_df["Energy Predicted"] = measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
 
 fig3 = px.scatter(measured_regression_df, x='Energy Predicted', y=vars.meter_data[0], title='Scatter plot between x and y')
 
@@ -387,6 +387,7 @@ fig3.update_layout(
 )
 
 pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
+pvsyst_test_model_df["date"] += np.timedelta64(34,'Y') 
 
 midpoint_date = test_start_date + (test_end_date - test_start_date) / 2
 pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
