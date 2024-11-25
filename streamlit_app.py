@@ -25,7 +25,7 @@ import funcs
 st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="wide")
 #st.logo("long_logo.jpg")
 
-st.image("long_logo.jpg", width=10)
+st.image("long_logo.jpg", width=1000)
 st.title("PV Cap Test")
 st.header("Date: " + str(datetime.date.today()))
 tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
