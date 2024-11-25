@@ -453,6 +453,215 @@ fig4 = px.scatter(expected_regression_df, x='Energy Predicted', y='E_Grid', titl
 # Customize the hover data
 fig4.update_traces(marker=dict(size=10), selector=dict(mode='markers'))
 
+Capcity_Ratio_Mono=measured_energy_monofacial/expected_energy_monofacial
+Capcity_Ratio_Bifacial=measured_energy_bifacial/expected_energy_bifacial
+
+detailed_report=f"""
+
+Detailed Report:
+Test Start Date: {test_start_date}
+Test End Date : {test_end_date}
+Number of Days: {test_end_date-test_start_date}
+
+
+Summary : 
+Measured Enrgy Bifacial={measured_energy_bifacial}
+Measured Enrgy Monofacial={measured_energy_monofacial}
+
+Expected Energy Bifacial={expected_energy_bifacial}
+Expected Energy Monofacial={expected_energy_monofacial}
+
+Capacity Ratio_Bifacial={Capcity_Ratio_Bifacial*100}
+Capacity Ratio_Monofacial={Capcity_Ratio_Mono*100}
+
+Soiling Avg ={avg_soiling}
+Capacity Ratio_Bifacial with Soiling from Met Station={Capcity_Ratio_Bifacial*100+avg_soiling}
+Capacity Ratio_Monofacial with Soiling from Met Station={Capcity_Ratio_Mono*100+avg_soiling}
+
+
+Soiling Avg_IV Curve ={soiling_with_iv_curve}
+apacity Ratio_Bifacial with Soiling from IV Curve={Capcity_Ratio_Bifacial*100+soiling_with_iv_curve}
+Capacity Ratio_Monofacial with Soiling from IV Curve={Capcity_Ratio_Mono*100+soiling_with_iv_curve}
+
+
+
+Total number of points on all primary filters=  {count_primary_filters}
+
+Total Number of points on secondary or RC conditions={count_rc_condition_thresold}                                           
+Percentage of secondary points above RC={secondary_above_rc_perc}          
+Percentage of secondary points below RC={secondary_below_rc_perc} 
+
+RC Values for model  : 
+
+RC POA Total = {rc_poa_total}
+RC FPOA =      {rc_fpoa}
+RC RPOA =      {rc_rpoa}
+RC Temp =      {rc_temp}
+RC Wind=       {rc_wind}
+
+Coeff for Measured Data : 
+Power = POA * (a1 + a2*POA + a3*Temp + a4*Wind)
+a1 ={fpoa}
+a2 ={fpoa_poa_poa}
+a3 ={fpoa_temp}
+a4 ={fpoa_wind}
+
+Coeff for PVSyst: 
+
+Power = POA * (b1 + b2*POA + b3*Temp + b4*Wind)
+b1 ={pvsyst_fpoa}
+b2 ={pvsyst_fpoa_poa_poa}
+b3 ={pvsyst_fpoa_temp}
+b4 ={pvsyst_fpoa_wind}
+
+
+Reporting Conditions Measured Data using Mean:               Reporting Conditions Measured Data using Percentile:
+
+RC T.POA=         {rc_avg_poa_total}                         RC T.POA=         {percentile_avg_poa_total}
+RC POA=           {rc_avg_fpoa}                              RC POA=           {percentile_avg_fpoa}
+RC RPOA=          {rc_avg_fpoa}                              RC RPOA=          {percentile_avg_rpoa}
+RC Temp=          {rc_avg_temp}                              RC Temp=          {percentile_avg_temp}
+RC Wind=          {rc_avg_wind}                              RC Wind=          {percentile_avg_wind}
+
+Reporting Conditions PVSyst Data using Mean:                Reporting Conditions PVSyst Data using Percentile:
+
+RC T.POA=         {rc_pvsyst_avg_poa_total}                  RC T.POA=         {rc_pvsyst_percentile_poa_total}
+RC POA=           {rc_pvsyst_avg_fpoa}                       RC POA=           {rc_pvsyst_percentile_fpoa}
+RC RPOA=          {rc_pvsyst_avg_rpoa}                       RC RPOA=          {rc_pvsyst_percentile_rpoa}
+RC Temp=          {rc_pvsyst_avg_temp}                       RC Temp=          {rc_pvsyst_percentileg_temp}
+RC Wind=          {rc_pvsyst_avg_wind}                       RC Wind=          {rc_pvsyst_percentile_wind}
+
+
+{count_primary_filters_per_day}    
+
+
+{count_secondary_filters_per_day}
+
+
+##Measured Data Inputs
+
+Minimum POA Irradaince={minimum_irradiance}
+Max POA Irradiance={max_irradiance}
+
+Grid Limit={max_gridlimit}kW
+Grid Clipping Threshold={grid_clipping_thresold}
+
+Inverter Rating={inverter_rating}
+Inverter Clipping Threshold={inverter_clipping_thresold}
+
+Reporting Condition Irradaince Band Range={reporting_condition_thresold}
+
+## Primary Filters
+                                                                                                           
+Number of points after applying grid>0 =                               
+{(count_meter_greaterzero)}                     
+
+Number of points after applying grid clipping limit  =                
+{count_grid_clipping}                            
+
+
+ Number of points after applying grid filters=                      
+{count_meter_filter_data}                        
+
+Number of points after checking inverter clipping=                    
+
+
+Number of points after checking inverter data is blank=                
+{count_inverter_blank}                             
+
+Number of points after checking inverter data is Zero                  
+{count_inverter_zero}                            
+
+#  Number of points after applying Inverter filters=                  
+# {count_inverter_filter_data}
+
+               
+                                      
+Number of points after removing fpoa blank data=                       
+{count_fpoa_blank}             
+
+Number of points after removing fpoa zero data=                        
+{count_fpoa_zero}
+
+Number of points after removing rpoa blank data=                       
+{count_rpoa_blank}
+
+Number of points after removing rpoa zero data=                        
+{count_rpoa_zero}
+
+Number of points after removing temp blank data=                       
+{count_temp_blank}
+
+Number of points after removing temp zero data=                        
+{count_temp_zero}
+
+Number of points after removing wind blank data=                       
+{count_wind_blank}
+
+Number of points after removing wind zero data=                        
+{count_wind_zero}
+
+Number of points after removin unstable irradiance data=               
+{count_fpoa_qc}
+
+Total number of points after all met data filtering=
+{count_after_all_met_data_filters}
+
+Total number of points on all primary filters= 
+{count_primary_filters}
+
+
+
+Reporting Condition Irradaince Band Range={reporting_condition_thresold}
+
+Total Number of points on secondary or RC conditions={count_rc_condition_thresold}
+
+
+
+
+{measured_energy_bifacial}
+{measured_energy_monofacial}
+
+{expected_energy_bifacial}
+{expected_energy_monofacial}
+
+{Capcity_Ratio_Bifacial}
+{Capcity_Ratio_Mono}
+
+##PVSyst Inputs
+
+PVSyst Minimum Irradiance= {minimum_irradiance}
+Minimum Shading (FShBm)= {pvsyst_shading}
+
+PVSyst Inverter Capacity= {Inverter_limit}
+PVSyst Inverter Clipping= {inverter_clipping}
+
+PVSyst Grid Capacity= {grid_clipping}
+PVSyst Grid Clipping ={grid_clipping}
+
+Bifaciality Factor = {bifaciality}
+
+PVSyst Test Data start date = {pvsyst_model_start_date}
+PVSyst Test Data end date = {pvsyst_model_end_date}
+
+Number of PVSyst points after filters = {pvsyst_filtered_df['E_Grid'].count()}
+
+
+
+
+
+Availability: 
+Average Availability for the project is                                          {avail_average}
+Here are list of inverters availability for the test period: 
+
+
+{avail_counts_df}
+
+
+
+
+"""
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -550,7 +759,7 @@ tab3.write(rc_pvsyst_percentile_rpoa)
 tab3.write(rc_pvsyst_percentileg_temp)
 tab3.write(rc_pvsyst_percentile_wind)
 
-tab3.write("PVSyst Coefficients in the order {4;3;2;1}:")
+tab3.subheader("PVSyst Coefficients in the order {4;3;2;1}:")
 tab3.write(f"fpoa: {pvsyst_fpoa}")
 tab3.write(f"fpoa_poa_poa: {pvsyst_fpoa_poa_poa}")
 tab3.write(f"fpoa_temp: {pvsyst_fpoa_temp}")
@@ -561,6 +770,11 @@ tab3.write("Bifacial: " + str(expected_energy_monofacial))
 tab3.write("Monofacial: " + str(expected_energy_bifacial))
 tab3.plotly_chart(fig4)
 
-tab3.subheader("congrats you passed 🎉")
-tab3.write("click button below to access in-depth report :)")
-tab3.link_button("Download report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+tab3.subheader("Capacity Ratio")
+tab3.write("Bifacial: " + str(Capcity_Ratio_Mono))
+tab3.write("Monofacial: " + str(Capcity_Ratio_Bifacial))
+
+tab3.header("Detailed Report Below:")
+tab3.write(detailed_report)
+
+tab3.link_button("Download in-depth report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
