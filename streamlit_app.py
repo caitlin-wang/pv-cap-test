@@ -86,7 +86,7 @@ test_end_date = np.datetime64(datetime.datetime.combine(form1_col2.date_input("E
 minimum_irradiance = form1_col1.number_input("Minimum Irradiance (W/m^2):", min_value=0, value=400, step=100)
 max_irradiance = form1_col2.number_input("Maximum Irradiance (W/m^2):", min_value=minimum_irradiance, value=1500, step=100)
 temporal_stability_thresold = form1_col1.number_input("Temporal Stability Threshold:", min_value=0, value=20, step=1)
-spatial_stability_thresold = form1_col2.number_input("Spatial Stability Threshold:", min_value=0.0, value=0.20, step=0.10)
+spatial_stability_thresold = form1_col2.number_input("Spatial Stability Threshold:", min_value=0.0, value=0.05, step=0.10)
 
 form1.subheader("Grid Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
@@ -233,8 +233,8 @@ count_fpoa_qc=merged_df['fpoa_QC'].value_counts().rename(index={True:"Including"
 count_after_all_met_data_filters=(merged_df['fpoa_blank']&merged_df['fpoa_zero']&merged_df['rpoa_blank']&merged_df['rpoa_zero']&merged_df['temp_blank']&
                                   merged_df['temp_zero']&merged_df['wind_blank']&merged_df['wind_zero']&merged_df['fpoa_QC']).value_counts().rename(index={True:"Including",False:"Excluding"})
 
-merged_df['average_fpoa_pct_change']=merged_df['average_fpoa'].pct_change()*100
-merged_df['temporal_stability_check']=merged_df['average_fpoa_pct_change'].abs()<=temporal_stability_thresold
+merged_df['average_fpoa_pct_change'] = merged_df['average_fpoa'].pct_change() * 100
+merged_df['temporal_stability_check'] = merged_df['average_fpoa_pct_change'].abs() <= temporal_stability_thresold
 
 # Calculate standard deviation and mean for each row across the fpoa_data columns
 merged_df['fpoa_spatial_std'] = merged_df[vars.fpoa_data].std(axis=1)
@@ -249,8 +249,8 @@ merged_df['spatial_stability_check'] = abs(merged_df['fpoa_spatial_stability']) 
 # Count the number of True and False values in the new column
 spatial_stability_counts = merged_df['spatial_stability_check'].value_counts().rename(index={True:"Including",False:"Excluding"})
 
-merged_df['average_inverter_pct_change']=merged_df['average_fpoa'].pct_change()*100
-merged_df['temporal_stability_check']=merged_df['average_fpoa_pct_change'].abs()<=temporal_stability_thresold
+merged_df['average_inverter_pct_change'] = merged_df['average_fpoa'].pct_change() * 100
+merged_df['temporal_stability_check'] = merged_df['average_fpoa_pct_change'].abs() <= temporal_stability_thresold
 
 ##Calculating Reporting Conditions 
 
