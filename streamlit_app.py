@@ -674,9 +674,9 @@ Here are list of inverters availability for the test period:
 # Tab 3: Report
 
 tab3.write(f"""
-Detailed Report:
-Test Start Date: {test_start_date}
-Test End Date : {test_end_date}
+Detailed Report:\n
+Test Start Date: {test_start_date}\n
+Test End Date : {test_end_date}\n
 Number of Days: {test_end_date-test_start_date}
 """)
 
@@ -691,8 +691,8 @@ tab3.header("Capacity Test Results:")
 # add: statement of passing or failing w/ percentage
 
 tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"],
-    "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, measured_energy_monofacial/expected_energy_monofacial],
-    "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, measured_energy_bifacial/expected_energy_bifacial]}).set_index("Summary"))
+    "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capcity_Ratio_Mono],
+    "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capcity_Ratio_Bifacial]}).set_index("Summary"))
 
 tab3.plotly_chart(fig3) # Measured vs. Expected Energy after secondary filtering
 
