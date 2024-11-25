@@ -8,6 +8,7 @@ import numpy as np
 from scipy import stats
 import os
 import plotly.graph_objs as go
+import statsmodels.api as sm
 #from glob import glob
 #import dask.dataframe as dd
 #from tqdm import tqdm
@@ -301,12 +302,10 @@ rc_temp=percentile_avg_temp
 # rc_temp=25
 rc_wind=1
 
-reporting_condition_thresold_min=(1-reporting_condition_thresold)*rc_poa_total
-reporting_condition_thresold_min
-reporting_condition_thresold_max=(1+reporting_condition_thresold)*rc_poa_total
-reporting_condition_thresold_max
+reporting_condition_thresold_min = (1-reporting_condition_thresold)*rc_poa_total
+reporting_condition_thresold_max = (1+reporting_condition_thresold)*rc_poa_total
 
-merged_df['rc_check']=merged_df['average_poa_total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
+merged_df['rc_check'] = merged_df['average_poa_total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
 
 ## Checking the secondary filter where the number of data should be 750 or based on contract with EPC
 
@@ -316,14 +315,14 @@ count_rc_condition_thresold=merged_df['secondary_filter'].value_counts().rename(
 secondary_above_rc_perc=(((merged_df['secondary_filter']==True)&(merged_df['average_poa_total']>=rc_poa_total)).sum()/((merged_df['secondary_filter']==True)).sum()*100)
 secondary_below_rc_perc=100-secondary_above_rc_perc
 
-measured_regression_df=merged_df[merged_df['secondary_filter']==True]
+measured_regression_df = merged_df[merged_df['secondary_filter']==True]
 
 count_secondary_filters_per_day = measured_regression_df.groupby(measured_regression_df['t_stamp'].dt.date)['secondary_filter'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
 
 # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
 fig2 = go.Figure()
 
-y_columns_secondary=['average_fpoa','average_rpoa','average_temp','average_wind']  # Replace with your column names
+y_columns_secondary = ['average_fpoa','average_rpoa','average_temp','average_wind']  # Replace with your column names
 
 
 # Add traces for the primary y-axis
@@ -347,6 +346,22 @@ fig2.update_layout(
     hovermode='x unified'
 )
 
+## Adding columns in data frame to use it for regression equation per ASTM 2848
+##Power = POA * (fpoa + fpoa_poa_poa*POA + fpoa_temp*Temp + fpoa_wind*Wind)
+
+## Calculating POA xPOA, POAxTemp and POAx Wind 
+measured_regression_df['fpoa'] = measured_regression_df['average_poa_total']
+measured_regression_df['fpoaxfpoa'] = measured_regression_df['average_poa_total'] * measured_regression_df['average_poa_total']
+measured_regression_df['fpoaxtemp'] = measured_regression_df['average_temp'] * measured_regression_df['average_poa_total']
+measured_regression_df['fpoaxwind'] = measured_regression_df['average_wind'] * measured_regression_df['average_poa_total']*0
+
+X = measured_regression_df[['fpoa','fpoaxfpoa','fpoaxtemp','fpoaxwind']]
+y = measured_regression_df[vars.meter_data]
+
+coefficients, residuals, rank, s = np.linalg.lstsq(X, y, rcond=None)
+final_coefficients = coefficients[::-1]
+
+fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -416,6 +431,12 @@ tab3.write(secondary_below_rc_perc)
 tab3.subheader("Secondary Filters per Day")
 tab3.write(count_secondary_filters_per_day)
 tab3.plotly_chart(fig2)
+
+tab3.subheader("Coefficients in the order for measured data  {4;3;2;1}:")
+tab3.write(f"fpoa: {fpoa}")
+tab3.write(f"fpoa_poa_poa: {fpoa_poa_poa}")
+tab3.write(f"fpoa_temp: {fpoa_temp}")
+tab3.write(f"fpoa_wind: {fpoa_wind}")
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")

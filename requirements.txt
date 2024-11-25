@@ -4,6 +4,7 @@ plotly
 datetime
 numpy
 scipy
+statsmodels
 #glob
 #dask
 tqdm
