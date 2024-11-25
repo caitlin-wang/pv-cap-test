@@ -69,7 +69,8 @@ fig.update_layout(
     title='Weather Station and Inverter Data',
     xaxis_title='Timestamp',
     yaxis_title='Values',
-    hovermode='x unified')
+    hovermode='x unified',
+    width = 1000)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -325,7 +326,8 @@ fig5.update_layout(
     title="Total Number of Points vs Threshold",
     xaxis_title="Threshold",
     yaxis_title="Total Number of Points",
-    template="plotly_white"
+    template="plotly_white",
+    width=1000
 )
 
 ## Checking the secondary filter where the number of data should be 750 or based on contract with EPC
@@ -400,7 +402,8 @@ fig3.update_layout(
     title = "Measured vs. Expected Energy (after secondary filter)",
     #xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
     #yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
-    yaxis_title = "Meter Data"
+    yaxis_title = "Meter Data",
+    width = 1000
 )
 
 pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
@@ -463,7 +466,7 @@ expected_energy_bifacial=(pvsyst_fpoa+pvsyst_fpoa_poa_poa*rc_poa_total+pvsyst_fp
 
 expected_regression_df.loc[:,"Energy Predicted"]=expected_regression_df['POA_Total']*((fpoa)+fpoa_poa_poa*expected_regression_df['POA_Total']+fpoa_temp*expected_regression_df['T_Amb']+fpoa_wind*expected_regression_df['WindVel'])
 # Assuming expected_regression_df is already defined and contains columns 'Energy Predicted' and 'E_Grid'
-fig4 = px.scatter(expected_regression_df, x='Energy Predicted', y='E_Grid', title='Scatter plot between Energy P and E_G')
+fig4 = px.scatter(expected_regression_df, x='Energy Predicted', y='E_Grid', title='Scatter plot between Energy P and E_G', width=1000)
 
 # Customize the hover data
 fig4.update_traces(marker=dict(size=10), selector=dict(mode='markers'))
