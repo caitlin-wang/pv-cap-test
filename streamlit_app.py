@@ -688,13 +688,8 @@ tab3.header("Capacity Test Results:")
 # add: statement of passing or failing w/ percentage
 
 tab3.write(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"],
-                        "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, measured_energy_monofacial/expected_energy_monofacial],
-                        "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, measured_energy_bifacial/expected_energy_bifacial]}))
-
-tab3.write("Bifacial: " + str(measured_energy_bifacial))
-tab3.write("Monofacial: " + str(measured_energy_monofacial))
-tab3.write("Bifacial: " + str(expected_energy_monofacial))
-tab3.write("Monofacial: " + str(expected_energy_bifacial))
+    "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, measured_energy_monofacial/expected_energy_monofacial],
+    "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, measured_energy_bifacial/expected_energy_bifacial]}).set_index("Summary"))
 
 #tab3.write(merged_df) # merged_df
 tab3.plotly_chart(fig) # initial data plot
