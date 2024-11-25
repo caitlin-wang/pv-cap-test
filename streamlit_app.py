@@ -349,16 +349,16 @@ y_columns_secondary = ['average_fpoa','average_rpoa','average_temp','average_win
 
 
 # Add traces for the primary y-axis
-for col in vars.y_columns_primary:
+for col in ['LBSP1/Device/PowerMeter/MTR/p3_kW', 'average_fpoa']:
     fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df[col], mode='lines', name=col))
 
 # Add traces for the secondary y-axis
-for col in y_columns_secondary:
+for col in ['LBSP1/Device/PowerMeter/MTR/p3_kW', 'average_fpoa']:
     fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df[col], mode='lines', name=col, yaxis='y2'))
 
 # Update layout to include a secondary y-axis
 fig2.update_layout(
-    title='Measured Regression Data Graph',
+    title='Meter vs. FPOA after secondary filtering',
     xaxis_title='Timestamp',
     yaxis_title='Meter and Inverter Data',
     yaxis2=dict(
@@ -399,7 +399,7 @@ fig3 = px.scatter(measured_regression_df, x='Energy Predicted', y=vars.meter_dat
 
 # Update the layout to include (0, 0) in the axes
 fig3.update_layout(
-    title = "Measured vs. Expected Energy (after secondary filter)",
+    title = "Measured vs. Expected Energy after secondary filtering",
     #xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
     #yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
     yaxis_title = "Meter Data",
@@ -694,7 +694,9 @@ tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"]
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, measured_energy_monofacial/expected_energy_monofacial],
     "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, measured_energy_bifacial/expected_energy_bifacial]}).set_index("Summary"))
 
-tab3.plotly_chart(fig3)
+tab3.plotly_chart(fig3) # Measured vs. Expected Energy after secondary filtering
+
+tab3.plotly_chart(fig2) # Meter vs. FPOA after secondary filtering
 
 #tab3.write(merged_df) # merged_df
 #tab3.plotly_chart(fig) # initial data plot
@@ -763,7 +765,6 @@ tab3.write(secondary_below_rc_perc)
 
 tab3.subheader("Secondary Filters per Day")
 tab3.write(count_secondary_filters_per_day)
-tab3.plotly_chart(fig2)
 
 tab3.subheader("Coefficients in the order for measured data  {4;3;2;1}:")
 tab3.write(f"fpoa: {fpoa}")
