@@ -364,7 +364,7 @@ fig2.update_layout(
         overlaying='y',
         side='right'),
     hovermode='x unified',
-    width = 400
+    width = 1000
 )
 
 ## Adding columns in data frame to use it for regression equation per ASTM 2848
