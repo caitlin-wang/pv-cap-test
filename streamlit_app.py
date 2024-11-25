@@ -27,7 +27,7 @@ st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="wide
 
 st.image("long_logo.jpg", width=300)
 st.title("PV Cap Test")
-st.header("Date: " + str(datetime.datetime.now()))
+st.header("Date: " + str(datetime.date.today()))
 tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
 # Tab 1: Data Upload
