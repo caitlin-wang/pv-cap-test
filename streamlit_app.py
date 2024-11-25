@@ -413,6 +413,23 @@ pvsyst_filtered_df = pvsyst_test_model_selected_columns_df.loc[(pvsyst_test_mode
     & (pvsyst_test_model_selected_columns_df['FShdBm'] == pvsyst_shading)
     & (pvsyst_test_model_selected_columns_df['IL_Pmax'] == 0)]
 
+pvsyst_filtered_df.loc[:,'POA_Total'] = pvsyst_filtered_df['POA_Total_pvsyst']
+pvsyst_filtered_df.loc[:,'POA_Total*POA_Total'] = pvsyst_filtered_df['POA_Total_pvsyst'] * pvsyst_filtered_df['POA_Total_pvsyst']
+pvsyst_filtered_df.loc[:,'POA_Total*Temp'] = pvsyst_filtered_df['POA_Total_pvsyst'] * pvsyst_filtered_df['T_Amb']
+pvsyst_filtered_df.loc[:,'POA_Total*Wind'] = pvsyst_filtered_df['POA_Total_pvsyst'] * pvsyst_filtered_df['WindVel']
+
+rc_pvsyst_avg_poa_total=pvsyst_filtered_df['POA_Total_pvsyst'].mean()
+rc_pvsyst_avg_fpoa=pvsyst_filtered_df['GlobInc'].mean()
+rc_pvsyst_avg_rpoa=pvsyst_filtered_df['GlobBak'].mean()
+rc_pvsyst_avg_temp=pvsyst_filtered_df['T_Amb'].mean()
+rc_pvsyst_avg_wind=pvsyst_filtered_df['WindVel'].mean()
+
+rc_pvsyst_percentile_poa_total=pvsyst_filtered_df['POA_Total_pvsyst'].quantile(percentile)
+rc_pvsyst_percentile_fpoa=pvsyst_filtered_df['GlobInc'].quantile(percentile)
+rc_pvsyst_percentile_rpoa=pvsyst_filtered_df['GlobBak'].quantile(percentile)
+rc_pvsyst_percentileg_temp=pvsyst_filtered_df['T_Amb'].quantile(percentile)
+rc_pvsyst_percentile_wind=pvsyst_filtered_df['WindVel'].quantile(percentile)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -497,6 +514,18 @@ tab3.subheader("PVSyst Test Model")
 tab3.write(pvsyst_test_model_df)
 tab3.write("PVsyst Start Date: " + str(pvsyst_model_start_date))
 tab3.write("PVSyst End Date: " + str(pvsyst_model_end_date))
+
+tab3.subheader("PVSyst RC Values")
+tab3.write(rc_pvsyst_avg_poa_total)
+tab3.write(rc_pvsyst_avg_fpoa)
+tab3.write(rc_pvsyst_avg_rpoa)
+tab3.write(rc_pvsyst_avg_temp)
+tab3.write(rc_pvsyst_avg_wind)
+tab3.write(rc_pvsyst_percentile_poa_total)
+tab3.write(rc_pvsyst_percentile_fpoa)
+tab3.write(rc_pvsyst_percentile_rpoa)
+tab3.write(rc_pvsyst_percentileg_temp)
+tab3.write(rc_pvsyst_percentile_wind)
 
 tab3.subheader("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
