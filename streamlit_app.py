@@ -362,9 +362,9 @@ fig2.update_layout(
     yaxis2=dict(
         title='MET Avg Data',
         overlaying='y',
-        side='right'
-    ),
-    hovermode='x unified'
+        side='right'),
+    hovermode='x unified',
+    width = 400
 )
 
 ## Adding columns in data frame to use it for regression equation per ASTM 2848
@@ -397,7 +397,7 @@ fig3 = px.scatter(measured_regression_df, x='Energy Predicted', y=vars.meter_dat
 
 # Update the layout to include (0, 0) in the axes
 fig3.update_layout(
-    title = "Plot of Energy Predicted",
+    title = "Measured vs. Expected Energy (after secondary filter)",
     #xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
     #yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
     yaxis_title = "Meter Data"
@@ -691,8 +691,10 @@ tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"]
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, measured_energy_monofacial/expected_energy_monofacial],
     "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, measured_energy_bifacial/expected_energy_bifacial]}).set_index("Summary"))
 
+tab3.plotly_chart(fig3)
+
 #tab3.write(merged_df) # merged_df
-tab3.plotly_chart(fig) # initial data plot
+#tab3.plotly_chart(fig) # initial data plot
 
 tab3.subheader("Average Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling))
@@ -766,8 +768,6 @@ tab3.write(f"fpoa_poa_poa: {fpoa_poa_poa}")
 tab3.write(f"fpoa_temp: {fpoa_temp}")
 tab3.write(f"fpoa_wind: {fpoa_wind}")
 
-tab3.subheader("Measured Energy")
-tab3.plotly_chart(fig3)
 tab3.plotly_chart(fig4)
 
 tab3.subheader("PVSyst Test Model")
