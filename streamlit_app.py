@@ -476,11 +476,6 @@ Capcity_Ratio_Bifacial=measured_energy_bifacial/expected_energy_bifacial
 
 detailed_report=f"""
 
-Detailed Report:
-Test Start Date: {test_start_date}
-Test End Date : {test_end_date}
-Number of Days: {test_end_date-test_start_date}
-
 Summary : 
 
 Capacity Ratio_Bifacial={Capcity_Ratio_Bifacial*100}
@@ -679,7 +674,7 @@ Here are list of inverters availability for the test period:
 # Tab 3: Report
 
 st.write("Test Start Date: " + str(test_start_date))
-st.write("Test End Date : " str(test_end_date))
+st.write("Test End Date : " + str(test_end_date))
 st.write("Number of Days: " + str(test_end_date-test_start_date))
 
 # add: table of inputs
