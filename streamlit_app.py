@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import datetime
 import numpy as np
-#from scipy import stats
+from scipy import stats
 import os
 import plotly.graph_objs as go
 #import statsmodels.api as sm
@@ -42,7 +42,7 @@ date_format = tab1.text_input("Date Format", "%Y-%m-%d %H:%M:%S.%f")
 
 uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
 column_groups = tab1.file_uploader("Upload column groups", type=['csv','xlsx'])
-pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['csv'])
+pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['csv', 'xlsx'])
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend begin ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -381,8 +381,8 @@ fig3 = px.scatter(measured_regression_df, x='Energy Predicted', y=vars.meter_dat
 # Update the layout to include (0, 0) in the axes
 fig3.update_layout(
     title = "Plot of Energy Predicted",
-    xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
-    yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
+    #xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
+    #yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
     yaxis_title = "Meter Data"
 )
 
