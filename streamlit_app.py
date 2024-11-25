@@ -4,6 +4,7 @@ import pandas as pd
 #import plotly.io as pio
 import plotly.graph_objects as go
 import datetime
+from dateutil.relativedelta import relativedelta 
 import numpy as np
 from scipy import stats
 import os
@@ -387,7 +388,7 @@ fig3.update_layout(
 )
 
 pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
-pvsyst_test_model_df["date"] += np.timedelta64(34,'Y') 
+pvsyst_test_model_df["date"] += relativedelta(years=34)  
 
 midpoint_date = test_start_date + (test_end_date - test_start_date) / 2
 pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
