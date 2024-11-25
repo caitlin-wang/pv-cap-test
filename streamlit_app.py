@@ -50,7 +50,7 @@ pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['c
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
         z.extractall(".")
-        tab1.write(os.listdir('2.Raw Data'))
+        #tab1.write(os.listdir('2.Raw Data'))
 if uploaded_zip is None or pvsyst_test_model_path is None:
     tab2.write('Upload files to proceed.')
     tab3.write('Upload files to proceed.')
@@ -742,7 +742,7 @@ tab3.write(percentile_avg_wind)
 tab3.write(count_primary_filters.to_string(dtype=False))
 
 tab3.subheader("RC Threshold Loop")
-tab3.df(results_df)
+tab3.write(results_df)
 tab3.plotly_chart(fig5)
 
 tab3.subheader("Secondary Filters")
