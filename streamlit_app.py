@@ -687,7 +687,7 @@ tab3.header("Capacity Test Results:")
 
 # add: statement of passing or failing w/ percentage
 
-tab3.write(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"],
+tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"],
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, measured_energy_monofacial/expected_energy_monofacial],
     "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, measured_energy_bifacial/expected_energy_bifacial]}).set_index("Summary"))
 
