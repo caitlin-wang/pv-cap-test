@@ -27,7 +27,7 @@ st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="wide
 
 st.image("long_logo.jpg", width=300)
 st.title("PV Cap Test")
-st.header("Date: " + str(datetime.date.today()))
+st.header("Date: " + str(datetime.now()))
 tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
 # Tab 1: Data Upload
@@ -681,7 +681,12 @@ Here are list of inverters availability for the test period:
 
 # Tab 3: Report
 
-tab3.write(merged_df) # merged_df
+tab3.write("Bifacial: " + str(measured_energy_bifacial))
+tab3.write("Monofacial: " + str(measured_energy_monofacial))
+tab3.write("Bifacial: " + str(expected_energy_monofacial))
+tab3.write("Monofacial: " + str(expected_energy_bifacial))
+
+#tab3.write(merged_df) # merged_df
 tab3.plotly_chart(fig) # initial data plot
 
 tab3.subheader("Average Soiling")
@@ -757,9 +762,8 @@ tab3.write(f"fpoa_temp: {fpoa_temp}")
 tab3.write(f"fpoa_wind: {fpoa_wind}")
 
 tab3.subheader("Measured Energy")
-tab3.write("Bifacial: " + str(measured_energy_bifacial))
-tab3.write("Monofacial: " + str(measured_energy_monofacial))
 tab3.plotly_chart(fig3)
+tab3.plotly_chart(fig4)
 
 tab3.subheader("PVSyst Test Model")
 tab3.write(pvsyst_test_model_df)
@@ -783,11 +787,6 @@ tab3.write(f"fpoa: {pvsyst_fpoa}")
 tab3.write(f"fpoa_poa_poa: {pvsyst_fpoa_poa_poa}")
 tab3.write(f"fpoa_temp: {pvsyst_fpoa_temp}")
 tab3.write(f"fpoa_wind: {pvsyst_fpoa_wind}")
-
-tab3.subheader("Expected Energy")
-tab3.write("Bifacial: " + str(expected_energy_monofacial))
-tab3.write("Monofacial: " + str(expected_energy_bifacial))
-tab3.plotly_chart(fig4)
 
 tab3.subheader("Capacity Ratio")
 tab3.write("Bifacial: " + str(Capcity_Ratio_Mono))
