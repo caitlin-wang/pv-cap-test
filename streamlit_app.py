@@ -481,13 +481,7 @@ Test Start Date: {test_start_date}
 Test End Date : {test_end_date}
 Number of Days: {test_end_date-test_start_date}
 
-
 Summary : 
-Measured Enrgy Bifacial={measured_energy_bifacial}
-Measured Enrgy Monofacial={measured_energy_monofacial}
-
-Expected Energy Bifacial={expected_energy_bifacial}
-Expected Energy Monofacial={expected_energy_monofacial}
 
 Capacity Ratio_Bifacial={Capcity_Ratio_Bifacial*100}
 Capacity Ratio_Monofacial={Capcity_Ratio_Mono*100}
@@ -684,6 +678,10 @@ Here are list of inverters availability for the test period:
 
 # Tab 3: Report
 
+st.write("Test Start Date: " + str(test_start_date))
+st.write("Test End Date : " str(test_end_date))
+st.write("Number of Days: " + str(test_end_date-test_start_date))
+
 # add: table of inputs
 
 tab3.header("Capacity Test Results:")
@@ -697,6 +695,11 @@ tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"]
 tab3.plotly_chart(fig3) # Measured vs. Expected Energy after secondary filtering
 
 tab3.plotly_chart(fig2) # Meter vs. FPOA after secondary filtering
+
+tab3.header("Availability Test:")
+# add: statement of availability calculation
+
+tab3.subheader("Test total availability")
 
 #tab3.write(merged_df) # merged_df
 #tab3.plotly_chart(fig) # initial data plot
