@@ -1,14 +1,15 @@
 import streamlit as st
 import pandas as pd
-import math
-import plotly.io as pio
+#import math
+#import plotly.io as pio
 import plotly.graph_objects as go
 import datetime
 import numpy as np
-from scipy import stats
+#from scipy import stats
 import os
 import plotly.graph_objs as go
-import statsmodels.api as sm
+#import statsmodels.api as sm
+import plotly.express as px
 #from glob import glob
 #import dask.dataframe as dd
 #from tqdm import tqdm
@@ -373,6 +374,18 @@ fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 measured_energy_bifacial=rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
 measured_energy_monofacial=rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
 
+measured_regression_df["Energy Predicted"]=measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
+
+fig3 = px.scatter(measured_regression_df, x='Energy Predicted', y=vars.meter_data[0], title='Scatter plot between x and y')
+
+# Update the layout to include (0, 0) in the axes
+fig3.update_layout(
+    title = "Plot of Energy Predicted",
+    xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
+    yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
+    yaxis_title = "Meter Data"
+)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -452,6 +465,6 @@ tab3.subheader("Measured Energy")
 tab3.write("Bifacial: " + str(measured_energy_bifacial))
 tab3.write("Monofacial: " + str(measured_energy_monofacial))
 
-tab3.write("congrats you passed 🎉")
+tab3.subheader("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
 tab3.link_button("Download report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
