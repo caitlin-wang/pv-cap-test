@@ -386,6 +386,12 @@ fig3.update_layout(
     yaxis_title = "Meter Data"
 )
 
+pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
+
+midpoint_date = test_start_date + (test_end_date - test_start_date) / 2
+pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
+pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -465,6 +471,11 @@ tab3.subheader("Measured Energy")
 tab3.write("Bifacial: " + str(measured_energy_bifacial))
 tab3.write("Monofacial: " + str(measured_energy_monofacial))
 tab3.plotly_chart(fig3)
+
+tab3.subheader("PVSyst Test Model")
+tab3.write(pvsyst_test_model_df)
+tab3.write("PVsyst Start Date: " + str(pvsyst_model_start_date))
+tab3.write("PVSyst End Date: " + str(pvsyst_model_end_date))
 
 tab3.subheader("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
