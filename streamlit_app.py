@@ -14,8 +14,8 @@ import plotly.express as px
 #from glob import glob
 #import dask.dataframe as dd
 #from tqdm import tqdm
-#import warnings
-#warnings.filterwarnings("ignore")
+import warnings
+warnings.filterwarnings("ignore")
 import zipfile
 import vars
 import funcs
@@ -393,6 +393,25 @@ pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
 midpoint_date = test_start_date + (test_end_date - test_start_date) / 2
 pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
 pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
+
+pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
+
+pvsyst_test_model_selected_columns_df = pvsyst_test_model_df[pvsyst_selected_column]
+pvsyst_test_model_selected_columns_df
+
+pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
+
+# Convert 'date' column to datetime
+pvsyst_test_model_selected_columns_df['date'] = pd.to_datetime(pvsyst_test_model_selected_columns_df['date'])
+
+
+pvsyst_filtered_df = pvsyst_test_model_selected_columns_df.loc[(pvsyst_test_model_selected_columns_df['date'] >= pvsyst_model_start_date)
+    & (pvsyst_test_model_selected_columns_df['date'] <= pvsyst_model_end_date)
+    & (pvsyst_test_model_selected_columns_df['GlobInc'] > minimum_irradiance) 
+    & (pvsyst_test_model_selected_columns_df['E_Grid'] > 0)
+    & (pvsyst_test_model_selected_columns_df['E_Grid'] < grid_clipping)
+    & (pvsyst_test_model_selected_columns_df['FShdBm'] == pvsyst_shading)
+    & (pvsyst_test_model_selected_columns_df['IL_Pmax'] == 0)]
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
