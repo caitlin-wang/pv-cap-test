@@ -464,6 +464,7 @@ tab3.write(f"fpoa_wind: {fpoa_wind}")
 tab3.subheader("Measured Energy")
 tab3.write("Bifacial: " + str(measured_energy_bifacial))
 tab3.write("Monofacial: " + str(measured_energy_monofacial))
+tab3.plotly_chart(fig3)
 
 tab3.subheader("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
