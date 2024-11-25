@@ -100,7 +100,10 @@ grid_clipping = grid_clipping_thresold * max_gridlimit
 form1.subheader("RC Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
 percentile = form1_col1.number_input("Percentile:", min_value=0.0, max_value=1.0, value=0.50, step=0.10)
-reporting_condition_thresold = form1_col2.number_input("Reporting Condition Threshold:", value=0.20, min_value=0.0, step=0.01)
+reporting_condition_thresold = form1_col2.number_input("Reporting Condition Threshold:", value=0.2, min_value=0.0, step=0.1)
+min_rc = form1_col1.number_input("Min RC Threshold:", min_value=0.0, max_value=1.0, value=0.1, step=0.1)
+max_rc = form1_col2.number_input("Max RC Threshold:", min_value=0.0, max_value=1.0, value=0.6, step=0.1)
+step_size = form1.number_input("RC Step Size:", min_value=0.01, max_value=0.10, value=0.05, step=0.01)
 
 form1.subheader("Inverter Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
@@ -312,6 +315,23 @@ reporting_condition_thresold_max = (1+reporting_condition_thresold)*rc_poa_total
 
 merged_df['rc_check'] = merged_df['average_poa_total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
 
+results_df = funcs.loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
+
+# Plot Total number of points against Threshold using Plotly
+fig5 = go.Figure()
+fig5.add_trace(go.Scatter(
+    x=results_df['Threshold'],
+    y=results_df['Total number of points'],
+    mode='lines+markers',
+    name='Total number of points'
+))
+fig5.update_layout(
+    title="Total Number of Points vs Threshold",
+    xaxis_title="Threshold",
+    yaxis_title="Total Number of Points",
+    template="plotly_white"
+)
+
 ## Checking the secondary filter where the number of data should be 750 or based on contract with EPC
 
 merged_df['secondary_filter']=merged_df['primary_filters']*merged_df['rc_check']
@@ -397,7 +417,6 @@ pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
 pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
 
 pvsyst_test_model_selected_columns_df = pvsyst_test_model_df[pvsyst_selected_column]
-pvsyst_test_model_selected_columns_df
 
 pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
 
@@ -721,6 +740,10 @@ tab3.write(percentile_avg_temp)
 tab3.write(percentile_avg_wind)
 # tab3.write(rc_wind_fixed)
 tab3.write(count_primary_filters.to_string(dtype=False))
+
+tab3.subheader("RC Threshold Loop")
+tab3.df(results_df)
+tab3.plotly_chart(fig5)
 
 tab3.subheader("Secondary Filters")
 tab3.write(count_rc_condition_thresold.to_string(dtype=False))
