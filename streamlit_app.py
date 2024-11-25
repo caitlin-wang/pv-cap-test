@@ -61,7 +61,7 @@ df3_combined = funcs.load_and_select(vars.files_meter, vars.meter_cols)
 
 # Merge the combined dataframes 
 merged_df = pd.merge(df1_combined, df2_combined)
-merged_df=pd.merge(merged_df, df3_combined)
+merged_df = pd.merge(merged_df, df3_combined)
 
 # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
 fig = go.Figure()
@@ -81,8 +81,8 @@ form1 = tab2.form("inputs form")
 
 form1.subheader("Irradiance Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
-test_start_date = np.datetime64(datetime.datetime.combine(form1_col1.date_input("Start Date", 'today', format='MM/DD/YYYY'), datetime.datetime.min.time()))
-test_end_date = np.datetime64(datetime.datetime.combine(form1_col2.date_input("End Date", 'today', format='MM/DD/YYYY'), datetime.datetime.min.time()))
+test_start_date = np.datetime64(datetime.datetime.combine(form1_col1.date_input("Start Date", '2024-10-10', format='MM/DD/YYYY'), datetime.datetime.min.time()))
+test_end_date = np.datetime64(datetime.datetime.combine(form1_col2.date_input("End Date", '2024-10-14', format='MM/DD/YYYY'), datetime.datetime.min.time()))
 minimum_irradiance = form1_col1.number_input("Minimum Irradiance (W/m^2):", min_value=0, value=400, step=100)
 max_irradiance = form1_col2.number_input("Maximum Irradiance (W/m^2):", min_value=minimum_irradiance, value=1500, step=100)
 temporal_stability_thresold = form1_col1.number_input("Temporal Stability Threshold:", min_value=0, value=20, step=1)
@@ -121,6 +121,9 @@ form1.form_submit_button("Submit Inputs")
 
 merged_df['t_stamp'] = pd.to_datetime(merged_df['t_stamp'])
 merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
+#st.write(test_start_date)
+#st.write(type(test_start_date))
+#st.write(merged_df['t_stamp'].dtype)
 
 # Apply the function to each row and create a new column 'average_fpoa'
 merged_df['average_fpoa'] = merged_df.apply(lambda row: funcs.average_if(row, vars.fpoa_data), axis=1)
@@ -149,7 +152,7 @@ avg_soiling_met15=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1
 avg_soiling_met21=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct'])).mean()
 avg_soiling_met29=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])).mean()
 
-count_avail_poa=((merged_df['average_fpoa']>=availability_min_fpoa)*merged_df['t_stamp_check']).sum()
+count_avail_poa = ((merged_df['average_fpoa'] >= availability_min_fpoa)*merged_df['t_stamp_check']).sum()
 counts = {}
 
 # Loop through each inverter column
