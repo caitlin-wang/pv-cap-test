@@ -366,6 +366,13 @@ final_coefficients = coefficients[::-1]
 
 fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 
+##Power = POA * (fpoa + fpoa_poa_poa*POA + fpoa_temp*Temp + fpoa_wind*Wind)
+
+## Note: Calculating energy 
+
+measured_energy_bifacial=rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
+measured_energy_monofacial=rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -440,6 +447,10 @@ tab3.write(f"fpoa: {fpoa}")
 tab3.write(f"fpoa_poa_poa: {fpoa_poa_poa}")
 tab3.write(f"fpoa_temp: {fpoa_temp}")
 tab3.write(f"fpoa_wind: {fpoa_wind}")
+
+tab3.subheader("Measured Energy")
+tab3.write("Bifacial: " + str(measured_energy_bifacial))
+tab3.write("Monofacial: " + str(measured_energy_monofacial))
 
 tab3.write("congrats you passed 🎉")
 tab3.write("click button below to access in-depth report :)")
