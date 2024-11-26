@@ -80,8 +80,10 @@ form1 = tab2.form("inputs form")
 
 form1.subheader("Irradiance Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
-test_start_date = np.datetime64(datetime.datetime.combine(form1_col1.date_input("Start Date", pd.to_datetime('2024-10-10'), format='MM/DD/YYYY'), datetime.datetime.min.time()))
-test_end_date = np.datetime64(datetime.datetime.combine(form1_col2.date_input("End Date", pd.to_datetime('2024-10-14'), format='MM/DD/YYYY'), datetime.datetime.min.time()))
+#test_start_date = np.datetime64(datetime.datetime.combine(form1_col1.date_input("Start Date", pd.to_datetime('2024-10-10'), format='MM/DD/YYYY'), datetime.datetime.min.time()))
+#test_end_date = np.datetime64(datetime.datetime.combine(form1_col2.date_input("End Date", pd.to_datetime('2024-10-14'), format='MM/DD/YYYY'), datetime.datetime.min.time()))
+test_start_date = datetime.datetime.combine(form1_col1.date_input("Start Date", pd.to_datetime('2024-10-10'), format='MM/DD/YYYY'), datetime.datetime.min.time())
+test_end_date = datetime.datetime.combine(form1_col2.date_input("End Date", pd.to_datetime('2024-10-14'), format='MM/DD/YYYY'), datetime.datetime.min.time())
 minimum_irradiance = form1_col1.number_input("Minimum Irradiance (W/m^2):", min_value=0, value=400, step=100)
 max_irradiance = form1_col2.number_input("Maximum Irradiance (W/m^2):", min_value=minimum_irradiance, value=1500, step=100)
 temporal_stability_thresold = form1_col1.number_input("Temporal Stability Threshold:", min_value=0, value=20, step=1)
@@ -471,21 +473,21 @@ fig4 = px.scatter(expected_regression_df, x='Energy Predicted', y='E_Grid', titl
 # Customize the hover data
 fig4.update_traces(marker=dict(size=10), selector=dict(mode='markers'))
 
-Capcity_Ratio_Mono=measured_energy_monofacial/expected_energy_monofacial
-Capcity_Ratio_Bifacial=measured_energy_bifacial/expected_energy_bifacial
+Capacity_Ratio_Mono=measured_energy_monofacial/expected_energy_monofacial*100
+Capacity_Ratio_Bifacial=measured_energy_bifacial/expected_energy_bifacial*100
 
 detailed_report=f"""
 
 Summary :
 
 Soiling Avg ={avg_soiling}
-Capacity Ratio_Bifacial with Soiling from Met Station={Capcity_Ratio_Bifacial*100+avg_soiling}
-Capacity Ratio_Monofacial with Soiling from Met Station={Capcity_Ratio_Mono*100+avg_soiling}
+Capacity Ratio_Bifacial with Soiling from Met Station={Capacity_Ratio_Bifacial*100+avg_soiling}
+Capacity Ratio_Monofacial with Soiling from Met Station={Capacity_Ratio_Mono*100+avg_soiling}
 
 
 Soiling Avg_IV Curve ={soiling_with_iv_curve}
-apacity Ratio_Bifacial with Soiling from IV Curve={Capcity_Ratio_Bifacial*100+soiling_with_iv_curve}
-Capacity Ratio_Monofacial with Soiling from IV Curve={Capcity_Ratio_Mono*100+soiling_with_iv_curve}
+apacity Ratio_Bifacial with Soiling from IV Curve={Capacity_Ratio_Bifacial*100+soiling_with_iv_curve}
+Capacity Ratio_Monofacial with Soiling from IV Curve={Capacity_Ratio_Mono*100+soiling_with_iv_curve}
 
 
 
@@ -648,16 +650,9 @@ Here are list of inverters availability for the test period:
 
 # Tab 3: Report
 
-tab3.write(f"""
-Detailed Report:\n
-Test Start Date: {test_start_date}\n
-Test End Date : {test_end_date}\n
-Number of Days: {test_end_date-test_start_date}
-""")
-
-#tab3.write("Test Start Date: ", test_start_date)
-#tab3.write("Test End Date : ", test_end_date)
-#tab3.write("Number of Days: ", test_end_date-test_start_date)
+tab3.write("Test Start Date: " + str(test_start_date))
+tab3.write("Test End Date : " + str(test_end_date))
+tab3.write("Number of Days: " + str((test_end_date-test_start_date)/3600))
 
 # add: table of inputs
 
@@ -666,8 +661,8 @@ tab3.header("Capacity Test Results:")
 # add: statement of passing or failing w/ percentage
 
 tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"],
-    "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capcity_Ratio_Mono],
-    "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capcity_Ratio_Bifacial]}).set_index("Summary"))
+    "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
+    "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capacity_Ratio_Bifacial]}).set_index("Summary"))
 
 tab3.plotly_chart(fig3) # Measured vs. Expected Energy after secondary filtering
 
@@ -776,10 +771,6 @@ tab3.write(f"fpoa: {pvsyst_fpoa}")
 tab3.write(f"fpoa_poa_poa: {pvsyst_fpoa_poa_poa}")
 tab3.write(f"fpoa_temp: {pvsyst_fpoa_temp}")
 tab3.write(f"fpoa_wind: {pvsyst_fpoa_wind}")
-
-tab3.subheader("Capacity Ratio")
-tab3.write("Bifacial: " + str(Capcity_Ratio_Mono))
-tab3.write("Monofacial: " + str(Capcity_Ratio_Bifacial))
 
 tab3.header("Detailed Report Below:")
 tab3.write(detailed_report)
