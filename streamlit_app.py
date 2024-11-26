@@ -349,10 +349,10 @@ y_columns_secondary = ['average_fpoa','average_rpoa','average_temp','average_win
 
 
 # Add traces for the primary y-axis
-fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines'))
+fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name='LBSP1/Device/PowerMeter/MTR/p3_kW'))
 
 # Add traces for the secondary y-axis
-fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['average_fpoa'], mode='lines', yaxis='y2'))
+fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['average_fpoa'], mode='lines', name='average_fpoa', yaxis='y2'))
 
 # Update layout to include a secondary y-axis
 fig2.update_layout(
