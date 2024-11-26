@@ -80,8 +80,6 @@ form1 = tab2.form("inputs form")
 
 form1.subheader("Irradiance Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
-#test_start_date = np.datetime64(datetime.datetime.combine(form1_col1.date_input("Start Date", pd.to_datetime('2024-10-10'), format='MM/DD/YYYY'), datetime.datetime.min.time()))
-#test_end_date = np.datetime64(datetime.datetime.combine(form1_col2.date_input("End Date", pd.to_datetime('2024-10-14'), format='MM/DD/YYYY'), datetime.datetime.min.time()))
 test_start_date = datetime.datetime.combine(form1_col1.date_input("Start Date", pd.to_datetime('2024-10-10'), format='MM/DD/YYYY'), datetime.datetime.min.time())
 test_end_date = datetime.datetime.combine(form1_col2.date_input("End Date", pd.to_datetime('2024-10-14'), format='MM/DD/YYYY'), datetime.datetime.min.time())
 minimum_irradiance = form1_col1.number_input("Minimum Irradiance (W/m^2):", min_value=0, value=400, step=100)
@@ -652,7 +650,7 @@ Here are list of inverters availability for the test period:
 
 tab3.write("Test Start Date: " + str(test_start_date))
 tab3.write("Test End Date : " + str(test_end_date))
-tab3.write("Number of Days: " + str((test_end_date-test_start_date)/3600))
+tab3.write("Number of Days: " + str(test_end_date-test_start_date))
 
 # add: table of inputs
 
