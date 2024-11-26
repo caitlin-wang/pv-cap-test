@@ -27,7 +27,7 @@ st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="wide
 
 st.image("long_logo.jpg", width=300)
 st.title("PV Cap Test")
-st.header("Date: " + str(datetime.date.today()))
+#st.header("Date: " + str(datetime.date.today()))
 tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
 # Tab 1: Data Upload
@@ -349,12 +349,10 @@ y_columns_secondary = ['average_fpoa','average_rpoa','average_temp','average_win
 
 
 # Add traces for the primary y-axis
-for col in ['LBSP1/Device/PowerMeter/MTR/p3_kW', 'average_fpoa']:
-    fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df[col], mode='lines', name=col))
+fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines'))
 
 # Add traces for the secondary y-axis
-for col in ['LBSP1/Device/PowerMeter/MTR/p3_kW', 'average_fpoa']:
-    fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df[col], mode='lines', name=col, yaxis='y2'))
+fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['average_fpoa'], mode='lines', yaxis='y2'))
 
 # Update layout to include a secondary y-axis
 fig2.update_layout(
@@ -652,7 +650,7 @@ tab3.write("Test Start Date: " + str(test_start_date))
 tab3.write("Test End Date : " + str(test_end_date))
 tab3.write("Number of Days: " + str(test_end_date-test_start_date))
 
-# add: table of inputs
+# add: table of inputs: Q: which inputs to use and which to exclude? possibly move the entire inputs tab over?
 
 tab3.header("Capacity Test Results:")
 
