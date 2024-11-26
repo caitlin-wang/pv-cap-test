@@ -390,8 +390,8 @@ fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 
 ## Note: Calculating energy 
 
-measured_energy_bifacial=rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
-measured_energy_monofacial=rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
+measured_energy_bifacial=rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)[0]
+measured_energy_monofacial=rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)[0]
 
 measured_regression_df["Energy Predicted"] = measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
 
@@ -476,10 +476,7 @@ Capcity_Ratio_Bifacial=measured_energy_bifacial/expected_energy_bifacial
 
 detailed_report=f"""
 
-Summary : 
-
-Capacity Ratio_Bifacial={Capcity_Ratio_Bifacial*100}
-Capacity Ratio_Monofacial={Capcity_Ratio_Mono*100}
+Summary :
 
 Soiling Avg ={avg_soiling}
 Capacity Ratio_Bifacial with Soiling from Met Station={Capcity_Ratio_Bifacial*100+avg_soiling}
@@ -617,23 +614,9 @@ Total number of points after all met data filtering=
 Total number of points on all primary filters= 
 {count_primary_filters}
 
-
-
 Reporting Condition Irradaince Band Range={reporting_condition_thresold}
 
 Total Number of points on secondary or RC conditions={count_rc_condition_thresold}
-
-
-
-
-{measured_energy_bifacial}
-{measured_energy_monofacial}
-
-{expected_energy_bifacial}
-{expected_energy_monofacial}
-
-{Capcity_Ratio_Bifacial}
-{Capcity_Ratio_Mono}
 
 ##PVSyst Inputs
 
@@ -653,19 +636,11 @@ PVSyst Test Data end date = {pvsyst_model_end_date}
 
 Number of PVSyst points after filters = {pvsyst_filtered_df['E_Grid'].count()}
 
-
-
-
-
 Availability: 
 Average Availability for the project is                                          {avail_average}
 Here are list of inverters availability for the test period: 
 
-
 {avail_counts_df}
-
-
-
 
 """
 
