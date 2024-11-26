@@ -400,7 +400,6 @@ fig3.update_layout(
     title = "Measured vs. Expected Energy after secondary filtering",
     #xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
     #yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
-    yaxis_title = "Meter Data",
     width = 1000
 )
 
