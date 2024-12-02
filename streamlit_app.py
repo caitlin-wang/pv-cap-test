@@ -641,21 +641,21 @@ Here are list of inverters availability for the test period:
 
 """
 
-#Added by KL to count per column how many inverters were did not hit criteria
-merged_df['inverter_count'] = merged_df.apply(
-    lambda row: sum(
-        (row[column] < 50) and
-        (row['average_fpoa'] > availability_min_fpoa) and
-        row['t_stamp_check'] and
-        row['data_check_inv']
-        for column in vars.inverter_data #merged_df.columns
-        #if 'INV' in column 
-    ),
-    axis = 1)
-
-##Added by KL to calculate lost capacity of each averaging interval and grphing inverter avail for start to end data
-merged_df['lost_capac'] = 100 - ((merged_df['inverter_count'] * inverter_rating / max_gridlimit ) / .01)
-merged_df.loc[merged_df['lost_capac'] < 0, 'lost_capac'] = 0
+##Added by KL to count per column how many inverters were did not hit criteria
+#merged_df['inverter_count'] = merged_df.apply(
+#    lambda row: sum(
+#        (row[column] < 50) and
+#        (row['average_fpoa'] > availability_min_fpoa) and
+#        row['t_stamp_check'] and
+#        row['data_check_inv']
+#        for column in vars.inverter_data #merged_df.columns
+#        #if 'INV' in column 
+#    ),
+#    axis = 1)
+#
+###Added by KL to calculate lost capacity of each averaging interval and grphing inverter avail for start to end data
+#merged_df['lost_capac'] = 100 - ((merged_df['inverter_count'] * inverter_rating / max_gridlimit ) / .01)
+#merged_df.loc[merged_df['lost_capac'] < 0, 'lost_capac'] = 0
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
