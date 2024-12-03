@@ -173,19 +173,6 @@ for key in counts:
 avail_counts_df = pd.DataFrame(list(counts.items()), columns=['Inverter', 'Availabiliy'])
 avail_average=avail_counts_df['Availabiliy'].mean()
 
-# Assuming merged_df is your DataFrame and t_stamp is your x-axis column
-fig6 = go.Figure()
-
-fig6.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['lost_capac'], mode='lines', name=col))
-
-# Update layout
-fig6.update_layout(
-    title='Interactive Graph',
-    xaxis_title='Timestamp',
-    yaxis_title='Values',
-    hovermode='x unified'
-)
-
 ## Applying filters to remove all data where meter value is positive and not clipping 
 
 merged_df['meter>0']=merged_df[vars.meter_data]>minimum_grid       ## Using this to filter value greater than zero
@@ -671,6 +658,19 @@ merged_df['inverter_count'] = merged_df.apply(
 ##Added by KL to calculate lost capacity of each averaging interval and grphing inverter avail for start to end data
 merged_df['lost_capac'] = 100 - ((merged_df['inverter_count'] * inverter_rating / max_gridlimit ) / .01)
 merged_df.loc[merged_df['lost_capac'] < 0, 'lost_capac'] = 0
+
+# Assuming merged_df is your DataFrame and t_stamp is your x-axis column
+fig6 = go.Figure()
+
+fig6.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['lost_capac'], mode='lines', name=col))
+
+# Update layout
+fig6.update_layout(
+    title='Interactive Graph',
+    xaxis_title='Timestamp',
+    yaxis_title='Values',
+    hovermode='x unified'
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
