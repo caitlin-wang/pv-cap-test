@@ -124,7 +124,7 @@ form1.form_submit_button("Submit Inputs")
 
 merged_df['t_stamp'] = pd.to_datetime(merged_df['t_stamp'])
 merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
-merged_df['data_check_inv'] = merged_df[vars.inverter_data.columns].notna().all(axis=1)
+merged_df['data_check_inv'] = merged_df[vars.inverter_data].notna().all(axis=1)
 #st.write(test_start_date)
 #st.write(type(test_start_date))
 #st.write(merged_df['t_stamp'].dtype)
