@@ -110,6 +110,7 @@ inverter_clipping_thresold = form1_col1.number_input("Inverter Clipping Threshol
 inverter_clipping = inverter_rating * inverter_clipping_thresold
 
 form1.subheader("Other Inputs:")
+passing_capacity = form1.number_input("Passing Capacity (Bifacial):", min_value=0.0, value=0.97, max_value=1.0)
 pvsyst_shading = form1.number_input("PVSyst Shading:", min_value=0, value=1, step=1)
 bifaciality = form1.number_input("Bifaciality", value=0.7, min_value=0.0, max_value=1.0, step=0.1)
 availability_min_fpoa = form1.number_input("Availability Minimum FPOA", value=50, min_value=0, step=1)
@@ -123,6 +124,7 @@ form1.form_submit_button("Submit Inputs")
 
 merged_df['t_stamp'] = pd.to_datetime(merged_df['t_stamp'])
 merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
+merged_df['data_check_inv'] = merged_df[vars.inverter_data.columns].notna().all(axis=1)
 #st.write(test_start_date)
 #st.write(type(test_start_date))
 #st.write(merged_df['t_stamp'].dtype)
@@ -170,6 +172,19 @@ for key in counts:
 # Convert the counts dictionary to a dataframe for better readability
 avail_counts_df = pd.DataFrame(list(counts.items()), columns=['Inverter', 'Availabiliy'])
 avail_average=avail_counts_df['Availabiliy'].mean()
+
+# Assuming merged_df is your DataFrame and t_stamp is your x-axis column
+fig6 = go.Figure()
+
+fig6.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['lost_capac'], mode='lines', name=col))
+
+# Update layout
+fig6.update_layout(
+    title='Interactive Graph',
+    xaxis_title='Timestamp',
+    yaxis_title='Values',
+    hovermode='x unified'
+)
 
 ## Applying filters to remove all data where meter value is positive and not clipping 
 
@@ -641,21 +656,21 @@ Here are list of inverters availability for the test period:
 
 """
 
-##Added by KL to count per column how many inverters were did not hit criteria
-#merged_df['inverter_count'] = merged_df.apply(
-#    lambda row: sum(
-#        (row[column] < 50) and
-#        (row['average_fpoa'] > availability_min_fpoa) and
-#        row['t_stamp_check'] and
-#        row['data_check_inv']
-#        for column in vars.inverter_data #merged_df.columns
-#        #if 'INV' in column 
-#    ),
-#    axis = 1)
-#
-###Added by KL to calculate lost capacity of each averaging interval and grphing inverter avail for start to end data
-#merged_df['lost_capac'] = 100 - ((merged_df['inverter_count'] * inverter_rating / max_gridlimit ) / .01)
-#merged_df.loc[merged_df['lost_capac'] < 0, 'lost_capac'] = 0
+#Added by KL to count per column how many inverters were did not hit criteria
+merged_df['inverter_count'] = merged_df.apply(
+    lambda row: sum(
+        (row[column] < 50) and
+        (row['average_fpoa'] > availability_min_fpoa) and
+        row['t_stamp_check'] and
+        row['data_check_inv']
+        for column in vars.inverter_data #merged_df.columns
+        #if 'INV' in column 
+    ),
+    axis = 1)
+
+##Added by KL to calculate lost capacity of each averaging interval and grphing inverter avail for start to end data
+merged_df['lost_capac'] = 100 - ((merged_df['inverter_count'] * inverter_rating / max_gridlimit ) / .01)
+merged_df.loc[merged_df['lost_capac'] < 0, 'lost_capac'] = 0
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -665,11 +680,15 @@ tab3.write("Test Start Date: " + str(test_start_date))
 tab3.write("Test End Date : " + str(test_end_date))
 tab3.write("Number of Days: " + str(test_end_date-test_start_date))
 
-# add: table of inputs: Q: which inputs to use and which to exclude? possibly move the entire inputs tab over?
+# add: table of inputs
 
 tab3.header("Capacity Test Results:")
 
-# add: statement of passing or failing w/ percentage
+# statement of passing or failing w/ percentage
+if Capacity_Ratio_Bifacial >= passing_capacity:
+    tab3.success("The test passed with a " + str(passing_capacity*100) + "% capacity.")
+else:
+    tab3.error("The test failed with a " + str(passing_capacity*100) + "% capacity.")
 
 tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"],
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
@@ -683,6 +702,8 @@ tab3.header("Availability Test:")
 # add: statement of availability calculation tab3.write("This calculation was done with...")
 
 tab3.subheader("Test total availability")
+tab3.write(f"Average Availability of the project is : {avail_average}")
+tab3.plotly_chart(fig6) # availability plot
 
 #tab3.write(merged_df) # merged_df
 #tab3.plotly_chart(fig) # initial data plot
@@ -694,10 +715,8 @@ tab3.write(f"Average soiling for met 15   : {avg_soiling_met15}")
 tab3.write(f"Average soiling for met 21   : {avg_soiling_met21}")
 tab3.write(f"Average soiling for met 29   : {avg_soiling_met29}")
 
-tab3.subheader("Average Availability")
 tab3.write(f"Number of events POA is greater then minimum irradiance :{count_avail_poa}")
 tab3.write(avail_counts_df)
-tab3.write(f"Average Availability of the project is : {avail_average}")
 
 tab3.subheader("Inverter Filters")
 tab3.write(count_meter_greaterzero.to_string(dtype=False))
@@ -783,7 +802,7 @@ tab3.write(f"fpoa_poa_poa: {pvsyst_fpoa_poa_poa}")
 tab3.write(f"fpoa_temp: {pvsyst_fpoa_temp}")
 tab3.write(f"fpoa_wind: {pvsyst_fpoa_wind}")
 
-tab3.header("Detailed Report Below:")
-tab3.write(detailed_report)
+#tab3.header("Detailed Report Below:")
+#tab3.write(detailed_report)
 
 tab3.link_button("Download in-depth report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
