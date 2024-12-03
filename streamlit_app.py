@@ -686,9 +686,9 @@ tab3.header("Capacity Test Results:")
 
 # statement of passing or failing w/ percentage
 if Capacity_Ratio_Bifacial >= passing_capacity:
-    tab3.success("The test passed with a " + str(passing_capacity*100) + "% capacity.")
+    tab3.success("The test passed with a " + str(Capacity_Ratio_Bifacial) + "% capacity.")
 else:
-    tab3.error("The test failed with a " + str(passing_capacity*100) + "% capacity.")
+    tab3.error("The test failed with a " + str(Capacity_Ratio_Bifacial) + "% capacity.")
 
 tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"],
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
@@ -702,7 +702,7 @@ tab3.header("Availability Test:")
 # add: statement of availability calculation tab3.write("This calculation was done with...")
 
 tab3.subheader("Test total availability")
-tab3.write(f"Average Availability of the project is : {avail_average}")
+tab3.write("Average Availability of the project is : " + str(avail_average*100) + "%")
 tab3.plotly_chart(fig6) # availability plot
 
 #tab3.write(merged_df) # merged_df
