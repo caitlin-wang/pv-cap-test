@@ -759,6 +759,7 @@ tab3.subheader("Test total availability")
 tab3.write("Average Availability of the project is : " + str(avail_average*100) + "%")
 tab3.plotly_chart(fig6) # availability plot
 
+tab3.header("Raw Data Graphs")
 tab3.plotly_chart(fig7)
 tab3.plotly_chart(fig8)
 tab3.plotly_chart(fig9)
@@ -766,7 +767,7 @@ tab3.plotly_chart(fig10)
 
 tab3.header("Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling))
-tab3.dataframe(pd.DataFrame({"Met Station": [5, 15, 21, 29],
+tab3.dataframe(pd.DataFrame({"MET Station": [5, 15, 21, 29],
     "Avg Soiling": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
 
 tab3.title("~~~~~~~~~~~~~~~~ PDF Ends Here ~~~~~~~~~~~~~~~~")
