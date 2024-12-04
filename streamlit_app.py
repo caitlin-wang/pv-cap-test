@@ -765,7 +765,7 @@ tab3.plotly_chart(fig9)
 tab3.plotly_chart(fig10)
 
 tab3.header("Soiling")
-tab3.write("Average Soiling: " + avg_soiling)
+tab3.write("Average Soiling: " + str(avg_soiling))
 tab3.dataframe(pd.DataFrame({"Met Station": [5, 15, 21, 29],
     "Avg Soiling": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
 
