@@ -673,6 +673,45 @@ fig6.update_layout(
     width=1000
 )
 
+fig7 = go.Figure()
+for col in vars.inverter_data:
+    fig7.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
+fig7.update_layout(
+    title='Inverter Raw Data',
+    xaxis_title='Timestamp',
+    yaxis_title='Values',
+    hovermode='x unified',
+    width = 1000)
+
+fig8 = go.Figure()
+for col in vars.fpoa_data:
+    fig8.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
+fig8.update_layout(
+    title='Irradiance Raw Data',
+    xaxis_title='Timestamp',
+    yaxis_title='Values',
+    hovermode='x unified',
+    width = 1000)
+
+fig9 = go.Figure()
+fig9.add_trace(go.Scatter(x=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], y=merged_df[col], mode='lines', name=col))
+fig9.update_layout(
+    title='Meter Power Raw Data',
+    xaxis_title='Timestamp',
+    yaxis_title='Values',
+    hovermode='x unified',
+    width = 1000)
+
+fig10 = go.Figure()
+for col in vars.soiling_data:
+    fig10.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
+fig10.update_layout(
+    title='Soiling Raw Data',
+    xaxis_title='Timestamp',
+    yaxis_title='Values',
+    hovermode='x unified',
+    width = 1000)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -684,8 +723,8 @@ tab3.write("Number of Days: " + str(test_end_date-test_start_date))
 # add: table of inputs
 tab3.header("Inputs")
 tab3_col1, tab3_col2 = tab3.columns(2)
-tab3_col1.write("Minimum Irradiance: " + str(minimum_irradiance))
-tab3_col1.write("Maximum Irradiance: " + str(max_irradiance))
+tab3_col1.write("Minimum Irradiance: " + str(minimum_irradiance) + "W/m^2")
+tab3_col1.write("Maximum Irradiance: " + str(max_irradiance) + "W/m^2")
 tab3_col1.write("Temporal Stability Threshold: " + str(temporal_stability_thresold))
 tab3_col1.write("Spatial Stability Threshold: " + str(spatial_stability_thresold))
 tab3_col1.write("Minimum Grid Value: " + str(minimum_grid))
@@ -720,13 +759,20 @@ tab3.subheader("Test total availability")
 tab3.write("Average Availability of the project is : " + str(avail_average*100) + "%")
 tab3.plotly_chart(fig6) # availability plot
 
-#tab3.write(merged_df) # merged_df
-#tab3.plotly_chart(fig) # initial data plot
+tab3.plotly_chart(fig7)
+tab3.plotly_chart(fig8)
+tab3.plotly_chart(fig9)
+tab3.plotly_chart(fig10)
+
+tab3.header("Soiling")
+tab3.write("Average Soiling: " + avg_soiling)
+tab3.dataframe(pd.DataFrame({"Met Station": [5, 15, 21, 29],
+    "Avg Soiling": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
 
 tab3.title("~~~~~~~~~~~~~~~~ PDF Ends Here ~~~~~~~~~~~~~~~~")
 
-tab3.subheader("Average Soiling")
-tab3.write("Average Soiling: " + str(avg_soiling))
+#tab3.write(merged_df) # merged_df
+
 tab3.write(f"Average soiling for met 5   : {avg_soiling_met5}")
 tab3.write(f"Average soiling for met 15   : {avg_soiling_met15}")
 tab3.write(f"Average soiling for met 21   : {avg_soiling_met21}")
