@@ -342,6 +342,10 @@ secondary_below_rc_perc=100-secondary_above_rc_perc
 
 measured_regression_df = merged_df[merged_df['secondary_filter']==True]
 
+count_secondary_filters=merged_df['primary_filters'].value_counts().rename(index={True:"Including",False:"Excluding"})       ##Note: Counting number of primary filters, this should be minimum number of points 
+
+count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
+
 count_secondary_filters_per_day = measured_regression_df.groupby(measured_regression_df['t_stamp'].dt.date)['secondary_filter'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
 
 # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
@@ -534,13 +538,6 @@ RC RPOA=          {rc_pvsyst_avg_rpoa}                       RC RPOA=          {
 RC Temp=          {rc_pvsyst_avg_temp}                       RC Temp=          {rc_pvsyst_percentileg_temp}
 RC Wind=          {rc_pvsyst_avg_wind}                       RC Wind=          {rc_pvsyst_percentile_wind}
 
-
-{count_primary_filters_per_day}    
-
-
-{count_secondary_filters_per_day}
-
-
 ##Measured Data Inputs
 
 Minimum POA Irradaince={minimum_irradiance}
@@ -694,7 +691,7 @@ fig8.update_layout(
     width = 1000)
 
 fig9 = go.Figure()
-fig9.add_trace(go.Scatter(x=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], y=merged_df[col], mode='lines', name=col))
+fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name=col))
 fig9.update_layout(
     title='Meter Power Raw Data',
     xaxis_title='Timestamp',
@@ -871,4 +868,4 @@ tab3.write(f"fpoa_wind: {pvsyst_fpoa_wind}")
 #tab3.header("Detailed Report Below:")
 #tab3.write(detailed_report)
 
-tab3.link_button("Download in-depth report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+#tab3.link_button("Download in-depth report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
