@@ -759,6 +759,8 @@ tab3.subheader("Test total availability")
 tab3.write("Average Availability of the project is : " + str(avail_average*100) + "%")
 tab3.plotly_chart(fig6) # availability plot
 
+# add: graph of all inverter data after secondary filters
+
 tab3.header("Raw Data Graphs")
 tab3.plotly_chart(fig7)
 tab3.plotly_chart(fig8)
@@ -770,14 +772,20 @@ tab3.write("Average Soiling: " + str(avg_soiling))
 tab3.dataframe(pd.DataFrame({"MET Station": [5, 15, 21, 29],
     "Avg Soiling": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
 
+# add: heap map of inverters
+# add: table w number of including/excluding points by filter
+
+tab3.header("Filters Per Day")
+tab3.write("Primary filters per day:")
+tab3.write(count_primary_filters_per_day)
+tab3.write("Secondary filters per day:")
+tab3.write(count_secondary_filters_per_day)
+
+tab3.header("RC Values")
+
 tab3.title("~~~~~~~~~~~~~~~~ PDF Ends Here ~~~~~~~~~~~~~~~~")
 
 #tab3.write(merged_df) # merged_df
-
-tab3.write(f"Average soiling for met 5   : {avg_soiling_met5}")
-tab3.write(f"Average soiling for met 15   : {avg_soiling_met15}")
-tab3.write(f"Average soiling for met 21   : {avg_soiling_met21}")
-tab3.write(f"Average soiling for met 29   : {avg_soiling_met29}")
 
 tab3.write(f"Number of events POA is greater then minimum irradiance :{count_avail_poa}")
 tab3.write(avail_counts_df)
@@ -806,9 +814,6 @@ tab3.write(count_after_all_met_data_filters.to_string(dtype=False))
 tab3.subheader("Spatial Stability Counts")
 tab3.write(spatial_stability_counts.to_string(dtype=False))
 
-tab3.subheader("Primary Filters per Day")
-tab3.write(count_primary_filters_per_day)
-
 tab3.subheader("RC Conditions")
 tab3.write(rc_avg_poa_total)
 tab3.write(rc_avg_fpoa)
@@ -831,9 +836,6 @@ tab3.subheader("Secondary Filters")
 tab3.write(count_rc_condition_thresold.to_string(dtype=False))
 tab3.write(secondary_above_rc_perc)
 tab3.write(secondary_below_rc_perc)
-
-tab3.subheader("Secondary Filters per Day")
-tab3.write(count_secondary_filters_per_day)
 
 tab3.subheader("Coefficients in the order for measured data  {4;3;2;1}:")
 tab3.write(f"fpoa: {fpoa}")
