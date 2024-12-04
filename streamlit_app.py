@@ -88,14 +88,14 @@ temporal_stability_thresold = form1_col1.number_input("Temporal Stability Thresh
 spatial_stability_thresold = form1_col2.number_input("Spatial Stability Threshold:", min_value=0.0, value=0.05, step=0.10)
 
 form1.subheader("Grid Inputs:")
-form1_col1, form1_col2 = form1.columns(2)
+#form1_col1, form1_col2 = form1.columns(2)
 minimum_grid = form1_col1.number_input("Minimum Grid Value:", value=0, step=100)
 max_gridlimit = form1_col2.number_input("Maximum Grid Value:", value=99600, step=100)
 grid_clipping_thresold = form1.number_input("Grid Clipping Threshold:", value=0.98, step=0.01)
 grid_clipping = grid_clipping_thresold * max_gridlimit
 
 form1.subheader("RC Inputs:")
-form1_col1, form1_col2 = form1.columns(2)
+#form1_col1, form1_col2 = form1.columns(2)
 percentile = form1_col1.number_input("Percentile:", min_value=0.0, max_value=1.0, value=0.50, step=0.10)
 reporting_condition_thresold = form1_col2.number_input("Reporting Condition Threshold:", value=0.2, min_value=0.0, step=0.1)
 min_rc = form1_col1.number_input("Min RC Threshold:", min_value=0.0, max_value=1.0, value=0.1, step=0.1)
@@ -103,7 +103,7 @@ max_rc = form1_col2.number_input("Max RC Threshold:", min_value=0.0, max_value=1
 step_size = form1.number_input("RC Step Size:", min_value=0.01, max_value=0.10, value=0.05, step=0.01)
 
 form1.subheader("Inverter Inputs:")
-form1_col1, form1_col2 = form1.columns(2)
+#form1_col1, form1_col2 = form1.columns(2)
 inverter_rating = form1_col1.number_input("Inverter Rating:", min_value=0, value=3600, step=100)
 Inverter_limit = form1_col2.number_input("Inverter Limit:", min_value=0, value=118800, step=100)
 inverter_clipping_thresold = form1_col1.number_input("Inverter Clipping Threshold:", min_value=0.0, value=0.98, max_value=1.0, step=0.01)
@@ -669,7 +669,8 @@ fig6.update_layout(
     title='Interactive Graph',
     xaxis_title='Timestamp',
     yaxis_title='Values',
-    hovermode='x unified'
+    hovermode='x unified',
+    width=1000
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -681,6 +682,19 @@ tab3.write("Test End Date : " + str(test_end_date))
 tab3.write("Number of Days: " + str(test_end_date-test_start_date))
 
 # add: table of inputs
+tab3.header("Inputs")
+tab3.write("Minimum Irradiance: ")
+tab3.write("Maximum Irradiance: ")
+tab3.write("Temporal Stability Threshold: ")
+tab3.write("Spatial Stability Threshold: ")
+tab3.write("Minimum Grid Value: ")
+tab3.write("Maximum Grid Value: ")
+tab3.write("Grid Clipping Threshold: ")
+tab3.write("RC Percentile: ")
+tab3.write("RC Threshold: ")
+tab3.write("Inverter Rating: ")
+tab3.write("Inverter Limit: ")
+tab3.write("Inverter Clipping Threshold: ")
 
 tab3.header("Capacity Test Results:")
 
@@ -707,6 +721,8 @@ tab3.plotly_chart(fig6) # availability plot
 
 #tab3.write(merged_df) # merged_df
 #tab3.plotly_chart(fig) # initial data plot
+
+tab3.title("~~~~~~~~~~~~~~~~ PDF Ends Here ~~~~~~~~~~~~~~~~")
 
 tab3.subheader("Average Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling))
