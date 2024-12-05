@@ -761,7 +761,7 @@ tab3.write("Secondary filters per day:")
 tab3.write(count_secondary_filters_per_day)
 
 tab3.header("RC Values")
-tab3.dataframe(pd.DataFrame({"RC Value": ["POA Total", "FPOA", "RPOA", "Temp", "Wind"],
+tab3.dataframe(pd.DataFrame({"RC Value": ["Total POA", "FPOA", "RPOA", "Temp", "Wind"],
     "Measured Average": [rc_avg_poa_total, rc_avg_fpoa, rc_avg_rpoa, rc_avg_temp, rc_avg_wind],
     "Measured Percentile": [percentile_avg_poa_total, percentile_avg_fpoa, percentile_avg_rpoa, percentile_avg_temp, percentile_avg_wind],
     "PVSyst Average": [rc_pvsyst_avg_poa_total, rc_pvsyst_avg_fpoa, rc_pvsyst_avg_rpoa, rc_pvsyst_avg_temp, rc_pvsyst_avg_wind],
