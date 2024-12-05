@@ -723,7 +723,7 @@ if Capacity_Ratio_Bifacial >= passing_capacity:
 else:
     tab3.error("The test failed with a " + str(Capacity_Ratio_Bifacial) + "% capacity.")
 
-tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "%"],
+tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "Capacity Ratio %"],
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
     "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capacity_Ratio_Bifacial]}).set_index("Summary"))
 
@@ -766,12 +766,15 @@ tab3.dataframe(pd.DataFrame({"RC Value": ["Total POA", "FPOA", "RPOA", "Temp", "
     "Measured Percentile": [percentile_avg_poa_total, percentile_avg_fpoa, percentile_avg_rpoa, percentile_avg_temp, percentile_avg_wind],
     "PVSyst Average": [rc_pvsyst_avg_poa_total, rc_pvsyst_avg_fpoa, rc_pvsyst_avg_rpoa, rc_pvsyst_avg_temp, rc_pvsyst_avg_wind],
     "PVSyst Percentile": [rc_pvsyst_percentile_poa_total, rc_pvsyst_percentile_fpoa, rc_pvsyst_percentile_rpoa, rc_pvsyst_percentileg_temp, rc_pvsyst_percentile_wind]}).set_index("RC Value"))
-# tab3.write(rc_wind_fixed)
-#tab3.write(count_primary_filters.to_string(dtype=False))
+tab3.write("Percent above RC after secondary filtering: " + str(secondary_above_rc_perc) + "%")
+tab3.write("Percent below RC after secondary filtering: " + str(secondary_below_rc_perc) + "%")
+
+tab3.header("Regression Coefficients")
+tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
+    "Measured": [fpoa, fpoa_poa_poa, fpoa_temp, fpoa_wind],
+    "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
 
 tab3.title("~~~~~~~~~~~~~~~~ PDF Ends Here ~~~~~~~~~~~~~~~~")
-
-#tab3.write(merged_df) # merged_df
 
 tab3.write(f"Number of events POA is greater then minimum irradiance :{count_avail_poa}")
 tab3.write(avail_counts_df)
@@ -809,24 +812,12 @@ tab3.write(count_rc_condition_thresold.to_string(dtype=False))
 tab3.write(secondary_above_rc_perc)
 tab3.write(secondary_below_rc_perc)
 
-tab3.subheader("Coefficients in the order for measured data  {4;3;2;1}:")
-tab3.write(f"fpoa: {fpoa}")
-tab3.write(f"fpoa_poa_poa: {fpoa_poa_poa}")
-tab3.write(f"fpoa_temp: {fpoa_temp}")
-tab3.write(f"fpoa_wind: {fpoa_wind}")
-
 tab3.plotly_chart(fig4)
 
 tab3.subheader("PVSyst Test Model")
 tab3.write(pvsyst_test_model_df)
 tab3.write("PVsyst Start Date: " + str(pvsyst_model_start_date))
 tab3.write("PVSyst End Date: " + str(pvsyst_model_end_date))
-
-tab3.subheader("PVSyst Coefficients in the order {4;3;2;1}:")
-tab3.write(f"fpoa: {pvsyst_fpoa}")
-tab3.write(f"fpoa_poa_poa: {pvsyst_fpoa_poa_poa}")
-tab3.write(f"fpoa_temp: {pvsyst_fpoa_temp}")
-tab3.write(f"fpoa_wind: {pvsyst_fpoa_wind}")
 
 #tab3.header("Detailed Report Below:")
 #tab3.write(detailed_report)
