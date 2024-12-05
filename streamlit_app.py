@@ -290,22 +290,10 @@ percentile_avg_wind=rc_conditions['average_wind'].quantile(percentile)
 
 ## Checking secondary consditions by taking irradiance threshold on primary filters
 
-# rc_poa_total=rc_avg_poa_total 
-# rc_fpoa=rc_avg_fpoa 
-# rc_rpoa=rc_avg_rpoa 
-# rc_temp=rc_avg_temp 
-# rc_wind=rc_avg_wind 
-
 rc_poa_total=percentile_avg_poa_total
 rc_fpoa=percentile_avg_fpoa
 rc_rpoa=percentile_avg_rpoa
 rc_temp=percentile_avg_temp
-# rc_wind=percentile_avg_wind
-
-# rc_poa_total=700
-# rc_fpoa=650
-# rc_rpoa=50
-# rc_temp=25
 rc_wind=1
 
 reporting_condition_thresold_min = (1-reporting_condition_thresold)*rc_poa_total
@@ -313,23 +301,23 @@ reporting_condition_thresold_max = (1+reporting_condition_thresold)*rc_poa_total
 
 merged_df['rc_check'] = merged_df['average_poa_total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
 
-results_df = funcs.loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
-
-# Plot Total number of points against Threshold using Plotly
-fig5 = go.Figure()
-fig5.add_trace(go.Scatter(
-    x=results_df['Threshold'],
-    y=results_df['Total number of points'],
-    mode='lines+markers',
-    name='Total number of points'
-))
-fig5.update_layout(
-    title="Total Number of Points vs Threshold",
-    xaxis_title="Threshold",
-    yaxis_title="Total Number of Points",
-    template="plotly_white",
-    width=1000
-)
+#results_df = funcs.loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
+#
+## Plot Total number of points against Threshold using Plotly
+#fig5 = go.Figure()
+#fig5.add_trace(go.Scatter(
+#    x=results_df['Threshold'],
+#    y=results_df['Total number of points'],
+#    mode='lines+markers',
+#    name='Total number of points'
+#))
+#fig5.update_layout(
+#    title="Total Number of Points vs Threshold",
+#    xaxis_title="Threshold",
+#    yaxis_title="Total Number of Points",
+#    template="plotly_white",
+#    width=1000
+#)
 
 ## Checking the secondary filter where the number of data should be 750 or based on contract with EPC
 
@@ -827,8 +815,8 @@ tab3.write(percentile_avg_wind)
 tab3.write(count_primary_filters.to_string(dtype=False))
 
 tab3.subheader("RC Threshold Loop")
-tab3.write(results_df)
-tab3.plotly_chart(fig5)
+#tab3.write(results_df)
+#tab3.plotly_chart(fig5)
 
 tab3.subheader("Secondary Filters")
 tab3.write(count_rc_condition_thresold.to_string(dtype=False))
