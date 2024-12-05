@@ -815,8 +815,8 @@ tab3.write(percentile_avg_wind)
 tab3.write(count_primary_filters.to_string(dtype=False))
 
 tab3.subheader("RC Threshold Loop")
-#tab3.write(results_df)
-#tab3.plotly_chart(fig5)
+tab3.write(results_df)
+tab3.plotly_chart(fig5)
 
 tab3.subheader("Secondary Filters")
 tab3.write(count_rc_condition_thresold.to_string(dtype=False))
