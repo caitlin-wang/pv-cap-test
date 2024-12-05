@@ -761,6 +761,13 @@ tab3.write("Secondary filters per day:")
 tab3.write(count_secondary_filters_per_day)
 
 tab3.header("RC Values")
+tab3.dataframe(pd.DataFrame({"RC Value": ["POA Total", "FPOA", "RPOA", "Temp", "Wind"],
+    "Measured Average": [rc_avg_poa_total, rc_avg_fpoa, rc_avg_rpoa, rc_avg_temp, rc_avg_wind],
+    "Measured Percentile": [percentile_avg_poa_total, percentile_avg_fpoa, percentile_avg_rpoa, percentile_avg_temp, percentile_avg_wind],
+    "PVSyst Average": [rc_pvsyst_avg_poa_total, rc_pvsyst_avg_fpoa, rc_pvsyst_avg_rpoa, rc_pvsyst_avg_temp, rc_pvsyst_avg_wind],
+    "PVSyst Percentile": [rc_pvsyst_percentile_poa_total, rc_pvsyst_percentile_fpoa, rc_pvsyst_percentile_rpoa, rc_pvsyst_percentileg_temp, rc_pvsyst_percentile_wind]}).set_index("RC Value"))
+# tab3.write(rc_wind_fixed)
+#tab3.write(count_primary_filters.to_string(dtype=False))
 
 tab3.title("~~~~~~~~~~~~~~~~ PDF Ends Here ~~~~~~~~~~~~~~~~")
 
@@ -793,20 +800,6 @@ tab3.write(count_after_all_met_data_filters.to_string(dtype=False))
 tab3.subheader("Spatial Stability Counts")
 tab3.write(spatial_stability_counts.to_string(dtype=False))
 
-tab3.subheader("RC Conditions")
-tab3.write(rc_avg_poa_total)
-tab3.write(rc_avg_fpoa)
-tab3.write(rc_avg_rpoa)
-tab3.write(rc_avg_temp)
-tab3.write(rc_avg_wind)
-tab3.write(percentile_avg_poa_total)
-tab3.write(percentile_avg_fpoa)
-tab3.write(percentile_avg_rpoa)
-tab3.write(percentile_avg_temp)
-tab3.write(percentile_avg_wind)
-# tab3.write(rc_wind_fixed)
-tab3.write(count_primary_filters.to_string(dtype=False))
-
 tab3.subheader("RC Threshold Loop")
 tab3.write(results_df)
 tab3.plotly_chart(fig5)
@@ -828,18 +821,6 @@ tab3.subheader("PVSyst Test Model")
 tab3.write(pvsyst_test_model_df)
 tab3.write("PVsyst Start Date: " + str(pvsyst_model_start_date))
 tab3.write("PVSyst End Date: " + str(pvsyst_model_end_date))
-
-tab3.subheader("PVSyst RC Values")
-tab3.write(rc_pvsyst_avg_poa_total)
-tab3.write(rc_pvsyst_avg_fpoa)
-tab3.write(rc_pvsyst_avg_rpoa)
-tab3.write(rc_pvsyst_avg_temp)
-tab3.write(rc_pvsyst_avg_wind)
-tab3.write(rc_pvsyst_percentile_poa_total)
-tab3.write(rc_pvsyst_percentile_fpoa)
-tab3.write(rc_pvsyst_percentile_rpoa)
-tab3.write(rc_pvsyst_percentileg_temp)
-tab3.write(rc_pvsyst_percentile_wind)
 
 tab3.subheader("PVSyst Coefficients in the order {4;3;2;1}:")
 tab3.write(f"fpoa: {pvsyst_fpoa}")
