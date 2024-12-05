@@ -64,7 +64,6 @@ def frange(start, stop, step):
 def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     # Initialize an empty list to store results before starting the loop
     results = []
-    merged_df_copy = merged_df
     
     # Loop over the range of thresholds (min_rc to max_rc with step_size)
     for reporting_condition_thresold in frange(min_rc, max_rc, step_size):
@@ -74,16 +73,16 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         reporting_condition_thresold_max = (1 + reporting_condition_thresold) * rc_poa_total
         
         # Apply the filter condition to the DF
-        merged_df_copy['rc_check'] = merged_df_copy['average_poa_total'].between(reporting_condition_thresold_min, reporting_condition_thresold_max)
-        merged_df_copy['secondary_filter'] = merged_df_copy['primary_filters'] * merged_df_copy['rc_check']
+        merged_df['rc_check'] = merged_df['average_poa_total'].between(reporting_condition_thresold_min, reporting_condition_thresold_max)
+        merged_df['secondary_filter'] = merged_df['primary_filters'] * merged_df['rc_check']
 
         # Count the 'Including' and 'Excluding' values
-        count_rc_condition_threshold = merged_df_copy['secondary_filter'].value_counts().rename(index={True: "Including", False: "Excluding"})
+        count_rc_condition_threshold = merged_df['secondary_filter'].value_counts().rename(index={True: "Including", False: "Excluding"})
         
         # Calculate the percentage of 'Including' above and below the threshold
-        total_secondary_filter_true = (merged_df_copy['secondary_filter'] == True).sum()
+        total_secondary_filter_true = (merged_df['secondary_filter'] == True).sum()
         if total_secondary_filter_true > 0:
-            secondary_above_rc_perc = ((merged_df_copy['secondary_filter'] == True) & (merged_df_copy['average_poa_total'] >= rc_poa_total)).sum() / total_secondary_filter_true * 100
+            secondary_above_rc_perc = ((merged_df['secondary_filter'] == True) & (merged_df['average_poa_total'] >= rc_poa_total)).sum() / total_secondary_filter_true * 100
         else:
             secondary_above_rc_perc = 0
         secondary_below_rc_perc = 100 - secondary_above_rc_perc
@@ -93,7 +92,7 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         count_excluding = count_rc_condition_threshold.get("Excluding", 0)
 
         # Get daily counts of 'Including' and 'Excluding'
-        measured_regression_df = merged_df_copy[merged_df_copy['secondary_filter'] == True]
+        measured_regression_df = merged_df[merged_df['secondary_filter'] == True]
         count_secondary_filters_per_day = measured_regression_df.groupby(measured_regression_df['t_stamp'].dt.date)['secondary_filter'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
         
         
