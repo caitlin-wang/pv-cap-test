@@ -301,24 +301,6 @@ reporting_condition_thresold_max = (1+reporting_condition_thresold)*rc_poa_total
 
 merged_df['rc_check'] = merged_df['average_poa_total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
 
-results_df = funcs.loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
-
-# Plot Total number of points against Threshold using Plotly
-fig5 = go.Figure()
-fig5.add_trace(go.Scatter(
-    x=results_df['Threshold'],
-    y=results_df['Total number of points'],
-    mode='lines+markers',
-    name='Total number of points'
-))
-fig5.update_layout(
-    title="Total Number of Points vs Threshold",
-    xaxis_title="Threshold",
-    yaxis_title="Total Number of Points",
-    template="plotly_white",
-    width=1000
-)
-
 ## Checking the secondary filter where the number of data should be 750 or based on contract with EPC
 
 merged_df['secondary_filter']=merged_df['primary_filters']*merged_df['rc_check']
@@ -694,6 +676,24 @@ fig10.update_layout(
     yaxis_title='Values',
     hovermode='x unified',
     width = 1000)
+
+results_df = funcs.loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
+
+# Plot Total number of points against Threshold using Plotly
+fig5 = go.Figure()
+fig5.add_trace(go.Scatter(
+    x=results_df['Threshold'],
+    y=results_df['Total number of points'],
+    mode='lines+markers',
+    name='Total number of points'
+))
+fig5.update_layout(
+    title="Total Number of Points vs Threshold",
+    xaxis_title="Threshold",
+    yaxis_title="Total Number of Points",
+    template="plotly_white",
+    width=1000
+)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
