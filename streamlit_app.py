@@ -771,7 +771,7 @@ tab3.write("Percent below RC after secondary filtering: " + str(secondary_below_
 
 tab3.header("Regression Coefficients")
 tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
-    "Measured": [fpoa, fpoa_poa_poa, fpoa_temp, fpoa_wind],
+    "Measured": [fpoa[0], fpoa_poa_poa[0], fpoa_temp[0], fpoa_wind[0]],
     "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
 
 tab3.title("~~~~~~~~~~~~~~~~ PDF Ends Here ~~~~~~~~~~~~~~~~")
