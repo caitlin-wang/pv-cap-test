@@ -310,10 +310,6 @@ secondary_above_rc_perc=(((merged_df['secondary_filter']==True)&(merged_df['aver
 secondary_below_rc_perc=100-secondary_above_rc_perc
 
 measured_regression_df = merged_df[merged_df['secondary_filter']==True]
-
-#count_secondary_filters=merged_df['secondary_filter'].value_counts().rename(index={True:"Including",False:"Excluding"})       ##Note: Counting number of primary filters, this should be minimum number of points 
-#count_secondary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['secondary_filter'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
-
 count_secondary_filters_per_day = measured_regression_df.groupby(measured_regression_df['t_stamp'].dt.date)['secondary_filter'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
 
 # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
@@ -762,9 +758,6 @@ tab3.header("Filters Per Day")
 tab3.write("Primary filters per day:")
 tab3.write(count_primary_filters_per_day)
 tab3.write("Secondary filters per day:")
-tab3.write(count_rc_condition_thresold.to_string(dtype=False))
-tab3.write(secondary_above_rc_perc)
-tab3.write(secondary_below_rc_perc)
 tab3.write(count_secondary_filters_per_day)
 
 tab3.header("RC Values")
