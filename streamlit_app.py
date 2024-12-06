@@ -464,12 +464,70 @@ fig6.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['lost_capac'], mod
 
 # Update layout
 fig6.update_layout(
-    title='Interactive Graph',
+    title='Availability Plot',
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
     width=1000
 )
+
+#Define the filters here, calling from functions defined above
+filter_registry = [
+    ("Meter > 0", funcs.filter_meter_greater_zero, []),  
+    ("Grid Clipping", funcs.filter_grid_clipping, []),  
+    ("Inverter Clipping", funcs.filter_inverter_clipping, [inverter_df]),  
+    ("Inverter is 0", funcs.filter_inverter_zero, [inverter_df]),
+    ("FPOA is blank", funcs.filter_fpoa_blank, [vars.fpoa_data]),
+    ("FPOA is 0", funcs.filter_fpoa_zero, [vars.fpoa_data]),  
+    ("RPOA is blank", funcs.filter_rpoa_blank, [vars.rpoa_data]),
+    ("RPOA is zero", funcs.filter_rpoa_zero, [vars.rpoa_data]),
+    ("Temp Blank", funcs.filter_temp_blank, [vars.temp_data]),
+    ("Temp is 0", funcs.filter_temp_zero, [vars.temp_data]),
+    (" Wind Blank", funcs.filter_wind_blank, [vars.wind_data]),
+    ("Wind is 0", funcs.filter_wind_zero, [vars.wind_data]),
+    ("FPOA QC", funcs.filter_fpoa_qc, [minimum_irradiance, max_irradiance]),
+    ("Spatial Stability Check", funcs.filter_spatial_stability, [vars.fpoa_data, spatial_stability_thresold]),
+    ("Temporal Stability Check", funcs.filter_temporal_stability, [temporal_stability_thresold])
+]
+# Initialize the DataFrame to track cumulative conditions
+#merged_df['cumulative_condition'] = True  
+filter_results = []
+
+# Initialize starting points and condition
+remaining_condition = pd.Series(True, index=merged_df.index)
+remaining_points = len(merged_df)
+initial_points = remaining_points
+
+for idx, (filter_name, filter_function, filter_args) in enumerate(filter_registry, start=1):
+    # Apply filter to the remaining points
+    current_condition = filter_function(merged_df, *filter_args)
+    
+    # Combine with the remaining condition from previous filters
+    combined_condition = remaining_condition & current_condition
+    
+    # Calculate lost and remaining points
+    lost_points = (~combined_condition & remaining_condition).sum()
+    remaining_points = combined_condition.sum()
+    
+    # Add the filter's results to the table
+    filter_results.append({
+        #"Filter Number": f"Filter {idx}",
+        "Filter Description": filter_name,
+        "Initial Points": initial_points,
+        "Points Lost": lost_points,
+        "Remaining Points": remaining_points,
+        #"Filter Description": filter_name,
+    })
+    
+    # Update the remaining condition 
+    remaining_condition = combined_condition
+    initial_points = remaining_points  # Remaining points become initial points for the next filter
+
+# Put results in DF
+filter_results_df = pd.DataFrame(filter_results)
+
+# Display the table, I gave a few options
+#print(tabulate(filter_results_df, headers = 'keys', tablefmt = 'github'))
 
 fig7 = go.Figure()
 for col in vars.inverter_data:
@@ -589,7 +647,9 @@ tab3.dataframe(pd.DataFrame({"MET Station": [5, 15, 21, 29],
     "Avg Soiling": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
 
 # add: heap map of inverters
-# add: table w number of including/excluding points by filter
+
+tab3.header("Number of Points by Filter")
+tab3.write(filter_results_df)
 
 tab3.header("Filters Per Day")
 tab3.write("Primary filters per day:")
