@@ -525,63 +525,63 @@ fig6.update_layout(
     width=1000
 )
 
-#Define the filters here, calling from functions defined above
-filter_registry = [
-    ("Meter > 0", filter_meter_greater_zero, []),  
-    ("Grid Clipping", filter_grid_clipping, []),  
-    ("Inverter Clipping", filter_inverter_clipping, [inverter_df]),  
-    ("Inverter is 0", filter_inverter_zero, [inverter_df]),
-    ("FPOA is blank", filter_fpoa_blank, [vars.fpoa_data]),
-    ("FPOA is 0", filter_fpoa_zero, [vars.fpoa_data]),  
-    ("RPOA is blank", filter_rpoa_blank, [vars.rpoa_data]),
-    ("RPOA is zero", filter_rpoa_zero, [vars.rpoa_data]),
-    ("Temp Blank", filter_temp_blank, [vars.temp_data]),
-    ("Temp is 0", filter_temp_zero, [vars.temp_data]),
-    (" Wind Blank", filter_wind_blank, [vars.wind_data]),
-    ("Wind is 0", filter_wind_zero, [vars.wind_data]),
-    ("FPOA QC", filter_fpoa_qc, [minimum_irradiance, max_irradiance]),
-    ("Spatial Stability Check", filter_spatial_stability, [vars.fpoa_data, spatial_stability_thresold]),
-    ("Temporal Stability Check", filter_temporal_stability, [temporal_stability_thresold])
-]
-# Initialize the DataFrame to track cumulative conditions
-#merged_df['cumulative_condition'] = True  
-filter_results = []
-
-# Initialize starting points and condition
-remaining_condition = pd.Series(True, index=merged_df.index)
-remaining_points = len(merged_df)
-initial_points = remaining_points
-
-for idx, (filter_name, filter_function, filter_args) in enumerate(filter_registry, start=1):
-    # Apply filter to the remaining points
-    current_condition = filter_function(merged_df, *filter_args)
-    
-    # Combine with the remaining condition from previous filters
-    combined_condition = remaining_condition & current_condition
-    
-    # Calculate lost and remaining points
-    lost_points = (~combined_condition & remaining_condition).sum()
-    remaining_points = combined_condition.sum()
-    
-    # Add the filter's results to the table
-    filter_results.append({
-        #"Filter Number": f"Filter {idx}",
-        "Filter Description": filter_name,
-        "Initial Points": initial_points,
-        "Points Lost": lost_points,
-        "Remaining Points": remaining_points,
-        #"Filter Description": filter_name,
-    })
-    
-    # Update the remaining condition 
-    remaining_condition = combined_condition
-    initial_points = remaining_points  # Remaining points become initial points for the next filter
-
-# Put results in DF
-filter_results_df = pd.DataFrame(filter_results)
-
-# Display the table, I gave a few options
-#print(tabulate(filter_results_df, headers = 'keys', tablefmt = 'github'))
+##Define the filters here, calling from functions defined above
+#filter_registry = [
+#    ("Meter > 0", filter_meter_greater_zero, []),  
+#    ("Grid Clipping", filter_grid_clipping, []),  
+#    ("Inverter Clipping", filter_inverter_clipping, [inverter_df]),  
+#    ("Inverter is 0", filter_inverter_zero, [inverter_df]),
+#    ("FPOA is blank", filter_fpoa_blank, [vars.fpoa_data]),
+#    ("FPOA is 0", filter_fpoa_zero, [vars.fpoa_data]),  
+#    ("RPOA is blank", filter_rpoa_blank, [vars.rpoa_data]),
+#    ("RPOA is zero", filter_rpoa_zero, [vars.rpoa_data]),
+#    ("Temp Blank", filter_temp_blank, [vars.temp_data]),
+#    ("Temp is 0", filter_temp_zero, [vars.temp_data]),
+#    (" Wind Blank", filter_wind_blank, [vars.wind_data]),
+#    ("Wind is 0", filter_wind_zero, [vars.wind_data]),
+#    ("FPOA QC", filter_fpoa_qc, [minimum_irradiance, max_irradiance]),
+#    ("Spatial Stability Check", filter_spatial_stability, [vars.fpoa_data, spatial_stability_thresold]),
+#    ("Temporal Stability Check", filter_temporal_stability, [temporal_stability_thresold])
+#]
+## Initialize the DataFrame to track cumulative conditions
+##merged_df['cumulative_condition'] = True  
+#filter_results = []
+#
+## Initialize starting points and condition
+#remaining_condition = pd.Series(True, index=merged_df.index)
+#remaining_points = len(merged_df)
+#initial_points = remaining_points
+#
+#for idx, (filter_name, filter_function, filter_args) in enumerate(filter_registry, start=1):
+#    # Apply filter to the remaining points
+#    current_condition = filter_function(merged_df, *filter_args)
+#    
+#    # Combine with the remaining condition from previous filters
+#    combined_condition = remaining_condition & current_condition
+#    
+#    # Calculate lost and remaining points
+#    lost_points = (~combined_condition & remaining_condition).sum()
+#    remaining_points = combined_condition.sum()
+#    
+#    # Add the filter's results to the table
+#    filter_results.append({
+#        #"Filter Number": f"Filter {idx}",
+#        "Filter Description": filter_name,
+#        "Initial Points": initial_points,
+#        "Points Lost": lost_points,
+#        "Remaining Points": remaining_points,
+#        #"Filter Description": filter_name,
+#    })
+#    
+#    # Update the remaining condition 
+#    remaining_condition = combined_condition
+#    initial_points = remaining_points  # Remaining points become initial points for the next filter
+#
+## Put results in DF
+#filter_results_df = pd.DataFrame(filter_results)
+#
+## Display the table, I gave a few options
+##print(tabulate(filter_results_df, headers = 'keys', tablefmt = 'github'))
 
 fig7 = go.Figure()
 for col in vars.inverter_data:
