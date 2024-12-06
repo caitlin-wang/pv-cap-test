@@ -482,9 +482,9 @@ fig6.update_layout(
 
 #Define the filters here, calling from functions defined above
 filter_registry = [
-    ("Meter > 0", funcs.filter_meter_greater_zero, []),  
-    ("Grid Clipping", funcs.filter_grid_clipping, []),  
-    ("Inverter Clipping", funcs.filter_inverter_clipping, [inverter_df]),  
+    ("Meter > 0", filter_meter_greater_zero, []),  
+    ("Grid Clipping", filter_grid_clipping, []),  
+    ("Inverter Clipping", filter_inverter_clipping, [inverter_df]),  
     ("Inverter is 0", funcs.filter_inverter_zero, [inverter_df]),
     ("FPOA is blank", funcs.filter_fpoa_blank, [vars.fpoa_data]),
     ("FPOA is 0", funcs.filter_fpoa_zero, [vars.fpoa_data]),  
