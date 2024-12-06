@@ -115,7 +115,7 @@ def filter_inverter_zero(df, inverter_data):
     return ~(inverter_data == 0).any(axis=1)
     
 def filter_fpoa_blank(df, fpoa_data):
-    return ~(fpoa_data.isnull()).any(axis=1)
+    return ~(fpoa_data == 0).any(axis=1)
 
 def filter_fpoa_zero(df, fpoa_data):
     return ~(fpoa_data == 0).any(axis=1)
