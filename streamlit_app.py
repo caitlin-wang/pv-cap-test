@@ -702,8 +702,8 @@ tab3.dataframe(pd.DataFrame({"MET Station": [5, 15, 21, 29],
 
 # add: heap map of inverters
 
-tab3.header("Number of Points by Filter")
-tab3.write(filter_results_df)
+#tab3.header("Number of Points by Filter")
+#tab3.write(filter_results_df)
 
 tab3.header("Filters Per Day")
 tab3.write("Primary filters per day:")
