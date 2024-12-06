@@ -153,7 +153,8 @@ merged_df['average_temp'] = merged_df.apply(lambda row: funcs.average_if(row, va
 # Apply the function to each row and create a new column 'average_temp'
 merged_df['average_wind'] = merged_df.apply(lambda row: funcs.average_if(row, vars.wind_data), axis=1)
 
-merged_df['sp. yield']=(merged_df[vars.meter_data]/system_size_dc)
+merged_df['average_meter_data'] = merged_df.apply(lambda row: funcs.average_if(row, vars.meter_data), axis=1)
+merged_df['sp. yield']=(merged_df['average_meter_data']/system_size_dc)
 # Display the DataFrame
 
 # Apply the function to each row and create a new column 'average_fpoa'
