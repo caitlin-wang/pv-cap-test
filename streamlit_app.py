@@ -530,18 +530,18 @@ filter_registry = [
     ("Meter > 0", filter_meter_greater_zero, []),  
     ("Grid Clipping", filter_grid_clipping, []),  
     ("Inverter Clipping", filter_inverter_clipping, [inverter_df]),  
-    ("Inverter is 0", funcs.filter_inverter_zero, [inverter_df]),
-    ("FPOA is blank", funcs.filter_fpoa_blank, [vars.fpoa_data]),
-    ("FPOA is 0", funcs.filter_fpoa_zero, [vars.fpoa_data]),  
-    ("RPOA is blank", funcs.filter_rpoa_blank, [vars.rpoa_data]),
-    ("RPOA is zero", funcs.filter_rpoa_zero, [vars.rpoa_data]),
-    ("Temp Blank", funcs.filter_temp_blank, [vars.temp_data]),
-    ("Temp is 0", funcs.filter_temp_zero, [vars.temp_data]),
-    (" Wind Blank", funcs.filter_wind_blank, [vars.wind_data]),
-    ("Wind is 0", funcs.filter_wind_zero, [vars.wind_data]),
-    ("FPOA QC", funcs.filter_fpoa_qc, [minimum_irradiance, max_irradiance]),
-    ("Spatial Stability Check", funcs.filter_spatial_stability, [vars.fpoa_data, spatial_stability_thresold]),
-    ("Temporal Stability Check", funcs.filter_temporal_stability, [temporal_stability_thresold])
+    ("Inverter is 0", filter_inverter_zero, [inverter_df]),
+    ("FPOA is blank", filter_fpoa_blank, [vars.fpoa_data]),
+    ("FPOA is 0", filter_fpoa_zero, [vars.fpoa_data]),  
+    ("RPOA is blank", filter_rpoa_blank, [vars.rpoa_data]),
+    ("RPOA is zero", filter_rpoa_zero, [vars.rpoa_data]),
+    ("Temp Blank", filter_temp_blank, [vars.temp_data]),
+    ("Temp is 0", filter_temp_zero, [vars.temp_data]),
+    (" Wind Blank", filter_wind_blank, [vars.wind_data]),
+    ("Wind is 0", filter_wind_zero, [vars.wind_data]),
+    ("FPOA QC", filter_fpoa_qc, [minimum_irradiance, max_irradiance]),
+    ("Spatial Stability Check", filter_spatial_stability, [vars.fpoa_data, spatial_stability_thresold]),
+    ("Temporal Stability Check", filter_temporal_stability, [temporal_stability_thresold])
 ]
 # Initialize the DataFrame to track cumulative conditions
 #merged_df['cumulative_condition'] = True  
