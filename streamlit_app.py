@@ -43,6 +43,15 @@ pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type=['c
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend begin ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+def filter_meter_greater_zero(df):
+    return df['average_meter_data'] > minimum_grid
+
+def filter_grid_clipping(df):
+    return df['average_meter_data'] < grid_clipping
+
+def filter_inverter_clipping(df, inverter_data):
+    return inverter_data.apply(lambda row: row.max() < inverter_clipping, axis=1)
+
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
         z.extractall(".")

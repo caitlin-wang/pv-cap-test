@@ -111,15 +111,6 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
 
     return results_df
 
-def filter_meter_greater_zero(df):
-    return df['average_meter_data'] > minimum_grid
-
-def filter_grid_clipping(df):
-    return df['average_meter_data'] < grid_clipping
-
-def filter_inverter_clipping(df, inverter_data):
-    return inverter_data.apply(lambda row: row.max() < inverter_clipping, axis=1)
-
 def filter_inverter_zero(df, inverter_data):
     return ~(inverter_data == 0).any(axis=1)
     
