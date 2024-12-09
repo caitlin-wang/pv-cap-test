@@ -817,15 +817,15 @@ tab3_col2.write("Inverter Clipping Threshold: " + str(inverter_clipping_thresold
 
 tab3.divider()
 tab3.header("Capacity Test Results:")
-
+tab3_col1, tab3_col2 = tab3.columns(2)
 # statement of passing or failing w/ percentage
 if Capacity_Ratio_Bifacial >= passing_capacity:
-    tab3.success("The test passed with a " + str(Capacity_Ratio_Bifacial) + "% capacity. Yippee!")
+    tab3_col1.success("The test passed with a " + str(Capacity_Ratio_Bifacial) + "% capacity. Yippee!")
 else:
-    tab3.error("The test failed with a " + str(Capacity_Ratio_Bifacial) +
+    tab3_col1.error("The test failed with a " + str(Capacity_Ratio_Bifacial) +
                "% capacity. The target bifacial capacity is " + str(passing_capacity) + "%")
 
-tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "Capacity Ratio %"],
+tab3_col2.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "Capacity Ratio %"],
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
     "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capacity_Ratio_Bifacial]}).set_index("Summary"))
 
