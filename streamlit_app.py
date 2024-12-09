@@ -881,12 +881,12 @@ tab3.dataframe(pd.DataFrame({"MET Station": vars.soiling_data,
 tab3.write("")
 
 tab3.header("Number of Points by Filter")
-tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
+tab3_col1, tab3_col2, tab3_col3, tab3_col4 = tab3.columns(4)
 tab3_col1.write(filter_results_df)
-tab3_col2.write("Primary filters per day:")
-tab3_col2.write(count_primary_filters_per_day)
-tab3_col3.write("Secondary filters per day:")
-tab3_col3.write(count_secondary_filters_per_day)
+tab3_col3.write("Primary filters per day:")
+tab3_col3.write(count_primary_filters_per_day)
+tab3_col4.write("Secondary filters per day:")
+tab3_col4.write(count_secondary_filters_per_day)
 
 tab3.divider()
 tab3.header("RC Values")
