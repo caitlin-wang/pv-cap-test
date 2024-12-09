@@ -870,7 +870,7 @@ tab3.write("Percent above RC after secondary filtering: " + str(secondary_above_
 tab3.write("Percent below RC after secondary filtering: " + str(secondary_below_rc_perc) + "%")
 
 tab3.subheader("RC Threshold Loop")
-tab3.dataframe(results_df)
+tab3.write(results_df)
 tab3.plotly_chart(fig5)
 
 tab3.header("Regression Coefficients")
