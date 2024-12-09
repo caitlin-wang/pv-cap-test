@@ -9,10 +9,10 @@ from plotly.subplots import make_subplots
 import warnings
 warnings.filterwarnings("ignore")
 import zipfile
+from scipy import stats
 import vars
 import funcs
 #from dateutil.relativedelta import relativedelta
-#from scipy import stats
 #import os
 #import statsmodels.api as sm
 #import math
@@ -529,14 +529,45 @@ measured_energy_monofacial = round(rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*
 
 measured_regression_df["Energy Predicted"] = measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
 
-fig3 = px.scatter(measured_regression_df, x='Energy Predicted', y=vars.meter_data[0], title='Scatter plot between x and y')
+# Create the interactive scatter plot
+fig3 = px.scatter(measured_regression_df, x='Energy Predicted', y=measured_regression_df['average_meter_data'], title='Scatter plot between Predicted Energy and Site Energy')
+
+# Calculate R² value using scipy's linregress
+slope, intercept, r_value, p_value, std_err = stats.linregress(measured_regression_df['Energy Predicted'], measured_regression_df['average_meter_data'])
+r_squared = r_value**2  # R² value
 
 # Update the layout to include (0, 0) in the axes
-fig3.update_layout(
-    title = "Measured vs. Expected Energy after secondary filtering",
-    #xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
-    #yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
-    width = 1000
+fig.update_layout(
+    xaxis=dict(
+        range=[
+            measured_regression_df['Energy Predicted'].min() - 0.05 * (measured_regression_df['Energy Predicted'].max() - measured_regression_df['Energy Predicted'].min()),
+            measured_regression_df['Energy Predicted'].max() + 0.05 * (measured_regression_df['Energy Predicted'].max() - measured_regression_df['Energy Predicted'].min())
+        ]
+    ),
+    yaxis=dict(
+        range=[
+            measured_regression_df['average_meter_data'].min() - 0.05 * (measured_regression_df['average_meter_data'].max() - measured_regression_df['average_meter_data'].min()),
+            measured_regression_df['average_meter_data'].max() + 0.05 * (measured_regression_df['average_meter_data'].max() - measured_regression_df['average_meter_data'].min())
+        ]
+    )
+)
+
+fig.add_shape(
+    type="line",
+    x0=0,
+    y0=0,
+    x1=max(fig.data[0].x),
+    y1=max(fig.data[0].x),
+    line=dict(color="red", dash="dash")
+)
+
+fig.add_annotation(
+    x=0.05, y=0.95, 
+    text=f"R² = {r_squared:.2f}", 
+    showarrow=False, 
+    font=dict(size=14, color="black"), 
+    align="left",
+    xref="paper", yref="paper"
 )
 
 pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
