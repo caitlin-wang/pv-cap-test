@@ -637,6 +637,46 @@ fig5.update_layout(
     width=1000
 )
 
+# Select the inverter columns based on your criteria for inverter column naming
+inverter_columns = [col for col in merged_df.columns if 'INV' in col]
+
+# Apply the criteria and create a filtered DataFrame for the heatmap
+#filtered_data = pd.DataFrame()
+# Initialize filtered_data without setting 't_stamp' as an index
+filtered_data = pd.DataFrame()
+
+# Apply conditions to each inverter column and populate filtered_data
+for column in vars.inverter_data.columns:
+    filtered_data[column] = ((merged_df[column].fillna(0) < 50) & 
+                             (merged_df['average_fpoa'].fillna(0) > availability_min_fpoa)).astype(int)
+
+filtered_data.index = merged_df['t_stamp']
+
+fig11 = px.imshow(
+    filtered_data.T,  # Transpose to have inverters as rows
+    labels=dict(x="Timestamp", y="Inverter", color="Avaiability"),
+    x=filtered_data.index,  # Timestamps
+    y=filtered_data.columns, 
+    color_continuous_scale=['white', 'red'],# Map 0 to white and 1 to red
+    zmin = 0, 
+    zmax = 1
+)
+
+fig11.update_layout(
+    title="Inverter Performance Compliance Over Time",
+    xaxis=dict(
+        showgrid=True,
+        gridcolor='lightgray',  
+        gridwidth=1  
+    ),
+    yaxis=dict(
+        showgrid=True,
+        gridcolor='lightgray', 
+        gridwidth=1  
+    ),
+    xaxis_nticks=20  
+)
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Tab 3: Report
@@ -697,7 +737,8 @@ tab3.write("Average Soiling: " + str(avg_soiling))
 tab3.dataframe(pd.DataFrame({"MET Station": [5, 15, 21, 29],
     "Avg Soiling": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
 
-# add: heap map of inverters
+tab3.header("Heat Map of Inverters")
+tab3.plotly_chart(fig11)
 
 tab3.header("Number of Points by Filter")
 tab3.write(filter_results_df)
