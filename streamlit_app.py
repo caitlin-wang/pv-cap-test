@@ -720,7 +720,7 @@ for idx, (filter_name, filter_function, filter_args) in enumerate(filter_registr
     initial_points = remaining_points  # Remaining points become initial points for the next filter
 
 # Put results in DF
-filter_results_df = pd.DataFrame(filter_results)
+filter_results_df = pd.DataFrame(filter_results).set_index('Filter Description')
 
 fig7 = go.Figure()
 for col in vars.inverter_data:
@@ -881,12 +881,12 @@ tab3.dataframe(pd.DataFrame({"MET Station": vars.soiling_data,
 tab3.write("")
 
 tab3.header("Number of Points by Filter")
-tab3_col1, tab3_col2, tab3_col3, tab3_col4 = tab3.columns(4)
-tab3_col1.write(filter_results_df)
-tab3_col3.write("Primary filters per day:")
-tab3_col3.write(count_primary_filters_per_day)
-tab3_col4.write("Secondary filters per day:")
-tab3_col4.write(count_secondary_filters_per_day)
+tab3_col1, tab3_col2 = tab3.columns(2)
+tab3_col1.dataframe(filter_results_df, height=15)
+tab3_col2.write("Primary filters per day:")
+tab3_col2.write(count_primary_filters_per_day)
+tab3_col2.write("Secondary filters per day:")
+tab3_col2.write(count_secondary_filters_per_day)
 
 tab3.divider()
 tab3.header("RC Values")
