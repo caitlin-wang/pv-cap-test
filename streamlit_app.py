@@ -903,7 +903,6 @@ tab3.subheader("RC Threshold Loop")
 tab3.write(results_df)
 tab3.plotly_chart(fig5)
 
-tab3.divider()
 tab3.header("Regression Coefficients")
 tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
     "Measured": [fpoa[0], fpoa_poa_poa[0], fpoa_temp[0], fpoa_wind[0]],
