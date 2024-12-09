@@ -646,7 +646,7 @@ inverter_columns = [col for col in merged_df.columns if 'INV' in col]
 filtered_data = pd.DataFrame()
 
 # Apply conditions to each inverter column and populate filtered_data
-for column in vars.inverter_data.columns:
+for column in vars.inverter_data:
     filtered_data[column] = ((merged_df[column].fillna(0) < 50) & 
                              (merged_df['average_fpoa'].fillna(0) > availability_min_fpoa)).astype(int)
 
