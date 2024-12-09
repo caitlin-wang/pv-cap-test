@@ -812,6 +812,7 @@ tab3_col2.write("Inverter Rating: " + str(inverter_rating))
 tab3_col2.write("Inverter Limit: " + str(Inverter_limit))
 tab3_col2.write("Inverter Clipping Threshold: " + str(inverter_clipping_thresold))
 
+tab3.divider()
 tab3.header("Capacity Test Results:")
 
 # statement of passing or failing w/ percentage
@@ -833,6 +834,7 @@ tab3.header("Availability Test:")
 tab3.write("Average Availability of the project is : " + str(avail_average*100) + "%")
 tab3.plotly_chart(fig6) # availability plot
 
+tab3.divider()
 tab3.header("Raw Data Graphs")
 tab3.plotly_chart(fig7)
 tab3.plotly_chart(fig8)
@@ -847,6 +849,7 @@ tab3.dataframe(pd.DataFrame({"MET Station": [5, 15, 21, 29],
 tab3.header("Heat Map of Inverters")
 tab3.plotly_chart(fig11)
 
+tab3.divider()
 tab3.header("Number of Points by Filter")
 tab3.write(filter_results_df)
 
@@ -856,6 +859,7 @@ tab3.write(count_primary_filters_per_day)
 tab3.write("Secondary filters per day:")
 tab3.write(count_secondary_filters_per_day)
 
+tab3.divider()
 tab3.header("RC Values")
 tab3.dataframe(pd.DataFrame({"RC Value": ["Total POA", "FPOA", "RPOA", "Temp", "Wind"],
     "Measured Average": [rc_avg_poa_total, rc_avg_fpoa, rc_avg_rpoa, rc_avg_temp, rc_avg_wind],
@@ -864,6 +868,10 @@ tab3.dataframe(pd.DataFrame({"RC Value": ["Total POA", "FPOA", "RPOA", "Temp", "
     "PVSyst Percentile": [rc_pvsyst_percentile_poa_total, rc_pvsyst_percentile_fpoa, rc_pvsyst_percentile_rpoa, rc_pvsyst_percentileg_temp, rc_pvsyst_percentile_wind]}).set_index("RC Value"))
 tab3.write("Percent above RC after secondary filtering: " + str(secondary_above_rc_perc) + "%")
 tab3.write("Percent below RC after secondary filtering: " + str(secondary_below_rc_perc) + "%")
+
+tab3.subheader("RC Threshold Loop")
+tab3.write(results_df)
+tab3.plotly_chart(fig5)
 
 tab3.header("Regression Coefficients")
 tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
@@ -898,10 +906,6 @@ tab3.write(count_after_all_met_data_filters.to_string(dtype=False))
 
 tab3.subheader("Spatial Stability Counts")
 tab3.write(spatial_stability_counts.to_string(dtype=False))
-
-tab3.subheader("RC Threshold Loop")
-tab3.write(results_df)
-tab3.plotly_chart(fig5)
 
 tab3.subheader("Secondary Filters")
 tab3.write(count_rc_condition_thresold.to_string(dtype=False))
