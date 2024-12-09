@@ -730,7 +730,7 @@ fig10.update_layout(
     hovermode='x unified',
     width = 1000)
 
-fig5, results_df = loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
+results_df, fig5 = loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
 
 ## Plot Total number of points against Threshold using Plotly
 #fig5 = go.Figure()
@@ -871,7 +871,7 @@ tab3.write("Percent below RC after secondary filtering: " + str(secondary_below_
 
 tab3.subheader("RC Threshold Loop")
 tab3.write(results_df)
-tab3.plotly_chart(fig5)
+#tab3.plotly_chart(fig5)
 
 tab3.header("Regression Coefficients")
 tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
