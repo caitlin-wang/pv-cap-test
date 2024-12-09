@@ -500,7 +500,7 @@ fig2.update_layout(
         overlaying='y',
         side='right'),
     hovermode='x unified',
-    width = 1000
+    width = 600
 )
 
 ## Adding columns in data frame to use it for regression equation per ASTM 2848
@@ -536,7 +536,7 @@ fig3.update_layout(
     title = "Measured vs. Expected Energy after secondary filtering",
     #xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
     #yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
-    width = 1000
+    width = 600
 )
 
 pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
@@ -801,19 +801,19 @@ tab3.write("Number of Days: " + str(test_end_date-test_start_date))
 
 # add: table of inputs
 tab3.header("Inputs")
-tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
+tab3_col1, tab3_col2 = tab3.columns(2)
 tab3_col1.write("Minimum Irradiance: " + str(minimum_irradiance) + "W/m^2")
 tab3_col1.write("Maximum Irradiance: " + str(max_irradiance) + "W/m^2")
 tab3_col1.write("Temporal Stability Threshold: " + str(temporal_stability_thresold))
 tab3_col1.write("Spatial Stability Threshold: " + str(spatial_stability_thresold))
-tab3_col2.write("RC Percentile: " + str(percentile))
-tab3_col2.write("RC Threshold: " + str(reporting_condition_thresold))
+tab3_col1.write("RC Percentile: " + str(percentile))
+tab3_col1.write("RC Threshold: " + str(reporting_condition_thresold))
 tab3_col2.write("Minimum Grid Value: " + str(minimum_grid))
 tab3_col2.write("Maximum Grid Value: " + str(max_gridlimit))
-tab3_col3.write("Grid Clipping Threshold: " + str(grid_clipping_thresold))
-tab3_col3.write("Inverter Rating: " + str(inverter_rating))
-tab3_col3.write("Inverter Limit: " + str(Inverter_limit))
-tab3_col3.write("Inverter Clipping Threshold: " + str(inverter_clipping_thresold))
+tab3_col2.write("Grid Clipping Threshold: " + str(grid_clipping_thresold))
+tab3_col2.write("Inverter Rating: " + str(inverter_rating))
+tab3_col2.write("Inverter Limit: " + str(Inverter_limit))
+tab3_col2.write("Inverter Clipping Threshold: " + str(inverter_clipping_thresold))
 
 tab3.divider()
 tab3.header("Capacity Test Results:")
