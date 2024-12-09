@@ -337,7 +337,7 @@ for key in counts:
     counts[key] /= count_avail_poa
 # Convert the counts dictionary to a dataframe for better readability
 avail_counts_df = pd.DataFrame(list(counts.items()), columns=['Inverter', 'Availabiliy'])
-avail_average=avail_counts_df['Availabiliy'].mean()
+avail_average = round(avail_counts_df['Availabiliy'].mean()*100, 2)
 
 ## Applying filters to remove all data where meter value is positive and not clipping 
 
