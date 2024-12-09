@@ -537,7 +537,7 @@ slope, intercept, r_value, p_value, std_err = stats.linregress(measured_regressi
 r_squared = r_value**2  # R² value
 
 # Update the layout to include (0, 0) in the axes
-fig.update_layout(
+fig3.update_layout(
     xaxis=dict(
         range=[
             measured_regression_df['Energy Predicted'].min() - 0.05 * (measured_regression_df['Energy Predicted'].max() - measured_regression_df['Energy Predicted'].min()),
@@ -552,16 +552,16 @@ fig.update_layout(
     )
 )
 
-fig.add_shape(
+fig3.add_shape(
     type="line",
     x0=0,
     y0=0,
-    x1=max(fig.data[0].x),
-    y1=max(fig.data[0].x),
+    x1=max(fig3.data[0].x),
+    y1=max(fig3.data[0].x),
     line=dict(color="red", dash="dash")
 )
 
-fig.add_annotation(
+fig3.add_annotation(
     x=0.05, y=0.95, 
     text=f"R² = {r_squared:.2f}", 
     showarrow=False, 
