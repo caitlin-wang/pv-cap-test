@@ -146,8 +146,8 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 
         #Calculate energy both monofacial and bifacial
-        measured_energy_bifacial=rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
-        measured_energy_monofacial=rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)
+        measured_energy_bifacial = round(rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
+        measured_energy_monofacial = round(rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
         measured_regression_df["Energy Predicted"]=measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
 
         #Adding Comparison of Site vs Pvsyst data here 
@@ -275,7 +275,7 @@ inverter_clipping_thresold = form1_col1.number_input("Inverter Clipping Threshol
 inverter_clipping = inverter_rating * inverter_clipping_thresold
 
 form1.subheader("Other Inputs:")
-passing_capacity = form1.number_input("Passing Capacity (Bifacial):", min_value=0.0, value=97.0, max_value=100.0)
+passing_capacity = form1.number_input("Passing Capacity (Bifacial):", min_value=0, value=97, max_value=100)
 pvsyst_shading = form1.number_input("PVSyst Shading:", min_value=0, value=1, step=1)
 bifaciality = form1.number_input("Bifaciality", value=0.7, min_value=0.0, max_value=1.0, step=0.1)
 availability_min_fpoa = form1.number_input("Availability Minimum FPOA", value=50, min_value=0, step=1)
@@ -604,8 +604,8 @@ fig4 = px.scatter(expected_regression_df, x='Energy Predicted', y='E_Grid', titl
 # Customize the hover data
 fig4.update_traces(marker=dict(size=10), selector=dict(mode='markers'))
 
-Capacity_Ratio_Mono=measured_energy_monofacial/expected_energy_monofacial*100
-Capacity_Ratio_Bifacial=measured_energy_bifacial/expected_energy_bifacial*100
+Capacity_Ratio_Mono = round(measured_energy_monofacial/expected_energy_monofacial*100, 2)
+Capacity_Ratio_Bifacial = (measured_energy_bifacial/expected_energy_bifacial*100, 2)
 
 #Added by KL to count per column how many inverters were did not hit criteria
 merged_df['inverter_count'] = merged_df.apply(
@@ -822,7 +822,7 @@ if Capacity_Ratio_Bifacial >= passing_capacity:
     tab3.success("The test passed with a " + str(Capacity_Ratio_Bifacial) + "% capacity. Yippee!")
 else:
     tab3.error("The test failed with a " + str(Capacity_Ratio_Bifacial) +
-               "% capacity. The target bifacial capacity ratio is " + str(passing_capacity) + "%")
+               "% capacity. The target bifacial capacity is " + str(passing_capacity) + "%")
 
 tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "Capacity Ratio %"],
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
