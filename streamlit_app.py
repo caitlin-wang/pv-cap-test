@@ -853,21 +853,23 @@ tab3.divider()
 tab3.header("Number of Points by Filter")
 tab3.write(filter_results_df)
 
+tab3_col1, tab3_col2 = tab3.columns(2)
 tab3.header("Filters Per Day")
-tab3.write("Primary filters per day:")
-tab3.write(count_primary_filters_per_day)
-tab3.write("Secondary filters per day:")
-tab3.write(count_secondary_filters_per_day)
+tab3_col1.write("Primary filters per day:")
+tab3_col1.write(count_primary_filters_per_day)
+tab3_col2.write("Secondary filters per day:")
+tab3_col2.write(count_secondary_filters_per_day)
 
+tab3_col1, tab3_col2 = tab3.columns(2)
 tab3.divider()
 tab3.header("RC Values")
-tab3.dataframe(pd.DataFrame({"RC Value": ["Total POA", "FPOA", "RPOA", "Temp", "Wind"],
+tab3_col1.dataframe(pd.DataFrame({"RC Value": ["Total POA", "FPOA", "RPOA", "Temp", "Wind"],
     "Measured Average": [rc_avg_poa_total, rc_avg_fpoa, rc_avg_rpoa, rc_avg_temp, rc_avg_wind],
     "Measured Percentile": [percentile_avg_poa_total, percentile_avg_fpoa, percentile_avg_rpoa, percentile_avg_temp, percentile_avg_wind],
     "PVSyst Average": [rc_pvsyst_avg_poa_total, rc_pvsyst_avg_fpoa, rc_pvsyst_avg_rpoa, rc_pvsyst_avg_temp, rc_pvsyst_avg_wind],
     "PVSyst Percentile": [rc_pvsyst_percentile_poa_total, rc_pvsyst_percentile_fpoa, rc_pvsyst_percentile_rpoa, rc_pvsyst_percentileg_temp, rc_pvsyst_percentile_wind]}).set_index("RC Value").round(2))
-tab3.write("Percent above RC after secondary filtering: " + str(secondary_above_rc_perc) + "%")
-tab3.write("Percent below RC after secondary filtering: " + str(secondary_below_rc_perc) + "%")
+tab3_col2.write("Percent above RC after secondary filtering: " + str(secondary_above_rc_perc) + "%")
+tab3_col2.write("Percent below RC after secondary filtering: " + str(secondary_below_rc_perc) + "%")
 
 tab3.subheader("RC Threshold Loop")
 tab3.write(results_df)
