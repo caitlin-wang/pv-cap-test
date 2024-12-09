@@ -834,7 +834,7 @@ tab3.plotly_chart(fig2) # Meter vs. FPOA after secondary filtering
 
 tab3.header("Availability Test:")
 # add: statement of availability calculation tab3.write("This calculation was done with...")
-tab3.write("Average Availability of the project is : " + str(avail_average*100) + "%")
+tab3.write("Average Availability of the project is : " + str(avail_average) + "%")
 #tab3.plotly_chart(fig6) # availability plot
 tab3.plotly_chart(fig11)
 
