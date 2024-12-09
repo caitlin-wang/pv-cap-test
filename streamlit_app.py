@@ -878,6 +878,7 @@ tab3.header("Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling) + "%")
 tab3.dataframe(pd.DataFrame({"MET Station": vars.soiling_data,
     "Avg Soiling (%)": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
+tab3.write("")
 
 tab3.header("Number of Points by Filter")
 tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
