@@ -49,12 +49,11 @@ def filter_meter_greater_zero(df):
 def filter_grid_clipping(df):
     return df['average_meter_data'] < grid_clipping
 
-def filter_inverter_clipping(df, inverter_data):
-    #return inverter_data.apply(lambda row: row.max() < inverter_clipping, axis=1)
-    tab3.write(inverter_data)
+def filter_inverter_clipping(df, inverter_df):
+    return inverter_df.apply(lambda row: row.max() < inverter_clipping, axis=1)
 
-def filter_inverter_zero(df, inverter_data):
-    return ~(inverter_data == 0).any(axis=1)
+def filter_inverter_zero(df, inverter_df):
+    return ~(inverter_df == 0).any(axis=1)
     
 def filter_fpoa_blank(df, fpoa_data):
     return ~(df[fpoa_data].isnull()).any(axis=1)
