@@ -882,7 +882,7 @@ tab3.write("")
 
 tab3.header("Number of Points by Filter")
 tab3_col1, tab3_col2 = tab3.columns(2)
-tab3_col1.dataframe(filter_results_df, height=560)
+tab3_col1.dataframe(filter_results_df, height=565)
 tab3_col2.write("Primary filters per day:")
 tab3_col2.write(count_primary_filters_per_day)
 tab3_col2.write("Secondary filters per day:")
