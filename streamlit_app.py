@@ -433,11 +433,11 @@ merged_df['primary_filters']=(merged_df['t_stamp_check']*
                               *merged_df['fpoa_blank']*merged_df['temp_blank']
                                 *merged_df['wind_blank']*merged_df['temp_zero']*merged_df['fpoa_zero']*merged_df['wind_zero'])
 # 
-count_primary_filters=merged_df['primary_filters'].value_counts().rename(index={True:"Including",False:"Excluding"})       ##Note: Counting number of primary filters, this should be minimum number of points 
+count_primary_filters = merged_df['primary_filters'].value_counts().rename(index={True:"Including",False:"Excluding"})       ##Note: Counting number of primary filters, this should be minimum number of points 
 
 count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
 
-rc_conditions=merged_df[merged_df['primary_filters']==True]    ## Note: Reporting conditions are calculated only on True values on primary filters 
+rc_conditions = merged_df[merged_df['primary_filters']==True]    ## Note: Reporting conditions are calculated only on True values on primary filters 
 
 ## Calculating RC conditions on fpoa, rpoa, temp and wind by taking average values
 rc_avg_poa_total=rc_conditions['average_poa_total'].mean()
@@ -867,19 +867,18 @@ tab3.write("Average Availability of the project is : " + str(avail_average) + "%
 #tab3.plotly_chart(fig6) # availability plot
 tab3.plotly_chart(fig11)
 
-tab3.divider()
 tab3.header("Raw Data Graphs")
 tab3.plotly_chart(fig7)
 tab3.plotly_chart(fig8)
 tab3.plotly_chart(fig9)
 tab3.plotly_chart(fig10)
 
+tab3.divider()
 tab3.header("Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling) + "%")
 tab3.dataframe(pd.DataFrame({"MET Station": vars.soiling_data,
     "Avg Soiling (%)": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
 
-tab3.divider()
 tab3.header("Number of Points by Filter")
 tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
 tab3_col1.write(filter_results_df)
