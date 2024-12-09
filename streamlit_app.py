@@ -500,7 +500,7 @@ fig2.update_layout(
         overlaying='y',
         side='right'),
     hovermode='x unified',
-    width = 600
+    width = 1000
 )
 
 ## Adding columns in data frame to use it for regression equation per ASTM 2848
@@ -536,7 +536,7 @@ fig3.update_layout(
     title = "Measured vs. Expected Energy after secondary filtering",
     #xaxis = dict(range=[0, measured_regression_df['Energy Predicted'].max()]),
     #yaxis = dict(range=[0, measured_regression_df[vars.meter_data[0]].max()]),
-    width = 600
+    width = 1000
 )
 
 pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1")
@@ -700,7 +700,7 @@ fig7.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1000)
+    width = 800)
 
 fig8 = go.Figure()
 for col in vars.fpoa_data:
@@ -710,7 +710,7 @@ fig8.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1000)
+    width = 800)
 
 fig9 = go.Figure()
 fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name=col))
@@ -719,7 +719,7 @@ fig9.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1000)
+    width = 800)
 
 fig10 = go.Figure()
 for col in vars.soiling_data:
@@ -729,7 +729,7 @@ fig10.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1000)
+    width = 800)
 
 results_df, fig5 = loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
 results_df = results_df.set_index("Threshold")
