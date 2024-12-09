@@ -202,7 +202,7 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         #xaxis_title="Threshold",
         #yaxis_title="Total Number of Points",
         template="plotly_white",
-        width=1090
+        width=1093
     )
 
     #print(results_day)
@@ -492,7 +492,7 @@ fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regres
 
 # Update layout to include a secondary y-axis
 fig2.update_layout(
-    title='Meter vs. FPOA after secondary filtering',
+    title='Meter vs. FPOA',
     xaxis_title='Timestamp',
     yaxis_title='Meter and Inverter Data',
     yaxis2=dict(
@@ -500,7 +500,7 @@ fig2.update_layout(
         overlaying='y',
         side='right'),
     hovermode='x unified',
-    width = 1250
+    width = 1255
 )
 
 ## Adding columns in data frame to use it for regression equation per ASTM 2848
@@ -548,7 +548,7 @@ fig3.update_layout(
             measured_regression_df['average_meter_data'].min() - 0.05 * (measured_regression_df['average_meter_data'].max() - measured_regression_df['average_meter_data'].min()),
             measured_regression_df['average_meter_data'].max() + 0.05 * (measured_regression_df['average_meter_data'].max() - measured_regression_df['average_meter_data'].min())
         ]),
-    width=1000
+    width=1005
 )
 
 fig3.add_shape(
@@ -730,7 +730,7 @@ fig7.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1255)
+    width = 1265)
 
 fig8 = go.Figure()
 for col in vars.fpoa_data:
@@ -859,7 +859,7 @@ tab3_col2.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy",
     "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capacity_Ratio_Bifacial]}).set_index("Summary"))
 
 tab3.plotly_chart(fig3) # Measured vs. Expected Energy after secondary filtering
-tab3.plotly_chart(fig2) # Meter vs. FPOA after secondary filtering
+tab3.plotly_chart(fig2) # Meter vs. FPOA
 
 tab3.header("Availability Test:")
 # add: statement of availability calculation tab3.write("This calculation was done with...")
