@@ -871,7 +871,7 @@ tab3.write("Percent below RC after secondary filtering: " + str(secondary_below_
 
 tab3.subheader("RC Threshold Loop")
 tab3.write(results_df)
-#tab3.plotly_chart(fig5)
+tab3.plotly_chart(fig5)
 
 tab3.header("Regression Coefficients")
 tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
