@@ -786,7 +786,8 @@ fig11.update_layout(
         gridcolor='lightgray', 
         gridwidth=1  
     ),
-    xaxis_nticks=20  
+    xaxis_nticks=20,
+    width=1000
 )
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
