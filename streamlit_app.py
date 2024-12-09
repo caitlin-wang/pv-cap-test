@@ -202,7 +202,7 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         #xaxis_title="Threshold",
         #yaxis_title="Total Number of Points",
         template="plotly_white",
-        width=1080
+        width=1090
     )
 
     #print(results_day)
@@ -730,7 +730,7 @@ fig7.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1250)
+    width = 1255)
 
 fig8 = go.Figure()
 for col in vars.fpoa_data:
@@ -740,7 +740,7 @@ fig8.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1340)
+    width = 1350)
 
 fig9 = go.Figure()
 fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name=col))
@@ -759,7 +759,7 @@ fig10.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1390)
+    width = 1385)
 
 results_df, fig5 = loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
 results_df = results_df.set_index("Threshold")
