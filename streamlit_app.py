@@ -822,7 +822,7 @@ if Capacity_Ratio_Bifacial >= passing_capacity:
     tab3.success("The test passed with a " + str(Capacity_Ratio_Bifacial) + "% capacity. Yippee!")
 else:
     tab3.error("The test failed with a " + str(Capacity_Ratio_Bifacial) +
-               "% capacity. The target bifacial capacity ratio is " str(passing_capacity) + "%")
+               "% capacity. The target bifacial capacity ratio is " + str(passing_capacity) + "%")
 
 tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "Capacity Ratio %"],
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
