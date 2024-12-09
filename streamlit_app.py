@@ -849,20 +849,19 @@ tab3.write("Average Soiling: " + str(avg_soiling) + "%")
 tab3.dataframe(pd.DataFrame({"MET Station": vars.soiling_data,
     "Avg Soiling (%)": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
 
+tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
 tab3.divider()
 tab3.header("Number of Points by Filter")
-tab3.write(filter_results_df)
-
-tab3_col1, tab3_col2 = tab3.columns(2)
+tab3_col1.write(filter_results_df)
 tab3.header("Filters Per Day")
-tab3_col1.write("Primary filters per day:")
-tab3_col1.write(count_primary_filters_per_day)
-tab3_col2.write("Secondary filters per day:")
-tab3_col2.write(count_secondary_filters_per_day)
+tab3_col2.write("Primary filters per day:")
+tab3_col2.write(count_primary_filters_per_day)
+tab3_col3.write("Secondary filters per day:")
+tab3_col3.write(count_secondary_filters_per_day)
 
-tab3_col1, tab3_col2 = tab3.columns(2)
 tab3.divider()
 tab3.header("RC Values")
+tab3_col1, tab3_col2 = tab3.columns(2)
 tab3_col1.dataframe(pd.DataFrame({"RC Value": ["Total POA", "FPOA", "RPOA", "Temp", "Wind"],
     "Measured Average": [rc_avg_poa_total, rc_avg_fpoa, rc_avg_rpoa, rc_avg_temp, rc_avg_wind],
     "Measured Percentile": [percentile_avg_poa_total, percentile_avg_fpoa, percentile_avg_rpoa, percentile_avg_temp, percentile_avg_wind],
