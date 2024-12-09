@@ -151,8 +151,8 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         measured_regression_df["Energy Predicted"]=measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
 
         #Adding Comparison of Site vs Pvsyst data here 
-        Capcity_Ratio_Mono=measured_energy_monofacial/expected_energy_monofacial
-        Capcity_Ratio_Bifacial=measured_energy_bifacial/expected_energy_bifacial
+        Capcity_Ratio_Mono = measured_energy_monofacial/expected_energy_monofacial
+        Capcity_Ratio_Bifacial = measured_energy_bifacial/expected_energy_bifacial
         
         #Format results table, but currently not working
         result = {
@@ -524,8 +524,8 @@ fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 
 ## Note: Calculating energy 
 
-measured_energy_bifacial=rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)[0]
-measured_energy_monofacial=rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)[0]
+measured_energy_bifacial = round(rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)[0])
+measured_energy_monofacial = round(rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)[0])
 
 measured_regression_df["Energy Predicted"] = measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
 
