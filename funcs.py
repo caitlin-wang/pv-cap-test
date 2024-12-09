@@ -14,6 +14,7 @@ from plotly.offline import init_notebook_mode, iplot
 #import warnings
 #warnings.filterwarnings("ignore")
 from zipfile import ZipFile
+import vars
 
 # Function to load and select columns from a list of files
 def load_and_select(files, columns):
@@ -61,7 +62,7 @@ def frange(start, stop, step):
         start += step
 
 # Function to loop through reporting condition thresholds
-def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
+def outdated_loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     # Initialize an empty list to store results before starting the loop
     results = []
     
