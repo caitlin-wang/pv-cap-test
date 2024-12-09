@@ -700,7 +700,7 @@ fig7.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 700)
+    width = 1000)
 
 fig8 = go.Figure()
 for col in vars.fpoa_data:
@@ -710,7 +710,7 @@ fig8.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 700)
+    width = 1000)
 
 fig9 = go.Figure()
 fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name=col))
@@ -719,7 +719,7 @@ fig9.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 700)
+    width = 1000)
 
 fig10 = go.Figure()
 for col in vars.soiling_data:
@@ -729,7 +729,7 @@ fig10.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 700)
+    width = 1000)
 
 results_df, fig5 = loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
 results_df = results_df.set_index("Threshold")
@@ -839,12 +839,11 @@ tab3.write("Average Availability of the project is : " + str(avail_average) + "%
 tab3.plotly_chart(fig11)
 
 tab3.divider()
-tab3_col1, tab3_col2 = tab3.columns(2)
 tab3.header("Raw Data Graphs")
-tab3_col1.plotly_chart(fig7)
-tab3_col2.plotly_chart(fig8)
-tab3_col1.plotly_chart(fig9)
-tab3_col2.plotly_chart(fig10)
+tab3.plotly_chart(fig7)
+tab3.plotly_chart(fig8)
+tab3.plotly_chart(fig9)
+tab3.plotly_chart(fig10)
 
 tab3.header("Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling) + "%")
