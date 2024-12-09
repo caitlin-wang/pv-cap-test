@@ -157,17 +157,17 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         #Format results table, but currently not working
         result = {
             'Threshold': reporting_condition_thresold,
-            'Total number of points': count_including,
+            'Total # points': count_including,
             'Excluding Count': count_excluding,
             'Secondary Above RC %': secondary_above_rc_perc,
             'Secondary Below RC %': secondary_below_rc_perc,
-            'FPOA Coefficient' : fpoa, 
-            'FPOA x FPOA Coefficient' : fpoa_poa_poa, 
-            'FPOA x Temp Coefficient' : fpoa_temp, 
-            'FPOA x Wind Coefficient' : fpoa_wind,
-            'Measured Energy Monfacial': measured_energy_monofacial, 
+            'FPOA Coeff' : fpoa, 
+            'FPOA x FPOA Coeff' : fpoa_poa_poa, 
+            'FPOA x Temp Coeff' : fpoa_temp, 
+            'FPOA x Wind Coeff' : fpoa_wind,
+            'Measured Energy Monofacial': measured_energy_monofacial, 
             'Measured Energy Bifacial' : measured_energy_bifacial, 
-            'Capacity Ratio Monfacial': Capcity_Ratio_Mono, 
+            'Capacity Ratio Monofacial': Capcity_Ratio_Mono, 
             'Capacity Ratio Bifacial': Capcity_Ratio_Bifacial 
         }
 
@@ -176,7 +176,7 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     results_df = pd.DataFrame(results)
 
     #Showing the results here#####################################################################
-    # Plot Total number of points against Threshold using Plotly
+    # Plot Total # points against Threshold using Plotly
     #fig = go.Figure()
     fig = make_subplots(
     rows=2, cols=1,
@@ -184,16 +184,16 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
 
     fig.add_trace(go.Scatter(
         x=results_df['Threshold'],
-        y=results_df['Total number of points'],
+        y=results_df['Total # points'],
         mode='lines+markers'),
-        #name='Total number of points',
+        #name='Total # points',
         row=1, col=1)
     
     fig.add_trace(go.Scatter(
         x=results_df['Threshold'],
         y=results_df['Capacity Ratio Bifacial'],
         mode='lines+markers'),
-        #name='Total number of points',
+        #name='Total # points',
         row=2, col=1
     )
     
