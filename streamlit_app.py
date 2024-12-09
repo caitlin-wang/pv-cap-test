@@ -472,8 +472,8 @@ merged_df['rc_check'] = merged_df['average_poa_total'].between(reporting_conditi
 merged_df['secondary_filter']=merged_df['primary_filters']*merged_df['rc_check']
 count_rc_condition_thresold=merged_df['secondary_filter'].value_counts().rename(index={True:"Including",False:"Excluding"})
 
-secondary_above_rc_perc=(((merged_df['secondary_filter']==True)&(merged_df['average_poa_total']>=rc_poa_total)).sum()/((merged_df['secondary_filter']==True)).sum()*100)
-secondary_below_rc_perc=100-secondary_above_rc_perc
+secondary_above_rc_perc = round((((merged_df['secondary_filter']==True)&(merged_df['average_poa_total']>=rc_poa_total)).sum()/((merged_df['secondary_filter']==True)).sum()*100), 2)
+secondary_below_rc_perc = round(100 - secondary_above_rc_perc, 2)
 
 measured_regression_df = merged_df[merged_df['secondary_filter']==True]
 count_secondary_filters_per_day = measured_regression_df.groupby(measured_regression_df['t_stamp'].dt.date)['secondary_filter'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
@@ -732,6 +732,7 @@ fig10.update_layout(
     width = 1000)
 
 results_df, fig5 = loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
+results_df = results_df.set_index("Threshold")
 
 ## Plot Total number of points against Threshold using Plotly
 #fig5 = go.Figure()
@@ -879,46 +880,16 @@ tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa",
     "Measured": [fpoa[0], fpoa_poa_poa[0], fpoa_temp[0], fpoa_wind[0]],
     "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
 
-tab3.title("~~~~~~~~~~~~~~~~ PDF Ends Here ~~~~~~~~~~~~~~~~")
+#tab3.write(f"Number of events POA is greater then minimum irradiance: {count_avail_poa}")
+#tab3.write(avail_counts_df)
 
-tab3.write(f"Number of events POA is greater then minimum irradiance :{count_avail_poa}")
-tab3.write(avail_counts_df)
+# different measured v expected energy plot
+#tab3.plotly_chart(fig4)
 
-tab3.subheader("Inverter Filters")
-tab3.write(count_meter_greaterzero.to_string(dtype=False))
-tab3.write(count_grid_clipping.to_string(dtype=False))
-tab3.write(count_meter_filter_data.to_string(dtype=False))
-tab3.write(count_inverter_clipping_check.to_string(dtype=False))
-tab3.write(count_inverter_blank.to_string(dtype=False))
-tab3.write(count_inverter_zero.to_string(dtype=False))
-tab3.write(count_inverter_filter_data.to_string(dtype=False))
-
-tab3.subheader("MET Filters")
-tab3.write(count_fpoa_blank.to_string(dtype=False))
-tab3.write(count_fpoa_zero.to_string(dtype=False))
-tab3.write(count_rpoa_blank.to_string(dtype=False))
-tab3.write(count_rpoa_zero.to_string(dtype=False))
-tab3.write(count_temp_blank.to_string(dtype=False))
-tab3.write(count_temp_zero.to_string(dtype=False))
-tab3.write(count_wind_blank.to_string(dtype=False))
-tab3.write(count_wind_zero.to_string(dtype=False))
-tab3.write(count_fpoa_qc.to_string(dtype=False))
-tab3.write(count_after_all_met_data_filters.to_string(dtype=False))
-
-tab3.subheader("Spatial Stability Counts")
-tab3.write(spatial_stability_counts.to_string(dtype=False))
-
-tab3.subheader("Secondary Filters")
-tab3.write(count_rc_condition_thresold.to_string(dtype=False))
-tab3.write(secondary_above_rc_perc)
-tab3.write(secondary_below_rc_perc)
-
-tab3.plotly_chart(fig4)
-
-tab3.subheader("PVSyst Test Model")
-tab3.write(pvsyst_test_model_df)
-tab3.write("PVsyst Start Date: " + str(pvsyst_model_start_date))
-tab3.write("PVSyst End Date: " + str(pvsyst_model_end_date))
+#tab3.subheader("PVSyst Test Model")
+#tab3.write(pvsyst_test_model_df)
+#tab3.write("PVsyst Start Date: " + str(pvsyst_model_start_date))
+#tab3.write("PVSyst End Date: " + str(pvsyst_model_end_date))
 
 #tab3.header("Detailed Report Below:")
 #tab3.write(detailed_report)
