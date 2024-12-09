@@ -201,7 +201,8 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         title="RC Threshold Sensitivity",
         #xaxis_title="Threshold",
         #yaxis_title="Total Number of Points",
-        template="plotly_white"
+        template="plotly_white",
+        width=1000
     )
 
     #print(results_day)
