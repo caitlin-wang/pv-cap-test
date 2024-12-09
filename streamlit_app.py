@@ -202,7 +202,7 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         #xaxis_title="Threshold",
         #yaxis_title="Total Number of Points",
         template="plotly_white",
-        width=1093
+        width=1095
     )
 
     #print(results_day)
@@ -500,7 +500,7 @@ fig2.update_layout(
         overlaying='y',
         side='right'),
     hovermode='x unified',
-    width = 1255
+    width = 1258
 )
 
 ## Adding columns in data frame to use it for regression equation per ASTM 2848
@@ -548,7 +548,7 @@ fig3.update_layout(
             measured_regression_df['average_meter_data'].min() - 0.05 * (measured_regression_df['average_meter_data'].max() - measured_regression_df['average_meter_data'].min()),
             measured_regression_df['average_meter_data'].max() + 0.05 * (measured_regression_df['average_meter_data'].max() - measured_regression_df['average_meter_data'].min())
         ]),
-    width=1005
+    width=1008
 )
 
 fig3.add_shape(
@@ -730,7 +730,7 @@ fig7.update_layout(
     xaxis_title='Timestamp',
     yaxis_title='Values',
     hovermode='x unified',
-    width = 1265)
+    width = 1270)
 
 fig8 = go.Figure()
 for col in vars.fpoa_data:
