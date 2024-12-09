@@ -605,7 +605,7 @@ fig4 = px.scatter(expected_regression_df, x='Energy Predicted', y='E_Grid', titl
 fig4.update_traces(marker=dict(size=10), selector=dict(mode='markers'))
 
 Capacity_Ratio_Mono = round(measured_energy_monofacial/expected_energy_monofacial*100, 2)
-Capacity_Ratio_Bifacial = (measured_energy_bifacial/expected_energy_bifacial*100, 2)
+Capacity_Ratio_Bifacial = round(measured_energy_bifacial/expected_energy_bifacial*100, 2)
 
 #Added by KL to count per column how many inverters were did not hit criteria
 merged_df['inverter_count'] = merged_df.apply(
