@@ -275,7 +275,7 @@ inverter_clipping_thresold = form1_col1.number_input("Inverter Clipping Threshol
 inverter_clipping = inverter_rating * inverter_clipping_thresold
 
 form1.subheader("Other Inputs:")
-passing_capacity = form1.number_input("Passing Capacity (Bifacial):", min_value=0, value=97, max_value=100)
+passing_capacity = form1.number_input("Passing Capacity (Bifacial):", min_value=0.0, value=97.0, max_value=100.0)
 pvsyst_shading = form1.number_input("PVSyst Shading:", min_value=0, value=1, step=1)
 bifaciality = form1.number_input("Bifaciality", value=0.7, min_value=0.0, max_value=1.0, step=0.1)
 availability_min_fpoa = form1.number_input("Availability Minimum FPOA", value=50, min_value=0, step=1)
