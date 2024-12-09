@@ -835,7 +835,8 @@ tab3.plotly_chart(fig2) # Meter vs. FPOA after secondary filtering
 tab3.header("Availability Test:")
 # add: statement of availability calculation tab3.write("This calculation was done with...")
 tab3.write("Average Availability of the project is : " + str(avail_average*100) + "%")
-tab3.plotly_chart(fig6) # availability plot
+#tab3.plotly_chart(fig6) # availability plot
+tab3.plotly_chart(fig11)
 
 tab3.divider()
 tab3.header("Raw Data Graphs")
@@ -848,9 +849,6 @@ tab3.header("Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling))
 tab3.dataframe(pd.DataFrame({"MET Station": [5, 15, 21, 29],
     "Avg Soiling": [avg_soiling_met5, avg_soiling_met15, avg_soiling_met21, avg_soiling_met29]}).set_index("MET Station"))
-
-tab3.header("Heat Map of Inverters")
-tab3.plotly_chart(fig11)
 
 tab3.divider()
 tab3.header("Number of Points by Filter")
