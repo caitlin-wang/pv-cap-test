@@ -51,7 +51,7 @@ def filter_grid_clipping(df):
 
 def filter_inverter_clipping(df, inverter_data):
     #return df[inverter_data].apply(lambda row: row.max() < inverter_clipping, axis=1)
-    tab3.write(inverter_data)
+    #tab3.write(inverter_data)
     tab3.write(df[inverter_data])
 
 def filter_inverter_zero(df, inverter_data):
