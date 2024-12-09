@@ -829,9 +829,9 @@ tab3.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "Cap
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
     "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capacity_Ratio_Bifacial]}).set_index("Summary"))
 
-tab3.plotly_chart(fig3) # Measured vs. Expected Energy after secondary filtering
-
-tab3.plotly_chart(fig2) # Meter vs. FPOA after secondary filtering
+tab3_col1, tab3_col2 = tab3.columns(2)
+tab3_col1.plotly_chart(fig3) # Measured vs. Expected Energy after secondary filtering
+tab3_col2.plotly_chart(fig2) # Meter vs. FPOA after secondary filtering
 
 tab3.header("Availability Test:")
 # add: statement of availability calculation tab3.write("This calculation was done with...")
@@ -840,7 +840,6 @@ tab3.write("Average Availability of the project is : " + str(avail_average) + "%
 tab3.plotly_chart(fig11)
 
 tab3.divider()
-tab3_col1, tab3_col2 = tab3.columns(2)
 tab3.header("Raw Data Graphs")
 tab3_col1.plotly_chart(fig7)
 tab3_col2.plotly_chart(fig8)
