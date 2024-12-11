@@ -104,7 +104,7 @@ for folder in os.listdir(main_directory):
         all_files.extend(csv_files)
 
 
-for file in tqdm(all_files, desc="Reading files"):
+for file in all_files:
     df = pd.read_csv(file)
     df = funcs.filter_and_parse_dates(df, date_format)  # Assuming you have a function to filter and parse dates
     all_dfs.append(df)
@@ -112,11 +112,8 @@ for file in tqdm(all_files, desc="Reading files"):
 # Concatenate all DataFrames vertically
 all_data = pd.concat(all_dfs, axis=0, ignore_index=True)
 
-# Track the progress of computing and group by t_stamp
-with tqdm(total=1, desc="Grouping and computing") as pbar:
-    # Group by 't_stamp' and keep the first row for each group
-    all_data = all_data.groupby('t_stamp').first()
-    pbar.update(1)
+# group by t_stamp
+all_data = all_data.groupby('t_stamp').first()
 
 # Step 2: Load the metadata and get columns to keep
 metadata_df = pd.read_excel(column_groups, header=None)
