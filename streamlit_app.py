@@ -33,7 +33,7 @@ tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 # Tab 1: Data Upload
 
 # Specify the main directory containing folders of daily CSV files
-main_directory = tab1.text_input("Main Directory", "2.Raw Data")
+main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", "2.Raw Data")
 metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
 date_format = tab1.text_input("Date Format", "%Y-%m-%d %H:%M:%S.%f")
 
@@ -94,7 +94,6 @@ form1.form_submit_button("Submit Inputs")
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
         z.extractall(".")
-        tab3.write(uploaded_zip.name)
 if uploaded_zip is None or column_groups is None or pvsyst_test_model_path is None:
     tab2.write('Upload files to proceed.')
     tab3.write('Upload files to proceed.')
@@ -105,7 +104,7 @@ all_dfs = []
     
 # Gather all file paths
 all_files = []
-for folder in os.listdir():
+for folder in os.listdir(main_directory):
     folder_path = os.path.join(main_directory, folder)
     if os.path.isdir(folder_path):  # Only process folders
         csv_files = glob(os.path.join(folder_path, "*.csv"))
@@ -135,6 +134,8 @@ if 't_stamp' not in columns_to_keep:
 # Step 3: Filter the merged DataFrame
 merged_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep).set_index('t_stamp')  # Reset index to keep 't_stamp' as a column
 merged_df = merged_df[(merged_df.index >= test_start_date) & (merged_df.index <= test_end_date)]
+tab3.write(merged_df)
+
 metadata_df = pd.read_excel(column_groups, header=None)  # Adjust header if necessary
 column_groups = {}
 
