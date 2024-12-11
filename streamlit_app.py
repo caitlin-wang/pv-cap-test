@@ -91,3 +91,44 @@ soiling_with_iv_curve = form1.number_input("Soiling with IV Curve:", min_value=0
 form1.form_submit_button("Submit Inputs")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend begin ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Initialize an empty Dask DataFrame
+all_dfs = []
+    
+# Gather all file paths
+all_files = []
+for folder in os.listdir(main_directory):
+    folder_path = os.path.join(main_directory, folder)
+    if os.path.isdir(folder_path):  # Only process folders
+        csv_files = glob(os.path.join(folder_path, "*.csv"))
+        all_files.extend(csv_files)
+
+
+for file in tqdm(all_files, desc="Reading files"):
+    df = pd.read_csv(file)
+    df = funcs.filter_and_parse_dates(df, date_format)  # Assuming you have a function to filter and parse dates
+    all_dfs.append(df)
+
+# Concatenate all DataFrames vertically
+all_data = pd.concat(all_dfs, axis=0, ignore_index=True)
+
+# Track the progress of computing and group by t_stamp
+with tqdm(total=1, desc="Grouping and computing") as pbar:
+    # Group by 't_stamp' and keep the first row for each group
+    all_data = all_data.groupby('t_stamp').first()
+    pbar.update(1)
+
+# Step 2: Load the metadata and get columns to keep
+metadata_df = pd.read_excel(column_groups, header=None)
+columns_to_keep = [col.strip() for col in metadata_df[1].dropna().tolist()]  # Assuming column B has the names
+#column_groups = [col.strip() for col in metadata_df[1].dropna().tolist()]  # Assuming column B has the names
+
+# Ensure 't_stamp' is in the list of columns to keep
+if 't_stamp' not in columns_to_keep:
+    columns_to_keep.insert(0, 't_stamp')  # Add it back to the beginning if needed
+
+# Step 3: Filter the merged DataFrame
+filtered_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep)  # Reset index to keep 't_stamp' as a column
+merged_df_all = filtered_df.set_index('t_stamp')
+merged_df = merged_df_all
+merged_df = merged_df_all[(merged_df_all.index >= test_start_date) & (merged_df_all.index <= test_end_date)]
