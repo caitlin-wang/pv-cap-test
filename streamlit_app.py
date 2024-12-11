@@ -94,6 +94,7 @@ form1.form_submit_button("Submit Inputs")
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
         z.extractall(".")
+        tab3.write(uploaded_zip.name)
 if uploaded_zip is None or column_groups is None or pvsyst_test_model_path is None:
     tab2.write('Upload files to proceed.')
     tab3.write('Upload files to proceed.')
@@ -104,7 +105,7 @@ all_dfs = []
     
 # Gather all file paths
 all_files = []
-for folder in os.listdir(main_directory):
+for folder in os.listdir():
     folder_path = os.path.join(main_directory, folder)
     if os.path.isdir(folder_path):  # Only process folders
         csv_files = glob(os.path.join(folder_path, "*.csv"))
