@@ -125,7 +125,6 @@ all_data = all_data.groupby('t_stamp').first()
 # Step 2: Load the metadata and get columns to keep
 metadata_df = pd.read_excel(column_groups, header=None)
 columns_to_keep = [col.strip() for col in metadata_df[1].dropna().tolist()]  # Assuming column B has the names
-#column_groups = [col.strip() for col in metadata_df[1].dropna().tolist()]  # Assuming column B has the names
 
 # Ensure 't_stamp' is in the list of columns to keep
 if 't_stamp' not in columns_to_keep:
@@ -134,7 +133,6 @@ if 't_stamp' not in columns_to_keep:
 # Step 3: Filter the merged DataFrame
 merged_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep).set_index('t_stamp')  # Reset index to keep 't_stamp' as a column
 merged_df = merged_df[(merged_df.index >= test_start_date) & (merged_df.index <= test_end_date)]
-tab3.write(merged_df)
 
 metadata_df = pd.read_excel(column_groups, header=None)  # Adjust header if necessary
 column_groups = {}
@@ -152,10 +150,6 @@ for index, row in metadata_df.iterrows():
     if pd.notna(row[1]) and current_group:
         column_groups[current_group].append(row[1].strip())
 
-# # Check what column_groups looks like
-# print("Column groups loaded from metadata:")
-# print(column_groups)
-
 grouped_data = funcs.group_data_by_metadata(merged_df, column_groups)
 fpoa_data = grouped_data.get('FPOA', None)
 rpoa_data = grouped_data.get('RPOA', None)
@@ -164,3 +158,19 @@ wind_data = grouped_data.get('Wind', None)
 soiling_data = grouped_data.get('Soiling Ratio', None)
 inverter_data = grouped_data.get('Inverter', None)
 meter_data = grouped_data.get('meter', None)
+
+merged_df['t_stamp'] = pd.to_datetime(merged_df.index)
+merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
+merged_df['data_check_inv'] = merged_df[inverter_data.columns].notna().all(axis=1)
+
+# Apply the functions to each row and create new columns
+merged_df['average_fpoa'] = merged_df.apply(lambda row: funcs.average_if(row, fpoa_data), axis=1)
+merged_df['average_rpoa'] = merged_df.apply(lambda row: funcs.average_if(row, rpoa_data), axis=1)
+merged_df['average_poa_total'] = (merged_df['average_fpoa']+(merged_df['average_rpoa']*bifaciality))
+merged_df['average_temp'] = merged_df.apply(lambda row: funcs.average_if(row, temp_data), axis=1)
+merged_df['average_wind'] = merged_df.apply(lambda row: funcs.average_if(row, wind_data), axis=1)
+merged_df['average_meter_data'] = merged_df.apply(lambda row: funcs.average_if(row, meter_data), axis=1)
+merged_df['sp. yield']=(merged_df['average_meter_data']/system_size_dc)
+merged_df['average_soiling'] = merged_df.apply(lambda row: funcs.average_if(row, soiling_data), axis=1)
+
+avg_soiling=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['average_soiling'])).mean()

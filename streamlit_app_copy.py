@@ -162,46 +162,6 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     #print(results_day)
     return results_df, fig
 
-if uploaded_zip is not None:
-    with zipfile.ZipFile(uploaded_zip, "r") as z:
-        z.extractall(".")
-        #tab1.write(os.listdir('2.Raw Data'))
-if uploaded_zip is None or column_groups is None or pvsyst_test_model_path is None:
-    tab2.write('Upload files to proceed.')
-    tab3.write('Upload files to proceed.')
-    st.stop()
-
-merged_df['t_stamp'] = pd.to_datetime(merged_df.index)
-merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
-merged_df['data_check_inv'] = merged_df[inverter_data.columns].notna().all(axis=1)
-
-# Apply the function to each row and create a new column 'average_fpoa'
-merged_df['average_fpoa'] = merged_df.apply(lambda row: funcs.average_if(row, fpoa_data), axis=1)
-
-# Apply the function to each row and create a new column 'average_temp'
-merged_df['average_rpoa'] = merged_df.apply(lambda row: funcs.average_if(row, rpoa_data), axis=1)
-
-# Apply the function to each row and create a new column 'average_poa_total'
-merged_df['average_poa_total'] = (merged_df['average_fpoa']+(merged_df['average_rpoa']*bifaciality))
-
-# Apply the function to each row and create a new column 'average_temp'
-merged_df['average_temp'] = merged_df.apply(lambda row: funcs.average_if(row, temp_data), axis=1)
-
-# Apply the function to each row and create a new column 'average_temp'
-merged_df['average_wind'] = merged_df.apply(lambda row: funcs.average_if(row, wind_data), axis=1)
-
-merged_df['average_meter_data'] = merged_df.apply(lambda row: funcs.average_if(row, meter_data), axis=1)
-merged_df['sp. yield']=(merged_df['average_meter_data']/system_size_dc)
-
-# Apply the function to each row and create a new column 'average_fpoa'
-merged_df['average_soiling'] = merged_df.apply(lambda row: funcs.average_if(row, soiling_data), axis=1)
-
-avg_soiling=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['average_soiling'])).mean()
-#avg_soiling_met5=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET05/DustVue/soilingRatio_pct'])).mean()
-#avg_soiling_met15=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET15/DustVue/soilingRatio_pct'])).mean()
-#avg_soiling_met21=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET21/DustVue/soilingRatio_pct'])).mean()
-#avg_soiling_met29=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['LBSP1/Device/WeatherStation/MET29/DustVue/soilingRatio_pct'])).mean()
-
 count_avail_poa = ((merged_df['average_fpoa'] >= availability_min_fpoa)*merged_df['t_stamp_check']).sum()
 counts = {}
 
