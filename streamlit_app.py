@@ -850,10 +850,10 @@ tab3_col1, tab3_col2 = tab3.columns(2)
 # statement of passing or failing w/ percentage
 if Capacity_Ratio_Bifacial >= passing_capacity:
     tab3_col1.success("The test passed with a " + str(Capacity_Ratio_Bifacial) + "% capacity and "
-                      + avg_soiling + "% soiling. Yippee!")
+                      + str(avg_soiling) + "% soiling. Yippee!")
 else:
     tab3_col1.error("The test failed with a " + str(Capacity_Ratio_Bifacial) + "% capacity and "
-                    + avg_soiling + "% soiling. The target bifacial capacity is " + str(passing_capacity) + "%")
+                    + str(avg_soiling) + "% soiling. The target bifacial capacity is " + str(passing_capacity) + "%")
 
 tab3_col2.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "Capacity Ratio %"],
     "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
