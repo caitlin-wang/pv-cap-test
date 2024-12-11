@@ -91,6 +91,9 @@ form1.form_submit_button("Submit Inputs")
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend begin ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+if uploaded_zip is not None:
+    with zipfile.ZipFile(uploaded_zip, "r") as z:
+        z.extractall(".")
 if uploaded_zip is None or column_groups is None or pvsyst_test_model_path is None:
     tab2.write('Upload files to proceed.')
     tab3.write('Upload files to proceed.')
