@@ -587,21 +587,6 @@ results_df = results_df.set_index("Threshold")
 #    width=1000
 #)
 
-# Select the inverter columns based on your criteria for inverter column naming
-inverter_columns = [col for col in merged_df.columns if 'INV' in col]
-
-# Apply the criteria and create a filtered DataFrame for the heatmap
-#filtered_data = pd.DataFrame()
-# Initialize filtered_data without setting 't_stamp' as an index
-filtered_data = pd.DataFrame()
-
-# Apply conditions to each inverter column and populate filtered_data
-for column in vars.inverter_data:
-    filtered_data[column] = ((merged_df[column].fillna(0) < 50) & 
-                             (merged_df['average_fpoa'].fillna(0) > availability_min_fpoa)).astype(int)
-
-filtered_data.index = merged_df['t_stamp']
-
 fig11 = px.imshow(
     filtered_data.T,  # Transpose to have inverters as rows
     labels=dict(x="Timestamp", y="Inverter", color="Avaiability"),

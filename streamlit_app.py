@@ -17,8 +17,7 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import vars
-import funcs
+import vars, funcs, figs
 
 # Page Setup
 
@@ -203,3 +202,13 @@ for key in counts:
 # Convert the counts dictionary to a dataframe for better readability
 avail_counts_df = pd.DataFrame(list(counts.items()), columns=['Inverter', 'Availabiliy'])
 avail_average = round(avail_counts_df['Availabiliy'].mean()*100, 2)
+
+# Apply the criteria and create a filtered DataFrame for the heatmap
+filtered_data = pd.DataFrame()
+
+# Apply conditions to each inverter column and populate filtered_data
+for column in inverter_data:
+    filtered_data[column] = ((merged_df[column].fillna(0) < 50) & 
+                             (merged_df['average_fpoa'].fillna(0) > availability_min_fpoa)).astype(int)
+
+filtered_data.index = merged_df['t_stamp']
