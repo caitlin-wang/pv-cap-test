@@ -174,3 +174,32 @@ merged_df['sp. yield']=(merged_df['average_meter_data']/system_size_dc)
 merged_df['average_soiling'] = merged_df.apply(lambda row: funcs.average_if(row, soiling_data), axis=1)
 
 avg_soiling=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['average_soiling'])).mean()
+
+count_avail_poa = ((merged_df['average_fpoa'] >= availability_min_fpoa)*merged_df['t_stamp_check']).sum()
+
+#Added by KL to count per column how many inverters were did not hit criteria
+merged_df['inverter_count'] = merged_df.apply(
+    lambda row: sum(
+        (row[column] < 50) and
+        (row['average_fpoa'] > availability_min_fpoa) and
+        row['t_stamp_check'] and
+        row['data_check_inv']
+        for column in inverter_data), axis = 1)
+
+##Added by KL to calculate lost capacity of each averaging interval and grphing inverter avail for start to end data
+merged_df['lost_capac'] = 100 - ((merged_df['inverter_count'] * inverter_rating / max_gridlimit ) / 0.01)
+merged_df.loc[merged_df['lost_capac'] < 0, 'lost_capac'] = 0
+
+counts = {}
+
+# Loop through each inverter column
+for column in inverter_data.columns:
+    # Calculate the difference and count the occurrences where the difference is greater than 150
+    counts[column] = (((merged_df[column] > 50) & (merged_df['average_fpoa'] > availability_min_fpoa))).sum()
+
+# Divide the counts by count_avail_poa
+for key in counts:
+    counts[key] /= count_avail_poa
+# Convert the counts dictionary to a dataframe for better readability
+avail_counts_df = pd.DataFrame(list(counts.items()), columns=['Inverter', 'Availabiliy'])
+avail_average = round(avail_counts_df['Availabiliy'].mean()*100, 2)
