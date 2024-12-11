@@ -46,8 +46,10 @@ pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type='cs
 
 form1 = tab2.form("inputs form")
 
+form1_col1, form1_col2 = form1.columns(2)
 test_start_date = datetime.datetime.combine(form1_col1.date_input("Start Date", pd.to_datetime('2024-10-10'), format='MM/DD/YYYY'), datetime.datetime.min.time())
 test_end_date = datetime.datetime.combine(form1_col2.date_input("End Date", pd.to_datetime('2024-10-14'), format='MM/DD/YYYY'), datetime.datetime.min.time())
+
 form1.subheader("Irradiance Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
 minimum_irradiance = form1_col1.number_input("Minimum Irradiance (W/m^2):", min_value=0, value=400, step=100)
