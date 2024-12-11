@@ -8,5 +8,4 @@ statsmodels
 openpyxl
 #glob
 #dask
-#tqdm
 #warnings

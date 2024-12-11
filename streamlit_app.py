@@ -10,7 +10,6 @@ import zipfile
 from scipy import stats
 import os
 from glob import glob
-from tqdm import tqdm
 import warnings
 warnings.filterwarnings("ignore")
 #from dateutil.relativedelta import relativedelta
@@ -125,7 +124,33 @@ if 't_stamp' not in columns_to_keep:
     columns_to_keep.insert(0, 't_stamp')  # Add it back to the beginning if needed
 
 # Step 3: Filter the merged DataFrame
-filtered_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep)  # Reset index to keep 't_stamp' as a column
-merged_df_all = filtered_df.set_index('t_stamp')
-merged_df = merged_df_all
-merged_df = merged_df_all[(merged_df_all.index >= test_start_date) & (merged_df_all.index <= test_end_date)]
+merged_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep).set_index('t_stamp')  # Reset index to keep 't_stamp' as a column
+merged_df = merged_df[(merged_df.index >= test_start_date) & (merged_df.index <= test_end_date)]
+metadata_df = pd.read_excel(column_groups, header=None)  # Adjust header if necessary
+column_groups = {}
+
+current_group = None
+
+# Iterate through the rows of the metadata DataFrame
+for index, row in metadata_df.iterrows():
+    # Check if the first column (Column A) has a group name (e.g., "FPOA")
+    if pd.notna(row[0]):
+        current_group = row[0].strip()  # Set the current group
+        column_groups[current_group] = []  # Initialize an empty list for this group
+    
+    # If there's a column name in Column B, add it to the current group
+    if pd.notna(row[1]) and current_group:
+        column_groups[current_group].append(row[1].strip())
+
+# # Check what column_groups looks like
+# print("Column groups loaded from metadata:")
+# print(column_groups)
+
+grouped_data = funcs.group_data_by_metadata(merged_df, column_groups)
+fpoa_data = grouped_data.get('FPOA', None)
+rpoa_data = grouped_data.get('RPOA', None)
+temp_data = grouped_data.get('Temp', None)
+wind_data = grouped_data.get('Wind', None)
+soiling_data = grouped_data.get('Soiling Ratio', None)
+inverter_data = grouped_data.get('Inverter', None)
+meter_data = grouped_data.get('meter', None)
