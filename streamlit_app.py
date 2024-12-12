@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import vars, funcs, figs
+import vars, funcs, filters
 
 # Page Setup
 
@@ -212,3 +212,59 @@ for column in inverter_data:
                              (merged_df['average_fpoa'].fillna(0) > availability_min_fpoa)).astype(int)
 
 filtered_data.index = merged_df['t_stamp']
+
+inverter_df = inverter_data
+
+#Define the filters here, calling from functions defined above
+filter_registry = [
+    ("Meter > 0", filters.filter_meter_greater_zero, [minimum_grid]),  
+    ("Grid Clipping", filters.filter_grid_clipping, [grid_clipping]),  
+    ("Inverter Clipping", filters.filter_inverter_clipping, [inverter_df, inverter_clipping]),  
+    ("Inverter is 0", filters.filter_inverter_zero, [inverter_df]),
+    ("FPOA is blank", filters.filter_fpoa_blank, [fpoa_data]),
+    ("FPOA is 0", filters.filter_fpoa_zero, [fpoa_data]),  
+    ("RPOA is blank", filters.filter_rpoa_blank, [rpoa_data]),
+    ("RPOA is zero", filters.filter_rpoa_zero, [rpoa_data]),
+    ("Temp Blank", filters.filter_temp_blank, [temp_data]),
+    ("Temp is 0", filters.filter_temp_zero, [temp_data]),
+    (" Wind Blank", filters.filter_wind_blank, [wind_data]),
+    ("Wind is 0", filters.filter_wind_zero, [wind_data]),
+    ("FPOA QC", filters.filter_fpoa_qc, [minimum_irradiance, max_irradiance]),
+    ("Spatial Stability Check", filters.filter_spatial_stability, [fpoa_data, spatial_stability_thresold]),
+    ("Temporal Stability Check", filters.filter_temporal_stability, [temporal_stability_thresold])]
+
+# Initialize the DataFrame to track cumulative conditions
+filter_results = []
+
+# Initialize starting points and condition
+remaining_condition = pd.Series(True, index=merged_df.index)
+remaining_points = len(merged_df)
+initial_points = remaining_points
+
+for idx, (filter_name, filter_function, filter_args) in enumerate(filter_registry, start=1):
+    # Apply filter to the remaining points
+    current_condition = filter_function(merged_df, *filter_args)
+    
+    # Combine with the remaining condition from previous filters
+    combined_condition = remaining_condition & current_condition
+    
+    # Calculate lost and remaining points
+    lost_points = (~combined_condition & remaining_condition).sum()
+    remaining_points = combined_condition.sum()
+    
+    # Add the filter's results to the table
+    filter_results.append({
+        #"Filter Number": f"Filter {idx}",
+        "Filter Description": filter_name,
+        "Initial Points": initial_points,
+        "Points Lost": lost_points,
+        "Remaining Points": remaining_points,
+        #"Filter Description": filter_name,
+    })
+    
+    # Update the remaining condition 
+    remaining_condition = combined_condition
+    initial_points = remaining_points  # Remaining points become initial points for the next filter
+
+# Put results in DF
+filter_results_df = pd.DataFrame(filter_results).set_index('Filter Description')
