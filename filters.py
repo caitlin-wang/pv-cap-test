@@ -40,8 +40,8 @@ def filter_fpoa_qc(df, minimum_irradiance, max_irradiance):
 def filter_spatial_stability(df, fpoa_data, spatial_threshold):
     #df['average_fpoa_pct_change'] = df['average_fpoa'].pct_change() * 100  #Ask Ashish if we need this
     # df['temporal_stability_check'] = df['average_fpoa_pct_change'].abs() <= temporal_threshold #Ask Ashish if we need this
-    df['fpoa_spatial_std'] = df[fpoa_data].std(axis=1) # changed fpoa_data to df[fpoa_data]
-    df['fpoa_spatial_mean'] = df[fpoa_data].mean(axis=1) # changed fpoa_data to df[fpoa_data]
+    df['fpoa_spatial_std'] = fpoa_data.std(axis=1)
+    df['fpoa_spatial_mean'] = fpoa_data.mean(axis=1)
     df['fpoa_spatial_stability'] = df['fpoa_spatial_std'] / df['fpoa_spatial_mean']
     df['spatial_stability_check'] = df['fpoa_spatial_stability'].abs() <= spatial_threshold
     return df['spatial_stability_check']
