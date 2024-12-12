@@ -268,3 +268,50 @@ for idx, (filter_name, filter_function, filter_args) in enumerate(filter_registr
 
 # Put results in DF
 filter_results_df = pd.DataFrame(filter_results).set_index('Filter Description')
+
+# Apply filters and store the results in new columns
+merged_df['meter>0'] = filters.filter_meter_greater_zero(merged_df, *[])
+merged_df['grid_clipping'] = filters.filter_grid_clipping(merged_df, *[])
+merged_df['inverter_clipping_check'] = filters.filter_inverter_clipping(merged_df, inverter_df)
+merged_df['inverter_blank'] = filters.filter_inverter_zero(merged_df, inverter_df)
+merged_df['inverter_zero'] = filters.filter_inverter_zero(merged_df, inverter_df)
+merged_df['fpoa_blank'] = filters.filter_fpoa_blank(merged_df, fpoa_data)
+merged_df['fpoa_zero'] = filters.filter_fpoa_zero(merged_df, fpoa_data)
+merged_df['temp_blank'] = filters.filter_temp_blank(merged_df, temp_data)
+merged_df['temp_zero'] = filters.filter_temp_zero(merged_df, temp_data)
+merged_df['wind_blank'] = filters.filter_wind_blank(merged_df, wind_data)
+merged_df['wind_zero'] = filters.filter_wind_zero(merged_df, wind_data)
+merged_df['fpoa_QC'] = filters.filter_fpoa_qc(merged_df, minimum_irradiance, max_irradiance)
+merged_df['spatial_stability_check'] = filters.filter_spatial_stability(merged_df, fpoa_data, spatial_stability_thresold)
+merged_df['temporal_stability_check'] = filters.filter_temporal_stability(merged_df, temporal_stability_thresold)
+
+# Calculate the 'primary_filters' column
+merged_df['primary_filters'] = (
+    merged_df['t_stamp_check'] *
+    merged_df['meter>0'] *
+    merged_df['grid_clipping'] *
+    merged_df['fpoa_QC'] *
+    merged_df['spatial_stability_check'] *
+    merged_df['temporal_stability_check'] *
+    merged_df['inverter_clipping_check'] *
+    merged_df['inverter_blank'] *
+    merged_df['inverter_zero'] *
+    merged_df['fpoa_blank'] *
+    merged_df['temp_blank'] *
+    merged_df['wind_blank'] *
+    merged_df['temp_zero'] *
+    merged_df['fpoa_zero'] *
+    merged_df['wind_zero']
+)
+
+# Count "Including" and "Excluding" for primary filters overall
+count_primary_filters = merged_df['primary_filters'].value_counts().rename(index={True: "Including", False: "Excluding"})
+
+# Group by date and calculate counts of "Including" and "Excluding"
+count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
+
+# Display the table for counts per day
+count_primary_filters_per_day_df = count_primary_filters_per_day
+
+including_points_PF = count_primary_filters.get('Including', 0)
+excluding_points_PF = count_primary_filters.get('Excluding', 0)
