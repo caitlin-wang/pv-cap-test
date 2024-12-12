@@ -272,7 +272,7 @@ filter_results_df = pd.DataFrame(filter_results).set_index('Filter Description')
 # Apply filters and store the results in new columns
 merged_df['meter>0'] = filters.filter_meter_greater_zero(merged_df, minimum_grid)
 merged_df['grid_clipping'] = filters.filter_grid_clipping(merged_df, grid_clipping)
-merged_df['inverter_clipping_check'] = filters.filter_inverter_clipping(merged_df, inverter_df)
+merged_df['inverter_clipping_check'] = filters.filter_inverter_clipping(merged_df, inverter_df, inverter_clipping)
 merged_df['inverter_blank'] = filters.filter_inverter_zero(merged_df, inverter_df)
 merged_df['inverter_zero'] = filters.filter_inverter_zero(merged_df, inverter_df)
 merged_df['fpoa_blank'] = filters.filter_fpoa_blank(merged_df, fpoa_data)
