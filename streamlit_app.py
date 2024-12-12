@@ -315,3 +315,29 @@ count_primary_filters_per_day_df = count_primary_filters_per_day
 
 including_points_PF = count_primary_filters.get('Including', 0)
 excluding_points_PF = count_primary_filters.get('Excluding', 0)
+
+columns = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind']
+results_dict = {}
+
+# Calculate averages and percentiles for each column and store in the dictionary
+rc_conditions = merged_df[merged_df['primary_filters']==True]
+for col in columns:
+    avg_value = rc_conditions[col].mean()
+    percentile_value = rc_conditions[col].quantile(percentile)
+    
+    results_dict[f"{col}_avg"] = avg_value
+    results_dict[f"{col}_percentile"] = percentile_value
+
+percentile_avg_poa_total = results_dict["average_poa_total_percentile"]
+
+metric_names = ['POA Total', 'FPOA', 'RPOA', 'Temp', 'Wind'] 
+metrics = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind'] 
+averages = [results_dict[f"{metric}_avg"] for metric in metrics]  
+percentiles = [results_dict[f"{metric}_percentile"] for metric in metrics]  
+
+# DFe for Average and Percentile
+rc_conditions_table = pd.DataFrame({
+    'Metric': metric_names,
+    'Average': averages,
+    f'{percentile*100}th Percentile': percentiles
+})
