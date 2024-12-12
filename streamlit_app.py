@@ -352,6 +352,7 @@ rc_conditions_table = pd.DataFrame({
     f'{percentile*100}th Percentile': percentiles
 })
 
+tab3.write(merged_df)
 tab3.write(filter_results_df)
 tab3.write(count_primary_filters_per_day_df)
 tab3.write(rc_conditions_table)

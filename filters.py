@@ -1,3 +1,6 @@
+def filter_meter_greater_zero(df, minimum_grid):
+    return df['average_meter_data'] > minimum_grid
+
 def filter_inverter_clipping(df, inverter_data, inverter_clipping):
     return inverter_data.apply(lambda row: row.max() < inverter_clipping, axis=1)
 
