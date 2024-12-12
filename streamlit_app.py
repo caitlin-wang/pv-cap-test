@@ -226,8 +226,8 @@ def filter_inverter_clipping(df, inverter_data):
 
 #Define the filters here, calling from functions defined above
 filter_registry = [
-    ("Meter > 0", filters.filter_meter_greater_zero, []),  
-    ("Grid Clipping", filters.filter_grid_clipping, []),  
+    ("Meter > 0", filter_meter_greater_zero, []),  
+    ("Grid Clipping", filter_grid_clipping, []),  
     ("Inverter Clipping", filter_inverter_clipping, [inverter_df]),  
     ("Inverter is 0", filters.filter_inverter_zero, [inverter_df]),
     ("FPOA is blank", filters.filter_fpoa_blank, [fpoa_data]),
@@ -279,8 +279,8 @@ for idx, (filter_name, filter_function, filter_args) in enumerate(filter_registr
 filter_results_df = pd.DataFrame(filter_results).set_index('Filter Description')
 
 # Apply filters and store the results in new columns
-merged_df['meter>0'] = filters.filter_meter_greater_zero(merged_df, *[])
-merged_df['grid_clipping'] = filters.filter_grid_clipping(merged_df, *[])
+merged_df['meter>0'] = filter_meter_greater_zero(merged_df, *[])
+merged_df['grid_clipping'] = filter_grid_clipping(merged_df, *[])
 merged_df['inverter_clipping_check'] = filter_inverter_clipping(merged_df, inverter_df)
 #merged_df['inverter_clipping_check'] = inverter_df.apply(lambda row: row.max() < inverter_clipping, axis=1)
 merged_df['inverter_blank'] = filters.filter_inverter_zero(merged_df, inverter_df)
