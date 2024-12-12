@@ -4,35 +4,35 @@ def filter_meter_greater_zero(df, minimum_grid):
 def filter_grid_clipping(df, grid_clipping):
     return df['average_meter_data'] < grid_clipping
 
-def filter_inverter_clipping(df, inverter_df, inverter_clipping):
-    return inverter_df.apply(lambda row: row.max() < inverter_clipping, axis=1)
+def filter_inverter_clipping(df, inverter_data, inverter_clipping):
+    return inverter_data.apply(lambda row: row.max() < inverter_clipping, axis=1)
 
-def filter_inverter_zero(df, inverter_df):
-    return ~(inverter_df == 0).any(axis=1)
+def filter_inverter_zero(df, inverter_data):
+    return ~(inverter_data == 0).any(axis=1)
     
 def filter_fpoa_blank(df, fpoa_data):
-    return ~(df[fpoa_data].isnull()).any(axis=1)
+    return ~(fpoa_data.isnull()).any(axis=1)
 
 def filter_fpoa_zero(df, fpoa_data):
-    return ~(df[fpoa_data] == 0).any(axis=1)
+    return ~(fpoa_data == 0).any(axis=1)
 
 def filter_rpoa_blank(df, rpoa_data):
-    return ~(df[rpoa_data].isnull()).any(axis=1)
+    return ~(rpoa_data.isnull()).any(axis=1)
     
 def filter_rpoa_zero(df, rpoa_data):
-    return ~(df[rpoa_data] == 0).any(axis=1)
+    return ~(rpoa_data == 0).any(axis=1)
 
 def filter_temp_blank(df, temp_data):
-    return ~(df[temp_data].isnull().any(axis=1))
+    return ~(temp_data.isnull().any(axis=1))
 
 def filter_temp_zero(df, temp_data):
-    return ~(df[temp_data] == 0).any(axis=1)
+    return ~(temp_data == 0).any(axis=1)
 
 def filter_wind_blank(df, wind_data):
-    return ~(df[wind_data].isnull().any(axis=1))
+    return ~(wind_data.isnull().any(axis=1))
 
 def filter_wind_zero(df, wind_data):
-    return ~(df[wind_data] == 0).any(axis=1)
+    return ~(wind_data == 0).any(axis=1)
 
 def filter_fpoa_qc(df, minimum_irradiance, max_irradiance):
     return df['average_fpoa'].between(minimum_irradiance, max_irradiance)
