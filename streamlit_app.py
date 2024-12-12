@@ -228,7 +228,8 @@ def filter_inverter_clipping(df, inverter_data):
 filter_registry = [
     ("Meter > 0", filter_meter_greater_zero, []),  
     ("Grid Clipping", filter_grid_clipping, []),  
-    ("Inverter Clipping", filter_inverter_clipping, [inverter_df]),  
+    ("Inverter Clipping", filter_inverter_clipping, [inverter_df]),
+    ("Inverter is blank", filters.filter_inverter_blank, [inverter_df]),
     ("Inverter is 0", filters.filter_inverter_zero, [inverter_df]),
     ("FPOA is blank", filters.filter_fpoa_blank, [fpoa_data]),
     ("FPOA is 0", filters.filter_fpoa_zero, [fpoa_data]),  
@@ -282,8 +283,7 @@ filter_results_df = pd.DataFrame(filter_results).set_index('Filter Description')
 merged_df['meter>0'] = filter_meter_greater_zero(merged_df, *[])
 merged_df['grid_clipping'] = filter_grid_clipping(merged_df, *[])
 merged_df['inverter_clipping_check'] = filter_inverter_clipping(merged_df, inverter_df)
-#merged_df['inverter_clipping_check'] = inverter_df.apply(lambda row: row.max() < inverter_clipping, axis=1)
-merged_df['inverter_blank'] = filters.filter_inverter_zero(merged_df, inverter_df)
+merged_df['inverter_blank'] = filters.filter_inverter_blank(merged_df, inverter_df)
 merged_df['inverter_zero'] = filters.filter_inverter_zero(merged_df, inverter_df)
 merged_df['fpoa_blank'] = filters.filter_fpoa_blank(merged_df, fpoa_data)
 merged_df['fpoa_zero'] = filters.filter_fpoa_zero(merged_df, fpoa_data)
