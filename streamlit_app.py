@@ -311,9 +311,6 @@ count_primary_filters = merged_df['primary_filters'].value_counts().rename(index
 # Group by date and calculate counts of "Including" and "Excluding"
 count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
 
-# Display the table for counts per day
-count_primary_filters_per_day_df = count_primary_filters_per_day
-
 including_points_PF = count_primary_filters.get('Including', 0)
 excluding_points_PF = count_primary_filters.get('Excluding', 0)
 
@@ -345,6 +342,6 @@ rc_conditions_table = pd.DataFrame({
 
 tab3.write(merged_df)
 tab3.write(filter_results_df)
-tab3.write(count_primary_filters_per_day_df)
+tab3.write(count_primary_filters_per_day)
 tab3.write(rc_conditions_table)
-tab3.write(inverter_data)
+tab3.line_chart(merged_df[['inverter_clipping_check', 'inverter_blank', 'inverter_zero']])
