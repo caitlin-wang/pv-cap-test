@@ -343,5 +343,5 @@ rc_conditions_table = pd.DataFrame({
 tab3.write(merged_df)
 tab3.write(filter_results_df)
 tab3.write(count_primary_filters_per_day)
-tab3.write(rc_conditions_table)
-tab3.line_chart(merged_df[['inverter_clipping_check', 'inverter_blank', 'inverter_zero']])
+#tab3.write(rc_conditions_table)
+tab3.plotly_chart(merged_df[['inverter_clipping_check', 'inverter_blank', 'inverter_zero']])
