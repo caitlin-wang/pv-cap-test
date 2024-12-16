@@ -33,11 +33,11 @@ tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
 # Specify the main directory containing folders of daily CSV files
 main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", "2.Raw Data")
-metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
+#metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
 date_format = tab1.text_input("Date Format", "%Y-%m-%d %H:%M:%S.%f")
 
 uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
-column_groups = tab1.file_uploader("Upload column groups", type='xlsx')
+scada_tags = tab1.file_uploader("Upload SCADA tags", type='xlsx')
 pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type='csv')
 
 # Tab 2: Inputs
@@ -93,7 +93,7 @@ form1.form_submit_button("Submit Inputs")
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
         z.extractall(".")
-if uploaded_zip is None or column_groups is None or pvsyst_test_model_path is None:
+if uploaded_zip is None or scada_tags is None or pvsyst_test_model_path is None:
     tab2.write('Upload files to proceed.')
     tab3.write('Upload files to proceed.')
     st.stop()
@@ -122,7 +122,7 @@ all_data = pd.concat(all_dfs, axis=0, ignore_index=True)
 all_data = all_data.groupby('t_stamp').first()
 
 # Step 2: Load the metadata and get columns to keep
-metadata_df = pd.read_excel(column_groups, header=None)
+metadata_df = pd.read_excel(scada_tags, header=None)
 columns_to_keep = [col.strip() for col in metadata_df[1].dropna().tolist()]  # Assuming column B has the names
 
 # Ensure 't_stamp' is in the list of columns to keep
@@ -133,7 +133,7 @@ if 't_stamp' not in columns_to_keep:
 merged_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep).set_index('t_stamp')  # Reset index to keep 't_stamp' as a column
 merged_df = merged_df[(merged_df.index >= test_start_date) & (merged_df.index <= test_end_date)]
 
-metadata_df = pd.read_excel(column_groups, header=None)  # Adjust header if necessary
+metadata_df = pd.read_excel(scada_tags, header=None)  # Adjust header if necessary
 column_groups = {}
 
 current_group = None
