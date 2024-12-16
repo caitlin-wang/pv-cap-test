@@ -62,7 +62,7 @@ def frange(start, stop, step):
         start += step
 
 # Function to loop through reporting condition thresholds
-def outdated_loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
+def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     # Initialize an empty list to store results before starting the loop
     results = []
     

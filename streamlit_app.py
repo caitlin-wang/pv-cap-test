@@ -351,8 +351,8 @@ merged_df['rc_check']=merged_df['average_poa_total'].between(reporting_condition
 merged_df['secondary_filter'] = merged_df['primary_filters'] * merged_df['rc_check']
 count_rc_condition_thresold = merged_df['secondary_filter'].value_counts().rename(index={True:"Including", False:"Excluding"})
 including_points_SF = count_rc_condition_thresold.get('Including', 0)
-secondary_above_rc_perc = (((merged_df['secondary_filter']==True) & (merged_df['average_poa_total']>=rc_poa_total)).sum() / ((merged_df['secondary_filter']==True)).sum()*100)
-secondary_below_rc_perc = 100 - secondary_above_rc_perc
+secondary_above_rc_perc = round((((merged_df['secondary_filter']==True)&(merged_df['average_poa_total']>=rc_poa_total)).sum()/((merged_df['secondary_filter']==True)).sum()*100), 2)
+secondary_below_rc_perc = round(100 - secondary_above_rc_perc, 2)
 
 #print("The secondary filter has a value of:", reporting_condition_thresold)
 #print(f"After applying the secondary filter of {reporting_condition_thresold}, the number of points included in the test is now: {including_points_SF}")
@@ -362,3 +362,93 @@ secondary_below_rc_perc = 100 - secondary_above_rc_perc
 data = {"Metric": [f"{reporting_condition_thresold:.2f}", f"{including_points_SF:.2f}", f"{secondary_above_rc_perc:.2f}%", f"{secondary_below_rc_perc:.2f}%"]}
 secondary_filter_df = pd.DataFrame(data, index=["Secondary Filter Value", "Included Points", "Percentage Above Filter", "Percentage Below Filter"])
 tab3.write(secondary_filter_df)
+
+measured_regression_df = merged_df[merged_df['secondary_filter']==True]
+count_secondary_filters_per_day = measured_regression_df.groupby(measured_regression_df['t_stamp'].dt.date)['secondary_filter'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
+
+## Adding columns in data frame to use it for regression equation per ASTM 2848
+##Power = POA * (fpoa + fpoa_poa_poa*POA + fpoa_temp*Temp + fpoa_wind*Wind)
+
+## Calculating POA xPOA, POAxTemp and POAx Wind 
+measured_regression_df['fpoa'] = measured_regression_df['average_poa_total']
+measured_regression_df['fpoaxfpoa'] = measured_regression_df['average_poa_total'] * measured_regression_df['average_poa_total']
+measured_regression_df['fpoaxtemp'] = measured_regression_df['average_temp'] * measured_regression_df['average_poa_total']
+measured_regression_df['fpoaxwind'] = measured_regression_df['average_wind'] * measured_regression_df['average_poa_total']*0
+
+X = measured_regression_df[['fpoa','fpoaxfpoa','fpoaxtemp','fpoaxwind']]
+y = measured_regression_df[vars.meter_data]
+
+coefficients, residuals, rank, s = np.linalg.lstsq(X, y, rcond=None)
+final_coefficients = coefficients[::-1]
+
+fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
+
+##Power = POA * (fpoa + fpoa_poa_poa*POA + fpoa_temp*Temp + fpoa_wind*Wind)
+## Note: Calculating energy 
+
+measured_energy_bifacial = round(rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind)[0])
+measured_energy_monofacial = round(rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind)[0])
+
+measured_regression_df["Energy Predicted"] = measured_regression_df['average_poa_total']*((fpoa)+fpoa_poa_poa*measured_regression_df['average_poa_total']+fpoa_temp*measured_regression_df['average_temp']+fpoa_wind*1)
+
+pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path, encoding="latin-1")
+#pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1",skiprows=12, header=0)
+
+midpoint_date = test_start_date + (test_end_date - test_start_date) / 2
+pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
+pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
+
+pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
+pvsyst_test_model_selected_columns_df = pvsyst_test_model_df[pvsyst_selected_column]
+pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
+
+# Convert 'date' column to datetime
+pvsyst_test_model_selected_columns_df['date'] = pd.to_datetime(pvsyst_test_model_selected_columns_df['date'])
+
+pvsyst_filtered_df = pvsyst_test_model_selected_columns_df.loc[(pvsyst_test_model_selected_columns_df['date'] >= pvsyst_model_start_date)
+    & (pvsyst_test_model_selected_columns_df['date'] <= pvsyst_model_end_date)
+    & (pvsyst_test_model_selected_columns_df['GlobInc'] > minimum_irradiance) 
+    & (pvsyst_test_model_selected_columns_df['E_Grid'] > 0)
+    & (pvsyst_test_model_selected_columns_df['E_Grid'] < grid_clipping)
+    & (pvsyst_test_model_selected_columns_df['FShdBm'] == pvsyst_shading)
+    & (pvsyst_test_model_selected_columns_df['IL_Pmax'] == 0)]
+
+pvsyst_filtered_df.loc[:,'POA_Total'] = pvsyst_filtered_df['POA_Total_pvsyst']
+pvsyst_filtered_df.loc[:,'POA_Total*POA_Total'] = pvsyst_filtered_df['POA_Total_pvsyst'] * pvsyst_filtered_df['POA_Total_pvsyst']
+pvsyst_filtered_df.loc[:,'POA_Total*Temp'] = pvsyst_filtered_df['POA_Total_pvsyst'] * pvsyst_filtered_df['T_Amb']
+pvsyst_filtered_df.loc[:,'POA_Total*Wind'] = pvsyst_filtered_df['POA_Total_pvsyst'] * pvsyst_filtered_df['WindVel']
+
+rc_pvsyst_avg_poa_total=pvsyst_filtered_df['POA_Total_pvsyst'].mean()
+rc_pvsyst_avg_fpoa=pvsyst_filtered_df['GlobInc'].mean()
+rc_pvsyst_avg_rpoa=pvsyst_filtered_df['GlobBak'].mean()
+rc_pvsyst_avg_temp=pvsyst_filtered_df['T_Amb'].mean()
+rc_pvsyst_avg_wind=pvsyst_filtered_df['WindVel'].mean()
+
+rc_pvsyst_percentile_poa_total=pvsyst_filtered_df['POA_Total_pvsyst'].quantile(percentile)
+rc_pvsyst_percentile_fpoa=pvsyst_filtered_df['GlobInc'].quantile(percentile)
+rc_pvsyst_percentile_rpoa=pvsyst_filtered_df['GlobBak'].quantile(percentile)
+rc_pvsyst_percentileg_temp=pvsyst_filtered_df['T_Amb'].quantile(percentile)
+rc_pvsyst_percentile_wind=pvsyst_filtered_df['WindVel'].quantile(percentile)
+
+reporting_condition_thresold_min=(1-reporting_condition_thresold)*rc_poa_total
+reporting_condition_thresold_max=(1+reporting_condition_thresold)*rc_poa_total
+pvsyst_filtered_df.loc[:,'rc_pvsyst_check']=pvsyst_filtered_df['POA_Total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
+expected_regression_df=pvsyst_filtered_df[pvsyst_filtered_df['rc_pvsyst_check']==True]
+
+X=expected_regression_df[['POA_Total','POA_Total*POA_Total','POA_Total*Temp','POA_Total*Wind']]
+y=expected_regression_df['E_Grid']
+
+coefficients, residuals, rank, s = np.linalg.lstsq(X, y, rcond=None)
+final_coefficients = coefficients[::-1]
+
+pvsyst_fpoa_wind, pvsyst_fpoa_temp, pvsyst_fpoa_poa_poa, pvsyst_fpoa = final_coefficients
+
+expected_energy_monofacial = round((pvsyst_fpoa+pvsyst_fpoa_poa_poa*rc_fpoa+pvsyst_fpoa_temp*rc_temp+pvsyst_fpoa_wind*rc_wind)*rc_fpoa)
+expected_energy_bifacial = round((pvsyst_fpoa+pvsyst_fpoa_poa_poa*rc_poa_total+pvsyst_fpoa_temp*rc_temp+pvsyst_fpoa_wind*rc_wind)*rc_poa_total)
+Capacity_Ratio_Mono = round(measured_energy_monofacial/expected_energy_monofacial*100, 2)
+Capacity_Ratio_Bifacial = round(measured_energy_bifacial/expected_energy_bifacial*100, 2)
+
+results_df, fig5 = funcs.loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
+
+tab3.write(results_df)
+tab3.plotly_chart(fig5)
