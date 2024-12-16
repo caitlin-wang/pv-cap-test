@@ -311,22 +311,17 @@ count_primary_filters = merged_df['primary_filters'].value_counts().rename(index
 # Group by date and calculate counts of "Including" and "Excluding"
 count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
 
-including_points_PF = count_primary_filters.get('Including', 0)
-excluding_points_PF = count_primary_filters.get('Excluding', 0)
-
-columns = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind']
-results_dict = {}
+rc_conditions = merged_df[merged_df['primary_filters']==True]
 
 # Calculate averages and percentiles for each column and store in the dictionary
-rc_conditions = merged_df[merged_df['primary_filters']==True]
+columns = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind']
+results_dict = {}
 for col in columns:
     avg_value = rc_conditions[col].mean()
     percentile_value = rc_conditions[col].quantile(percentile)
     
     results_dict[f"{col}_avg"] = avg_value
     results_dict[f"{col}_percentile"] = percentile_value
-
-percentile_avg_poa_total = results_dict["average_poa_total_percentile"]
 
 metric_names = ['POA Total', 'FPOA', 'RPOA', 'Temp', 'Wind'] 
 metrics = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind'] 
@@ -340,15 +335,4 @@ rc_conditions_table = pd.DataFrame({
     f'{percentile*100}th Percentile': percentiles
 })
 
-tab3.write(merged_df)
-tab3.write(filter_results_df)
-tab3.write(count_primary_filters_per_day)
-#tab3.write(rc_conditions_table)
-
-fig = go.Figure()
-fig.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['inverter_clipping_check'], mode='lines', name='inverter_clipping_check'))
-fig.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['inverter_blank'], mode='lines', name='inverter_blank'))
-fig.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['inverter_zero'], mode='lines', name='inverter_zero'))
-tab3.plotly_chart(fig)
-tab3.write(inverter_df)
-tab3.write(inverter_df.shape)
+tab3.write(rc_conditions_table)
