@@ -351,3 +351,4 @@ fig.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['inverter_blank'], 
 fig.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['inverter_zero'], mode='lines', name='inverter_zero'))
 tab3.plotly_chart(fig)
 tab3.write(inverter_df)
+tab3.write(inverter_df.shape)
