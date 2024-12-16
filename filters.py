@@ -8,7 +8,7 @@ def filter_inverter_clipping(df, inverter_data, inverter_clipping):
     return inverter_data.apply(lambda row: row.max() < inverter_clipping, axis=1)
 
 def filter_inverter_blank(df, inverter_data):
-    return ~(inverter_data).isnull(axis=1)
+    return ~(inverter_data).isna().any(axis=1)
 
 def filter_inverter_zero(df, inverter_data):
     return ~(inverter_data == 0).any(axis=1)
