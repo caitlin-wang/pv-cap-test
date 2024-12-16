@@ -335,4 +335,30 @@ rc_conditions_table = pd.DataFrame({
     f'{percentile*100}th Percentile': percentiles
 })
 
-tab3.write(rc_conditions_table)
+rc_poa_total = results_dict.get("average_poa_total_percentile")
+rc_fpoa = results_dict.get("average_fpoa_percentile")
+rc_rpoa = results_dict.get("average_rpoa_percentile")
+rc_temp = results_dict.get("average_temp_percentile")
+#rc_wind = results_dict.get("average_wind_percentile")
+rc_wind=1
+
+reporting_condition_thresold_min = (1 - reporting_condition_thresold) * rc_poa_total
+reporting_condition_thresold_max = (1 + reporting_condition_thresold) * rc_poa_total
+
+merged_df['rc_check']=merged_df['average_poa_total'].between(reporting_condition_thresold_min,reporting_condition_thresold_max)
+
+## Checking the secondary filter where the number of data should be 750 or based on contract with EPC
+merged_df['secondary_filter'] = merged_df['primary_filters'] * merged_df['rc_check']
+count_rc_condition_thresold = merged_df['secondary_filter'].value_counts().rename(index={True:"Including", False:"Excluding"})
+including_points_SF = count_rc_condition_thresold.get('Including', 0)
+secondary_above_rc_perc = (((merged_df['secondary_filter']==True) & (merged_df['average_poa_total']>=rc_poa_total)).sum() / ((merged_df['secondary_filter']==True)).sum()*100)
+secondary_below_rc_perc = 100 - secondary_above_rc_perc
+
+#print("The secondary filter has a value of:", reporting_condition_thresold)
+#print(f"After applying the secondary filter of {reporting_condition_thresold}, the number of points included in the test is now: {including_points_SF}")
+#print(f"The percentage above secondary filter is {secondary_above_rc_perc:.2f}%")
+#print(f"The percentage below secondary filter is {secondary_below_rc_perc:.2f}%")
+
+data = {"Metric": [f"{reporting_condition_thresold:.2f}", f"{including_points_SF:.2f}", f"{secondary_above_rc_perc:.2f}%", f"{secondary_below_rc_perc:.2f}%"]}
+secondary_filter_df = pd.DataFrame(data, index=["Secondary Filter Value", "Included Points", "Percentage Above Filter", "Percentage Below Filter"])
+tab3.write(secondary_filter_df)
