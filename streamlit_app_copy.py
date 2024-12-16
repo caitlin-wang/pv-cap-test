@@ -138,8 +138,6 @@ count_inverter_zero=(~merged_df['inverter_zero']).value_counts().rename(index={T
 
 count_inverter_filter_data=(merged_df['inverter_clipping_check']&merged_df['inverter_blank']).value_counts().rename(index={True:"Including",False:"Excluding"})
 
-# count_grid_inverter_filter_data=(merged_df['inverter_clipping_check']&merged_df['inverter_blank']&merged_df['meter>0']&merged_df['grid_clipping']).value_counts().rename(index={True:"Including",False:"Excluding"})
-
 ## Applying conditions on irradiance, temp and wind data
 
 merged_df['fpoa_blank']=~(merged_df[vars.fpoa_data]).isnull().any(axis=1)
