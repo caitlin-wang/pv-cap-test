@@ -115,7 +115,7 @@ def create_fig8(merged_df):
 
 def create_fig9(merged_df):
     fig9 = go.Figure()
-    fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name=col))
+    fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name='LBSP1/Device/PowerMeter/MTR/p3_kW'))
     fig9.update_layout(
         title='Meter Power Raw Data',
         xaxis_title='Timestamp',
