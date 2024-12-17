@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import vars, funcs, filters
+import vars, funcs, filters, figs
 
 # Page Setup
 
@@ -444,7 +444,7 @@ rc_conditions_table = pd.DataFrame({
     'Metric': metric_names,
     'Average': averages,
     f'{percentile*100}th Percentile': percentiles
-})
+}).set_index('Metric')
 
 rc_poa_total = results_dict.get("average_poa_total_percentile")
 rc_fpoa = results_dict.get("average_fpoa_percentile")
@@ -472,7 +472,6 @@ secondary_below_rc_perc = round(100 - secondary_above_rc_perc, 2)
 
 data = {"Metric": [f"{reporting_condition_thresold:.2f}", f"{including_points_SF:.2f}", f"{secondary_above_rc_perc:.2f}%", f"{secondary_below_rc_perc:.2f}%"]}
 secondary_filter_df = pd.DataFrame(data, index=["Secondary Filter Value", "Included Points", "Percentage Above Filter", "Percentage Below Filter"])
-tab3.write(secondary_filter_df)
 
 measured_regression_df = merged_df[merged_df['secondary_filter']==True]
 count_secondary_filters_per_day = measured_regression_df.groupby(measured_regression_df['t_stamp'].dt.date)['secondary_filter'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
@@ -561,5 +560,100 @@ Capacity_Ratio_Bifacial = round(measured_energy_bifacial/expected_energy_bifacia
 
 results_df, fig5 = loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df)
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ backend end ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# Tab 3: Report
+
+# add: table of inputs
+tab3.header("Inputs")
+tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
+tab3_col1.write("Test Start Date: " + str(test_start_date))
+tab3_col1.write("Test End Date : " + str(test_end_date))
+tab3_col1.write("Number of Days: " + str(test_end_date - test_start_date))
+tab3_col2.write("Minimum Irradiance: " + str(minimum_irradiance) + "W/m^2")
+tab3_col2.write("Maximum Irradiance: " + str(max_irradiance) + "W/m^2")
+tab3_col2.write("Temporal Stability Threshold: " + str(temporal_stability_thresold))
+tab3_col2.write("Spatial Stability Threshold: " + str(spatial_stability_thresold))
+tab3_col2.write("RC Percentile: " + str(percentile))
+tab3_col2.write("RC Threshold: " + str(reporting_condition_thresold))
+tab3_col3.write("Minimum Grid Value: " + str(minimum_grid))
+tab3_col3.write("Maximum Grid Value: " + str(max_gridlimit))
+tab3_col3.write("Grid Clipping Threshold: " + str(grid_clipping_thresold))
+tab3_col3.write("Inverter Rating: " + str(inverter_rating))
+tab3_col3.write("Inverter Limit: " + str(Inverter_limit))
+tab3_col3.write("Inverter Clipping Threshold: " + str(inverter_clipping_thresold))
+
+tab3.divider()
+tab3.header("Capacity Test Results:")
+tab3_col1, tab3_col2 = tab3.columns(2)
+# statement of passing or failing w/ percentage
+if Capacity_Ratio_Bifacial >= passing_capacity:
+    tab3_col1.success("The test passed with a " + str(Capacity_Ratio_Bifacial) + "% capacity. Yippee!")
+else:
+    tab3_col1.error("The test failed with a " + str(Capacity_Ratio_Bifacial) +
+               "% capacity. The target bifacial capacity is " + str(passing_capacity) + "%")
+
+tab3_col2.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy", "Capacity Ratio %"],
+    "Monofacial": [expected_energy_monofacial, measured_energy_monofacial, Capacity_Ratio_Mono],
+    "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capacity_Ratio_Bifacial]}).set_index("Summary"))
+
+tab3.plotly_chart(figs.create_fig3(measured_regression_df)) # Measured vs. Expected Energy after secondary filtering
+tab3.plotly_chart(figs.create_fig2(measured_regression_df)) # Meter vs. FPOA
+
+tab3.header("Availability Test:")
+# add: statement of availability calculation tab3.write("This calculation was done with...")
+tab3.write("Average Availability of the project is : " + str(avail_average) + "%")
+#tab3.plotly_chart(fig6) # availability plot
+tab3.plotly_chart(figs.create_fig11(filtered_data))
+
+tab3.header("Raw Data Graphs")
+tab3.plotly_chart(figs.create_fig7(merged_df))
+tab3.plotly_chart(figs.create_fig8(merged_df))
+tab3.plotly_chart(figs.create_fig9(merged_df))
+tab3.plotly_chart(figs.create_fig10(merged_df))
+
+tab3.divider()
+tab3.header("Soiling")
+tab3.write("Average Soiling: " + str(avg_soiling) + "%")
+tab3.write(((merged_df['average_fpoa'] > min_poa_soiling) * soiling_data).mean())
+tab3.write("")
+
+tab3.header("Number of Points by Filter")
+tab3_col1, tab3_col2 = tab3.columns(2)
+tab3_col1.dataframe(filter_results_df, height=563)
+tab3_col2.write("Primary filters per day:")
+tab3_col2.write(count_primary_filters_per_day)
+tab3_col2.write("Secondary filters per day:")
+tab3_col2.write(count_secondary_filters_per_day)
+
+tab3.divider()
+tab3.header("RC Values")
+tab3_col1, tab3_col2 = tab3.columns(2)
+tab3_col1.write(rc_conditions_table)
+tab3_col2.write("Percent above RC after secondary filtering: " + str(secondary_above_rc_perc) + "%")
+tab3_col2.write("Percent below RC after secondary filtering: " + str(secondary_below_rc_perc) + "%")
+
+tab3.subheader("RC Threshold Loop")
 tab3.write(results_df)
 tab3.plotly_chart(fig5)
+
+tab3.header("Regression Coefficients")
+tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
+    "Measured": [fpoa[0], fpoa_poa_poa[0], fpoa_temp[0], fpoa_wind[0]],
+    "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
+
+#tab3.write(f"Number of events POA is greater then minimum irradiance: {count_avail_poa}")
+#tab3.write(avail_counts_df)
+
+# different measured v expected energy plot
+#tab3.plotly_chart(fig4)
+
+#tab3.subheader("PVSyst Test Model")
+#tab3.write(pvsyst_test_model_df)
+#tab3.write("PVsyst Start Date: " + str(pvsyst_model_start_date))
+#tab3.write("PVSyst End Date: " + str(pvsyst_model_end_date))
+
+#tab3.header("Detailed Report Below:")
+#tab3.write(detailed_report)
+
+#tab3.link_button("Download in-depth report as PDF", "https://www.youtube.com/watch?v=dQw4w9WgXcQ")
