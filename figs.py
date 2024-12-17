@@ -89,34 +89,6 @@ def create_fig3(measured_regression_df):
 
     return fig3
 
-def create_fig11(filtered_data):
-    fig11 = px.imshow(
-        filtered_data.T,  # Transpose to have inverters as rows
-        labels=dict(x="Timestamp", y="Inverter", color="Avaiability"),
-        x=filtered_data.index,  # Timestamps
-        y=filtered_data.columns, 
-        color_continuous_scale=['white', 'red'],# Map 0 to white and 1 to red
-        zmin = 0, 
-        zmax = 1
-    )
-
-    fig11.update_layout(
-        title="Inverter Performance Compliance Over Time",
-        xaxis=dict(
-            showgrid=True,
-            gridcolor='lightgray',  
-            gridwidth=1  
-        ),
-        yaxis=dict(
-            showgrid=True,
-            gridcolor='lightgray', 
-            gridwidth=1  
-        ),
-        xaxis_nticks=20,
-        width=1100
-    )
-    fig11
-
 def create_fig7(merged_df):
     fig7 = go.Figure()
     for col in vars.inverter_data:
@@ -163,3 +135,31 @@ def create_fig10(merged_df):
         hovermode='x unified',
         width = 1385)
     return fig10
+
+def create_fig11(filtered_data):
+    fig11 = px.imshow(
+        filtered_data.T,  # Transpose to have inverters as rows
+        labels=dict(x="Timestamp", y="Inverter", color="Avaiability"),
+        x=filtered_data.index,  # Timestamps
+        y=filtered_data.columns, 
+        color_continuous_scale=['white', 'red'],# Map 0 to white and 1 to red
+        zmin = 0, 
+        zmax = 1
+    )
+
+    fig11.update_layout(
+        title="Inverter Performance Compliance Over Time",
+        xaxis=dict(
+            showgrid=True,
+            gridcolor='lightgray',  
+            gridwidth=1  
+        ),
+        yaxis=dict(
+            showgrid=True,
+            gridcolor='lightgray', 
+            gridwidth=1  
+        ),
+        xaxis_nticks=20,
+        width=1100
+    )
+    return fig11
