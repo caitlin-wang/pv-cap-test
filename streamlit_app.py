@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import vars, funcs, filters, figs
+import funcs, filters, figs
 
 # Page Setup
 
@@ -304,7 +304,7 @@ counts = {}
 
 # Loop through each inverter column
 for column in inverter_data.columns:
-    # Calculate the difference and count the occurrences where the difference is greater than 150
+    # Calculate the difference and count the occurrences where the difference is greater than 50
     counts[column] = (((merged_df[column] > 50) & (merged_df['average_fpoa'] > availability_min_fpoa))).sum()
 
 # Divide the counts by count_avail_poa
@@ -486,7 +486,7 @@ measured_regression_df['fpoaxtemp'] = measured_regression_df['average_temp'] * m
 measured_regression_df['fpoaxwind'] = measured_regression_df['average_wind'] * measured_regression_df['average_poa_total']*0
 
 X = measured_regression_df[['fpoa','fpoaxfpoa','fpoaxtemp','fpoaxwind']]
-y = measured_regression_df[vars.meter_data]
+y = measured_regression_df['average_meter_data']
 
 coefficients, residuals, rank, s = np.linalg.lstsq(X, y, rcond=None)
 final_coefficients = coefficients[::-1]
