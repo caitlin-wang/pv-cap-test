@@ -640,7 +640,7 @@ tab3.plotly_chart(fig5)
 
 tab3.header("Regression Coefficients")
 tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
-    "Measured": [fpoa[0], fpoa_poa_poa[0], fpoa_temp[0], fpoa_wind[0]],
+    "Measured": [fpoa, fpoa_poa_poa, fpoa_temp, fpoa_wind],
     "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
 
 #tab3.write(f"Number of events POA is greater then minimum irradiance: {count_avail_poa}")
