@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import funcs, filters, figs
+import vars, funcs, filters, figs
 
 # Page Setup
 
@@ -487,6 +487,7 @@ measured_regression_df['fpoaxwind'] = measured_regression_df['average_wind'] * m
 
 X = measured_regression_df[['fpoa','fpoaxfpoa','fpoaxtemp','fpoaxwind']]
 y = measured_regression_df['average_meter_data']
+y = measured_regression_df[vars.meter_data]
 
 coefficients, residuals, rank, s = np.linalg.lstsq(X, y, rcond=None)
 final_coefficients = coefficients[::-1]
