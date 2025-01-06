@@ -510,6 +510,7 @@ pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
 
 pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
 pvsyst_test_model_selected_columns_df = pvsyst_test_model_df[pvsyst_selected_column]
+st.write(pvsyst_test_model_selected_columns_df)
 pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
 
 # Convert 'date' column to datetime
