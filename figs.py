@@ -89,9 +89,9 @@ def create_fig3(measured_regression_df):
 
     return fig3
 
-def create_fig7(merged_df):
+def create_fig7(merged_df, inverter_data):
     fig7 = go.Figure()
-    for col in vars.inverter_data:
+    for col in inverter_data.columns:
         fig7.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
     fig7.update_layout(
         title='Inverter Raw Data',
