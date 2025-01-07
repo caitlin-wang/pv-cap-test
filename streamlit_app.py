@@ -517,7 +517,7 @@ for column in pvsyst_selected_column:
         pvsyst_test_model_selected_columns_df[column] = pvsyst_test_model_df[column]
     else:
         pvsyst_test_model_selected_columns_df[column] = 0
-st.write(pvsyst_test_model_df)
+st.write(pvsyst_test_model_selected_columns_df)
 pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
 
 # Convert 'date' column to datetime
