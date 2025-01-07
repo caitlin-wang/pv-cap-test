@@ -622,7 +622,7 @@ tab3.plotly_chart(figs.create_fig10(merged_df, soiling_data))
 tab3.divider()
 tab3.header("Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling) + "%")
-tab3.write(soiling_data.groupby(soiling_data['t_stamp'].dt.date).mean())
+tab3.write(soiling_data)
 tab3.write("")
 
 tab3.header("Number of Points by Filter")
