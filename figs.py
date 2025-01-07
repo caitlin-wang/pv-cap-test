@@ -17,7 +17,6 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import vars, funcs, filters
 
 def create_fig2(measured_regression_df):
     # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
@@ -124,9 +123,9 @@ def create_fig9(merged_df, meter_data):
         width = 1000)
     return fig9
 
-def create_fig10(merged_df):
+def create_fig10(merged_df, soiling_data):
     fig10 = go.Figure()
-    for col in vars.soiling_data:
+    for col in soiling_data.columns:
         fig10.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
     fig10.update_layout(
         title='Soiling Raw Data',

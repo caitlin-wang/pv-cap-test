@@ -617,7 +617,7 @@ tab3.header("Raw Data Graphs")
 tab3.plotly_chart(figs.create_fig7(merged_df, inverter_data))
 tab3.plotly_chart(figs.create_fig8(merged_df, fpoa_data))
 tab3.plotly_chart(figs.create_fig9(merged_df, meter_data))
-tab3.plotly_chart(figs.create_fig10(merged_df))
+tab3.plotly_chart(figs.create_fig10(merged_df, soiling_data))
 
 tab3.divider()
 tab3.header("Soiling")
