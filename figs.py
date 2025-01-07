@@ -101,9 +101,9 @@ def create_fig7(merged_df, inverter_data):
         width = 1270)
     return fig7
 
-def create_fig8(merged_df):
+def create_fig8(merged_df, fpoa_data):
     fig8 = go.Figure()
-    for col in vars.fpoa_data:
+    for col in fpoa_data.columns:
         fig8.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df[col], mode='lines', name=col))
     fig8.update_layout(
         title='Irradiance Raw Data',
@@ -113,9 +113,9 @@ def create_fig8(merged_df):
         width = 1350)
     return fig8
 
-def create_fig9(merged_df):
+def create_fig9(merged_df, meter_data):
     fig9 = go.Figure()
-    fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=merged_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name='LBSP1/Device/PowerMeter/MTR/p3_kW'))
+    fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=meter_data, mode='lines', name=meter_data.columns[0]))
     fig9.update_layout(
         title='Meter Power Raw Data',
         xaxis_title='Timestamp',
