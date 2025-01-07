@@ -270,7 +270,7 @@ wind_data = grouped_data.get('Wind', None)
 soiling_data = grouped_data.get('Soiling Ratio', None)
 inverter_data = grouped_data.get('Inverter', None)
 meter_data = grouped_data.get('meter', None)
-st.write(meter_data)
+st.write(meter_data.columns)
 
 merged_df['t_stamp'] = pd.to_datetime(merged_df.index)
 merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
