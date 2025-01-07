@@ -243,10 +243,8 @@ if 't_stamp' not in columns_to_keep:
     columns_to_keep.insert(0, 't_stamp')  # Add it back to the beginning if needed
 
 # Step 3: Filter the merged DataFrame
-merged_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep).set_index('t_stamp')  # Reset index to keep 't_stamp' as a column
-merged_df = merged_df[(merged_df.index >= test_start_date) & (merged_df.index <= test_end_date)]
-st.write("merged_df")
-st.write(merged_df)
+merged_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep).set_index('t_stamp')  # create merged_df and reset index to keep 't_stamp' as a column
+merged_df = merged_df[(merged_df.index >= test_start_date) & (merged_df.index <= test_end_date)] # restrict merged_df to given dates
 
 metadata_df = pd.read_excel(scada_tags, header=None)  # Adjust header if necessary
 column_groups = {}
@@ -426,13 +424,7 @@ count_primary_filters = merged_df['primary_filters'].value_counts().rename(index
 # Group by date and calculate counts of "Including" and "Excluding"
 count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
 
-#st.write("merged_df")
-#st.write(merged_df)
-
-
 rc_conditions = merged_df[merged_df['primary_filters']==True]
-#st.write("rc_conditions")
-#st.write(rc_conditions)
 
 # Calculate averages and percentiles for each column and store in the dictionary
 columns = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind']
@@ -444,15 +436,10 @@ for col in columns:
     results_dict[f"{col}_avg"] = avg_value
     results_dict[f"{col}_percentile"] = percentile_value
 
-#st.write("results_dict")
-#st.write(results_dict)
-
 metric_names = ['POA Total', 'FPOA', 'RPOA', 'Temp', 'Wind'] 
 metrics = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind'] 
 averages = [results_dict[f"{metric}_avg"] for metric in metrics]  
 percentiles = [results_dict[f"{metric}_percentile"] for metric in metrics]
-#st.write("Percentiles:")
-#st.write(percentiles)
 
 # DFe for Average and Percentile
 rc_conditions_table = pd.DataFrame({
@@ -511,8 +498,6 @@ fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 ##Power = POA * (fpoa + fpoa_poa_poa*POA + fpoa_temp*Temp + fpoa_wind*Wind)
 ## Note: Calculating energy 
 
-#st.write("rc_poa_total, fpoa, fpoa_poa_poa, rc_poa_total, fpoa_temp, rc_temp, fpoa_wind, rc_wind:")
-#st.write(rc_poa_total, fpoa, fpoa_poa_poa, rc_poa_total, fpoa_temp, rc_temp, fpoa_wind, rc_wind)
 measured_energy_bifacial = round(rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
 measured_energy_monofacial = round(rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
 
@@ -527,8 +512,9 @@ pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
 
 pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
 pvsyst_test_model_selected_columns_df = pvsyst_test_model_df[pvsyst_selected_column]
-st.write("pvsyst_test_model_selected_columns_df")
-st.write(pvsyst_test_model_selected_columns_df)
+#for column in pvsyst_selected_column:
+#    if column not in pvsyst_test_model_selected_columns_df
+st.write(pvsyst_test_model_df)
 pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
 
 # Convert 'date' column to datetime
