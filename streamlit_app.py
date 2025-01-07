@@ -244,9 +244,9 @@ if 't_stamp' not in columns_to_keep:
 
 # Step 3: Filter the merged DataFrame
 merged_df = funcs.filter_columns(all_data.reset_index(), columns_to_keep).set_index('t_stamp')  # Reset index to keep 't_stamp' as a column
+merged_df = merged_df[(merged_df.index >= test_start_date) & (merged_df.index <= test_end_date)]
 st.write("merged_df")
 st.write(merged_df)
-merged_df = merged_df[(merged_df.index >= test_start_date) & (merged_df.index <= test_end_date)]
 
 metadata_df = pd.read_excel(scada_tags, header=None)  # Adjust header if necessary
 column_groups = {}
