@@ -19,15 +19,12 @@ warnings.filterwarnings("ignore")
 #import dask.dataframe as dd
 import vars, funcs, filters
 
-def create_fig2(measured_regression_df):
+def create_fig2(measured_regression_df, meter_data):
     # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
     fig2 = go.Figure()
     
-    y_columns_secondary = ['average_fpoa','average_rpoa','average_temp','average_wind']  # Replace with your column names
-    
-    
     # Add traces for the primary y-axis
-    fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['LBSP1/Device/PowerMeter/MTR/p3_kW'], mode='lines', name='LBSP1/Device/PowerMeter/MTR/p3_kW'))
+    fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=meter_data, mode='lines', name=meter_data.columns[0]))
     
     # Add traces for the secondary y-axis
     fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['average_fpoa'], mode='lines', name='average_fpoa', yaxis='y2'))

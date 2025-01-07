@@ -270,7 +270,6 @@ wind_data = grouped_data.get('Wind', None)
 soiling_data = grouped_data.get('Soiling Ratio', None)
 inverter_data = grouped_data.get('Inverter', None)
 meter_data = grouped_data.get('meter', None)
-st.write(meter_data.columns[0])
 
 merged_df['t_stamp'] = pd.to_datetime(merged_df.index)
 merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
@@ -606,7 +605,7 @@ tab3_col2.dataframe(pd.DataFrame({"Summary": ["Model Energy", "Measured Energy",
     "Bifacial": [expected_energy_bifacial, measured_energy_bifacial, Capacity_Ratio_Bifacial]}).set_index("Summary"))
 
 tab3.plotly_chart(figs.create_fig3(measured_regression_df)) # Measured vs. Expected Energy after secondary filtering
-tab3.plotly_chart(figs.create_fig2(measured_regression_df)) # Meter vs. FPOA
+tab3.plotly_chart(figs.create_fig2(measured_regression_df, meter_data)) # Meter vs. FPOA
 
 tab3.header("Availability Test:")
 # add: statement of availability calculation tab3.write("This calculation was done with...")
