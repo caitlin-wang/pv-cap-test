@@ -111,7 +111,7 @@ def create_fig8(merged_df, fpoa_data):
 
 def create_fig9(merged_df, meter_data):
     fig9 = go.Figure()
-    fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=meter_data[0], mode='lines', name=meter_data.columns[0]))
+    fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=meter_data[meter_data.columns[0]], mode='lines', name=meter_data.columns[0]))
     fig9.update_layout(
         title='Meter Power Raw Data',
         xaxis_title='Timestamp',
