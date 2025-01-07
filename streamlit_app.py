@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import funcs, filters, figs
+import vars, funcs, filters, figs
 
 # Page Setup
 
@@ -423,6 +423,10 @@ count_primary_filters = merged_df['primary_filters'].value_counts().rename(index
 
 # Group by date and calculate counts of "Including" and "Excluding"
 count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
+
+st.write("count_primary_filters_per_day")
+st.write(count_primary_filters_per_day)
+
 
 rc_conditions = merged_df[merged_df['primary_filters']==True]
 st.write("rc_conditions")
