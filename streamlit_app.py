@@ -270,6 +270,7 @@ wind_data = grouped_data.get('Wind', None)
 soiling_data = grouped_data.get('Soiling Ratio', None)
 inverter_data = grouped_data.get('Inverter', None)
 meter_data = grouped_data.get('meter', None)
+st.write(meter_data)
 
 merged_df['t_stamp'] = pd.to_datetime(merged_df.index)
 merged_df['t_stamp_check'] = (merged_df['t_stamp'] >= test_start_date) & (merged_df['t_stamp'] <= test_end_date)
@@ -517,7 +518,6 @@ for column in pvsyst_selected_column:
         pvsyst_test_model_selected_columns_df[column] = pvsyst_test_model_df[column]
     else:
         pvsyst_test_model_selected_columns_df[column] = 0
-st.write(pvsyst_test_model_selected_columns_df)
 pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
 
 # Convert 'date' column to datetime
