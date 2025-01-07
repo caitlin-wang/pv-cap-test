@@ -32,7 +32,7 @@ tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 # Tab 1: Data Upload
 
 # Specify the main directory containing folders of daily CSV files
-main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", "2.Raw Data")
+main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", "1.Raw Data")
 #metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
 date_format = tab1.text_input("Date Format", "%Y-%m-%d %H:%M:%S.%f")
 
@@ -219,7 +219,6 @@ for folder in os.listdir(main_directory):
     if os.path.isdir(folder_path):  # Only process folders
         csv_files = glob(os.path.join(folder_path, "*.csv"))
         all_files.extend(csv_files)
-st.write(all_files)
 
 for file in all_files:
     df = pd.read_csv(file)
@@ -497,6 +496,7 @@ fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 ##Power = POA * (fpoa + fpoa_poa_poa*POA + fpoa_temp*Temp + fpoa_wind*Wind)
 ## Note: Calculating energy 
 
+st.write(rc_poa_total, fpoa, fpoa_poa_poa, rc_poa_total, fpoa_temp, rc_temp, fpoa_wind, rc_wind)
 measured_energy_bifacial = round(rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
 measured_energy_monofacial = round(rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
 
