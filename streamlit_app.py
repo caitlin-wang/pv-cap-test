@@ -511,9 +511,12 @@ pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
 pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
 
 pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
-pvsyst_test_model_selected_columns_df = pvsyst_test_model_df[pvsyst_selected_column]
-#for column in pvsyst_selected_column:
-#    if column not in pvsyst_test_model_selected_columns_df
+pvsyst_test_model_selected_columns_df = pd.DataFrame()
+for column in pvsyst_selected_column:
+    if column in pvsyst_test_model_df:
+        pvsyst_test_model_selected_columns_df[column] = pvsyst_test_model_df[column]
+    else:
+        pvsyst_test_model_selected_columns_df[column] = 0
 st.write(pvsyst_test_model_df)
 pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
 
