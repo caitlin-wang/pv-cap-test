@@ -34,7 +34,7 @@ tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 # Specify the main directory containing folders of daily CSV files
 main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", "1.Raw Data")
 #metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
-project = st.selectbox(
+project = tab1.selectbox(
     "Default project inputs:",
     ("Liberty", "Bayou Galion", "North Fork"),
 )
