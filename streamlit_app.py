@@ -437,7 +437,8 @@ metric_names = ['POA Total', 'FPOA', 'RPOA', 'Temp', 'Wind']
 metrics = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind'] 
 averages = [results_dict[f"{metric}_avg"] for metric in metrics]  
 percentiles = [results_dict[f"{metric}_percentile"] for metric in metrics]
-st.write("Percentiles: " + percentiles)
+st.write("Percentiles:")
+st.write(percentiles)
 
 # DFe for Average and Percentile
 rc_conditions_table = pd.DataFrame({
