@@ -224,7 +224,6 @@ for file in all_files:
     df = pd.read_csv(file)
     df = funcs.filter_and_parse_dates(df, date_format)  # Assuming you have a function to filter and parse dates
     all_dfs.append(df)
-#st.write(all_dfs)
 
 # Concatenate all DataFrames vertically
 all_data = pd.concat(all_dfs, axis=0, ignore_index=True)
@@ -437,7 +436,8 @@ for col in columns:
 metric_names = ['POA Total', 'FPOA', 'RPOA', 'Temp', 'Wind'] 
 metrics = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind'] 
 averages = [results_dict[f"{metric}_avg"] for metric in metrics]  
-percentiles = [results_dict[f"{metric}_percentile"] for metric in metrics]  
+percentiles = [results_dict[f"{metric}_percentile"] for metric in metrics]
+st.write("Percentiles: " + percentiles)
 
 # DFe for Average and Percentile
 rc_conditions_table = pd.DataFrame({
@@ -496,7 +496,7 @@ fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 ##Power = POA * (fpoa + fpoa_poa_poa*POA + fpoa_temp*Temp + fpoa_wind*Wind)
 ## Note: Calculating energy 
 
-st.write(rc_poa_total, fpoa, fpoa_poa_poa, rc_poa_total, fpoa_temp, rc_temp, fpoa_wind, rc_wind)
+st.write("rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind): " + rc_poa_total, fpoa, fpoa_poa_poa, rc_poa_total, fpoa_temp, rc_temp, fpoa_wind, rc_wind)
 measured_energy_bifacial = round(rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
 measured_energy_monofacial = round(rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
 
@@ -511,7 +511,7 @@ pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
 
 pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
 pvsyst_test_model_selected_columns_df = pvsyst_test_model_df[pvsyst_selected_column]
-st.write(pvsyst_test_model_selected_columns_df)
+st.write("pvsyst_test_model_selected_columns_df: " + pvsyst_test_model_selected_columns_df)
 pvsyst_test_model_selected_columns_df['POA_Total_pvsyst'] = (pvsyst_test_model_selected_columns_df['GlobInc'] + ((pvsyst_test_model_selected_columns_df['GlobBak'] + pvsyst_test_model_selected_columns_df['BackShd']) * bifaciality))
 
 # Convert 'date' column to datetime
