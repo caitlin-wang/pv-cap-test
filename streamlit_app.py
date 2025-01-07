@@ -433,6 +433,9 @@ for col in columns:
     results_dict[f"{col}_avg"] = avg_value
     results_dict[f"{col}_percentile"] = percentile_value
 
+st.write("results_dict")
+st.write(results_dict)
+
 metric_names = ['POA Total', 'FPOA', 'RPOA', 'Temp', 'Wind'] 
 metrics = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind'] 
 averages = [results_dict[f"{metric}_avg"] for metric in metrics]  
@@ -497,7 +500,7 @@ fpoa_wind, fpoa_temp, fpoa_poa_poa, fpoa = final_coefficients
 ##Power = POA * (fpoa + fpoa_poa_poa*POA + fpoa_temp*Temp + fpoa_wind*Wind)
 ## Note: Calculating energy 
 
-st.write("rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind): ")
+st.write("rc_poa_total, fpoa, fpoa_poa_poa, rc_poa_total, fpoa_temp, rc_temp, fpoa_wind, rc_wind:")
 st.write(rc_poa_total, fpoa, fpoa_poa_poa, rc_poa_total, fpoa_temp, rc_temp, fpoa_wind, rc_wind)
 measured_energy_bifacial = round(rc_poa_total*(fpoa+fpoa_poa_poa*rc_poa_total+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
 measured_energy_monofacial = round(rc_fpoa*(fpoa+fpoa_poa_poa*rc_fpoa+fpoa_temp*rc_temp+fpoa_wind*rc_wind))
