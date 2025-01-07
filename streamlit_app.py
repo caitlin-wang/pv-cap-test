@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import vars, funcs, filters, figs
+import funcs, filters, figs
 
 # Page Setup
 
@@ -203,8 +203,8 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
 
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
-        z.extractall(".")
-if uploaded_zip is None or scada_tags is None or pvsyst_test_model_path is None:
+        z.extractall(".") # extract zip file to local directory
+if uploaded_zip is None or scada_tags is None or pvsyst_test_model_path is None: # if one of the files is not uploaded
     tab2.write('Upload files to proceed.')
     tab3.write('Upload files to proceed.')
     st.stop()
@@ -225,6 +225,7 @@ for file in all_files:
     df = pd.read_csv(file)
     df = funcs.filter_and_parse_dates(df, date_format)  # Assuming you have a function to filter and parse dates
     all_dfs.append(df)
+st.write(all_dfs)
 
 # Concatenate all DataFrames vertically
 all_data = pd.concat(all_dfs, axis=0, ignore_index=True)
