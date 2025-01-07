@@ -34,7 +34,10 @@ tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 # Specify the main directory containing folders of daily CSV files
 main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", "1.Raw Data")
 #metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
-date_format = tab1.text_input("Date Format", "%Y-%m-%d %H:%M:%S.%f")
+project = st.selectbox(
+    "Default project inputs:",
+    ("Liberty", "Bayou Galion", "North Fork"),
+)
 
 uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
 scada_tags = tab1.file_uploader("Upload SCADA tags", type='xlsx')
@@ -222,7 +225,7 @@ for folder in os.listdir(main_directory):
 
 for file in all_files:
     df = pd.read_csv(file)
-    df = funcs.filter_and_parse_dates(df, date_format)  # Assuming you have a function to filter and parse dates
+    df = funcs.filter_and_parse_dates(df)  # Assuming you have a function to filter and parse dates
     all_dfs.append(df)
 
 # Concatenate all DataFrames vertically

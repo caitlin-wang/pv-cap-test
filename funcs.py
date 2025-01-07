@@ -22,9 +22,9 @@ def load_and_select(files, columns):
     return pd.concat(dfs)
 
 # Function to filter rows based on t_stamp format
-def filter_and_parse_dates(df, date_format):
+def filter_and_parse_dates(df):
     # Convert t_stamp with strict parsing and drop invalid rows
-    df['t_stamp'] = pd.to_datetime(df['t_stamp'], format=date_format, errors='coerce')
+    df['t_stamp'] = pd.to_datetime(df['t_stamp'], format="%Y-%m-%d %H:%M:%S.%f", errors='coerce')
     df = df.dropna(subset=['t_stamp'])  # Keep only rows with valid dates
     return df
 
