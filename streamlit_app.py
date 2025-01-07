@@ -219,13 +219,13 @@ for folder in os.listdir(main_directory):
     if os.path.isdir(folder_path):  # Only process folders
         csv_files = glob(os.path.join(folder_path, "*.csv"))
         all_files.extend(csv_files)
-
+st.write(all_files)
 
 for file in all_files:
     df = pd.read_csv(file)
     df = funcs.filter_and_parse_dates(df, date_format)  # Assuming you have a function to filter and parse dates
     all_dfs.append(df)
-st.write(all_dfs)
+#st.write(all_dfs)
 
 # Concatenate all DataFrames vertically
 all_data = pd.concat(all_dfs, axis=0, ignore_index=True)
