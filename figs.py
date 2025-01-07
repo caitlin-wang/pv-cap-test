@@ -21,10 +21,7 @@ warnings.filterwarnings("ignore")
 def create_fig2(measured_regression_df):
     # Assuming merged_df is your DataFrame and t_stamp is your x-axis column
     fig2 = go.Figure()
-    
-    y_columns_secondary = ['average_fpoa','average_rpoa','average_temp','average_wind']  # Replace with your column names
-    
-    
+
     # Add traces for the primary y-axis
     fig2.add_trace(go.Scatter(x=measured_regression_df['t_stamp'], y=measured_regression_df['average_meter_data'], mode='lines', name='average_meter_data'))
     
@@ -114,7 +111,7 @@ def create_fig8(merged_df, fpoa_data):
 
 def create_fig9(merged_df, meter_data):
     fig9 = go.Figure()
-    fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=meter_data, mode='lines', name=meter_data.columns[0]))
+    fig9.add_trace(go.Scatter(x=merged_df['t_stamp'], y=meter_data[0], mode='lines', name=meter_data.columns[0]))
     fig9.update_layout(
         title='Meter Power Raw Data',
         xaxis_title='Timestamp',
