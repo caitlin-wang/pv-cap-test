@@ -422,6 +422,8 @@ count_primary_filters = merged_df['primary_filters'].value_counts().rename(index
 count_primary_filters_per_day = merged_df.groupby(merged_df['t_stamp'].dt.date)['primary_filters'].value_counts().unstack().fillna(0).rename(columns={True: "Including", False: "Excluding"})
 
 rc_conditions = merged_df[merged_df['primary_filters']==True]
+st.write("rc_conditions")
+st.write(rc_conditions)
 
 # Calculate averages and percentiles for each column and store in the dictionary
 columns = ['average_poa_total', 'average_fpoa', 'average_rpoa', 'average_temp', 'average_wind']
