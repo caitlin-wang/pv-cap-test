@@ -211,7 +211,7 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
 if project is 'Liberty':
     #scada_tags = pd.read_excel('SCADA Tags_Liberty.xlsx', header=None)
     scada_tags = 'SCADA Tags_Liberty.xlsx'
-    pvsyst_test_model_path = 'PVSyst Model_Liberty.csv'
+    pvsyst_test_model_path = 'PVSyst Model_Liberty.CSV'
 elif project is 'Bayou Galion':
     #scada_tags = pd.read_excel('SCADA Tags_BayouGalion.xlsx', header=None)
     scada_tags = 'SCADA Tags_BayouGalion.xlsx'
