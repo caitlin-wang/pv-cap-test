@@ -209,14 +209,17 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     return results_df, fig
 
 if project is 'Liberty':
-    scada_tags = pd.read_excel('SCADA Tags_Liberty.xlsx', header=None)
+    #scada_tags = pd.read_excel('SCADA Tags_Liberty.xlsx', header=None)
+    scada_tags = 'SCADA Tags_Liberty.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_Liberty.csv'
 elif project is 'Bayou Galion':
-    scada_tags = pd.read_excel('SCADA Tags_BayouGalion.xlsx', header=None)
+    #scada_tags = pd.read_excel('SCADA Tags_BayouGalion.xlsx', header=None)
+    scada_tags = 'SCADA Tags_BayouGalion.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_BayouGalion.csv'
     meter_units = 'KW'
 elif project is 'North Fork':
-    scada_tags = pd.read_excel('SCADA Tags_NorthFork.xlsx', header=None)
+    #scada_tags = pd.read_excel('SCADA Tags_NorthFork.xlsx', header=None)
+    scada_tags = 'SCADA Tags_NorthFork.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_NorthFork1.csv'
 
 if uploaded_zip is not None:
