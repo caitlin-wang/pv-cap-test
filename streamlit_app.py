@@ -215,12 +215,12 @@ if project is 'Liberty':
 elif project is 'Bayou Galion':
     #scada_tags = pd.read_excel('SCADA Tags_BayouGalion.xlsx', header=None)
     scada_tags = 'SCADA Tags_BayouGalion.xlsx'
-    pvsyst_test_model_path = 'PVSyst Model_BayouGalion.csv'
+    pvsyst_test_model_path = 'PVSyst Model_BayouGalion.CSV'
     meter_units = 'KW'
 elif project is 'North Fork':
     #scada_tags = pd.read_excel('SCADA Tags_NorthFork.xlsx', header=None)
     scada_tags = 'SCADA Tags_NorthFork.xlsx'
-    pvsyst_test_model_path = 'PVSyst Model_NorthFork1.csv'
+    pvsyst_test_model_path = 'PVSyst Model_NorthFork1.CSV'
 
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
