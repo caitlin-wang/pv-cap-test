@@ -48,8 +48,8 @@ uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
 form1 = tab2.form("inputs form")
 
 form1_col1, form1_col2 = form1.columns(2)
-test_start_date = datetime.datetime.combine(form1_col1.date_input("Start Date", pd.to_datetime('2024-10-29'), format='MM/DD/YYYY'), datetime.datetime.min.time())
-test_end_date = datetime.datetime.combine(form1_col2.date_input("End Date", pd.to_datetime('2024-11-07'), format='MM/DD/YYYY'), datetime.datetime.min.time())
+test_start_date = datetime.datetime.combine(form1_col1.date_input("Start Date", start_date, format='MM/DD/YYYY'), datetime.datetime.min.time())
+test_end_date = datetime.datetime.combine(form1_col2.date_input("End Date", end_date, format='MM/DD/YYYY'), datetime.datetime.min.time())
 
 form1.subheader("Irradiance Inputs:")
 form1_col1, form1_col2 = form1.columns(2)
@@ -212,15 +212,21 @@ if project is 'Liberty':
     #scada_tags = pd.read_excel('SCADA Tags_Liberty.xlsx', header=None)
     scada_tags = 'SCADA Tags_Liberty.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_Liberty.CSV'
+    start_date = pd.to_datetime('2024-10-10')
+    end_date = pd.to_datetime('2024-10-13')
 elif project is 'Bayou Galion':
     #scada_tags = pd.read_excel('SCADA Tags_BayouGalion.xlsx', header=None)
     scada_tags = 'SCADA Tags_BayouGalion.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_BayouGalion.CSV'
     meter_units = 'KW'
+    start_date = pd.to_datetime('2024-10-29')
+    end_date = pd.to_datetime('2024-11-06')
 elif project is 'North Fork':
     #scada_tags = pd.read_excel('SCADA Tags_NorthFork.xlsx', header=None)
     scada_tags = 'SCADA Tags_NorthFork.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_NorthFork1.CSV'
+    start_date = pd.to_datetime('2024-05-20')
+    end_date = pd.to_datetime('2024-05-28')
 
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
