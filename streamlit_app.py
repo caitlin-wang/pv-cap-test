@@ -31,8 +31,13 @@ tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
 # Tab 1: Data Upload
 
+main_directory = '2.Raw Data'
+scada_tags = 'SCADA Tags_Liberty.xlsx'
+pvsyst_test_model_path = 'PVSyst Model_Liberty.CSV'
+start_date = pd.to_datetime('2024-10-10')
+end_date = pd.to_datetime('2024-10-13')
 # Specify the main directory containing folders of daily CSV files
-main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", "1.Raw Data")
+main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", main_directory)
 #metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
 project = tab1.selectbox(
     "Default project inputs:",
@@ -209,20 +214,20 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     return results_df, fig
 
 if project is 'Liberty':
-    #scada_tags = pd.read_excel('SCADA Tags_Liberty.xlsx', header=None)
+    main_directory = '2.Raw Data'
     scada_tags = 'SCADA Tags_Liberty.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_Liberty.CSV'
     start_date = pd.to_datetime('2024-10-10')
     end_date = pd.to_datetime('2024-10-13')
 elif project is 'Bayou Galion':
-    #scada_tags = pd.read_excel('SCADA Tags_BayouGalion.xlsx', header=None)
+    main_directory = '1.Raw Data'
     scada_tags = 'SCADA Tags_BayouGalion.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_BayouGalion.CSV'
     meter_units = 'KW'
     start_date = pd.to_datetime('2024-10-29')
     end_date = pd.to_datetime('2024-11-06')
 elif project is 'North Fork':
-    #scada_tags = pd.read_excel('SCADA Tags_NorthFork.xlsx', header=None)
+    main_directory = '3.Raw Data'
     scada_tags = 'SCADA Tags_NorthFork.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_NorthFork1.CSV'
     start_date = pd.to_datetime('2024-05-20')
