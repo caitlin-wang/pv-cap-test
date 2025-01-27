@@ -43,7 +43,7 @@ tab1_col1, tab1_col2 = tab1.columns(2)
 test_start_date = datetime.datetime.combine(tab1_col1.date_input("Start Date", 'today', format='MM/DD/YYYY'), datetime.datetime.min.time())
 test_end_date = datetime.datetime.combine(tab1_col2.date_input("End Date", 'today', format='MM/DD/YYYY'), datetime.datetime.min.time())
 uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
-tab1.write(os.path.basename(uploaded_zip))
+tab1.write(uploaded_zip)
 #scada_tags = tab1.file_uploader("Upload SCADA tags", type='xlsx')
 #pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type='csv')
 
