@@ -234,7 +234,6 @@ all_dfs = []
 # Gather all file paths
 all_files = []
 main_directory = uploaded_zip.name[:-4]
-st.write(main_directory)
 for folder in os.listdir(main_directory):
     folder_path = os.path.join(main_directory, folder)
     if os.path.isdir(folder_path):  # Only process folders
