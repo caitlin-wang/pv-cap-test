@@ -27,7 +27,7 @@ st.set_page_config(page_title= "PV Cap Test", page_icon="icon.jpg", layout="wide
 st.image("long_logo.jpg", width=300)
 st.title("PV Cap Test")
 #st.header("Date: " + str(datetime.date.today()))
-tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
+tab1, tab2, tab3 = st.tabs(['Main Inputs', 'Detailed Inputs', 'Report'])
 
 # Tab 1: Data Upload
 
@@ -43,7 +43,6 @@ tab1_col1, tab1_col2 = tab1.columns(2)
 test_start_date = datetime.datetime.combine(tab1_col1.date_input("Start Date", 'today', format='MM/DD/YYYY'), datetime.datetime.min.time())
 test_end_date = datetime.datetime.combine(tab1_col2.date_input("End Date", 'today', format='MM/DD/YYYY'), datetime.datetime.min.time())
 uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
-tab1.write(uploaded_zip.name)
 #scada_tags = tab1.file_uploader("Upload SCADA tags", type='xlsx')
 #pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type='csv')
 
@@ -234,6 +233,8 @@ all_dfs = []
     
 # Gather all file paths
 all_files = []
+main_directory = uploaded_zip.name[:-4]
+st.write(main_directory)
 for folder in os.listdir(main_directory):
     folder_path = os.path.join(main_directory, folder)
     if os.path.isdir(folder_path):  # Only process folders
