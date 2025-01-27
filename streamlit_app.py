@@ -33,18 +33,17 @@ tab1, tab2, tab3 = st.tabs(['Data Upload', 'Inputs', 'Report'])
 
 scada_tags = 'SCADA Tags_Liberty.xlsx'
 pvsyst_test_model_path = 'PVSyst Model_Liberty.CSV'
-start_date = pd.to_datetime('2024-10-10')
-end_date = pd.to_datetime('2024-10-13')
 # Specify the main directory containing folders of daily CSV files
-main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", '2.Raw Data')
+#main_directory = tab1.text_input("Name of ZIP File (do not include .zip)", '2.Raw Data')
 #metadata_file_path = tab1.text_input("Metadata File Path", "SCADA Tags_Liberty.xlsx")  # Path to your metadata file
 project = tab1.selectbox(
     "Default project inputs:",
     ("Liberty", "Bayou Galion", "North Fork"))
-test_start_date = datetime.datetime.combine(tab1.date_input("Start Date", start_date, format='MM/DD/YYYY'), datetime.datetime.min.time())
-test_end_date = datetime.datetime.combine(tab1.date_input("End Date", end_date, format='MM/DD/YYYY'), datetime.datetime.min.time())
-
+tab1_col1, tab1_col2 = tab1.columns(2)
+test_start_date = datetime.datetime.combine(tab1_col1.date_input("Start Date", 'today', format='MM/DD/YYYY'), datetime.datetime.min.time())
+test_end_date = datetime.datetime.combine(tab1_col2.date_input("End Date", 'today', format='MM/DD/YYYY'), datetime.datetime.min.time())
 uploaded_zip = tab1.file_uploader("Upload raw data", type='zip')
+tab1.write(os.path.basename(uploaded_zip))
 #scada_tags = tab1.file_uploader("Upload SCADA tags", type='xlsx')
 #pvsyst_test_model_path = tab1.file_uploader("Upload PVSyst test model", type='csv')
 
@@ -214,19 +213,13 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
 if project is 'Liberty':
     scada_tags = 'SCADA Tags_Liberty.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_Liberty.CSV'
-    start_date = pd.to_datetime('2024-10-10')
-    end_date = pd.to_datetime('2024-10-13')
 elif project is 'Bayou Galion':
     scada_tags = 'SCADA Tags_BayouGalion.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_BayouGalion.CSV'
     meter_units = 'KW'
-    start_date = pd.to_datetime('2024-10-29')
-    end_date = pd.to_datetime('2024-11-06')
 elif project is 'North Fork':
     scada_tags = 'SCADA Tags_NorthFork.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_NorthFork1.CSV'
-    start_date = pd.to_datetime('2024-05-20')
-    end_date = pd.to_datetime('2024-05-28')
 
 if uploaded_zip is not None:
     with zipfile.ZipFile(uploaded_zip, "r") as z:
