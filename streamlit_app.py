@@ -648,11 +648,6 @@ tab3.plotly_chart(figs.create_fig9(merged_df, meter_data))
 tab3.plotly_chart(figs.create_fig10(merged_df, soiling_data))
 
 tab3.divider()
-tab3.header("Soiling")
-tab3.write("Average Soiling: " + str(avg_soiling) + "%")
-tab3.write(avg_soiling_by_day)
-tab3.write("")
-
 tab3.header("Number of Points by Filter")
 tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
 tab3_col1.dataframe(filter_results_df, height=563)
@@ -679,6 +674,12 @@ tab3_col3.write("Percent below RC after secondary filtering: " + str(secondary_b
 tab3.subheader("RC Threshold Loop")
 tab3.write(results_df)
 tab3.plotly_chart(fig5)
+
+tab3.divider()
+tab3.header("Soiling")
+tab3.write("Average Soiling: " + str(avg_soiling) + "%")
+tab3.write(avg_soiling_by_day)
+tab3.write("")
 
 #tab3.write(f"Number of events POA is greater then minimum irradiance: {count_avail_poa}")
 #tab3.write(avail_counts_df)
