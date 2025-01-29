@@ -163,18 +163,18 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
             'Secondary Above RC %': secondary_above_rc_perc,
             'Secondary Below RC %': secondary_below_rc_perc,
             'FPOA Coeff' : fpoa, 
-            'FPOA x FPOA Coeff' : fpoa_poa_poa, 
-            'FPOA x Temp Coeff' : fpoa_temp, 
-            'FPOA x Wind Coeff' : fpoa_wind,
-            'Measured Energy Monofacial': measured_energy_monofacial, 
-            'Measured Energy Bifacial' : measured_energy_bifacial, 
-            'Capacity Ratio Monofacial': Capcity_Ratio_Mono, 
-            'Capacity Ratio Bifacial': Capcity_Ratio_Bifacial 
+            'FPOAxFPOA Coeff' : fpoa_poa_poa, 
+            'FPOAxTemp Coeff' : fpoa_temp, 
+            'FPOAxWind Coeff' : fpoa_wind,
+            'Measured Energy Mono': measured_energy_monofacial, 
+            'Measured Energy Bi' : measured_energy_bifacial, 
+            'Capacity Ratio Mono': Capcity_Ratio_Mono, 
+            'Capacity Ratio Bi': Capcity_Ratio_Bifacial 
         }
 
 
         results.append(result)
-    results_df = pd.DataFrame(results)
+    results_df = pd.DataFrame(results).set_index('Threshold')
 
     #Showing the results here#####################################################################
     # Plot Total # points against Threshold using Plotly
