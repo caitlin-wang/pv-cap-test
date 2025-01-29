@@ -662,8 +662,8 @@ tab3_col3.write("Secondary filters per day:")
 tab3_col3.dataframe(count_secondary_filters_per_day, width=400)
 
 tab3.divider()
-tab3.header("Regression Coefficients")
 tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
+tab3_col1.header("Regression Coefficients")
 tab3_col1.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
     "Measured": [fpoa, fpoa_poa_poa, fpoa_temp, fpoa_wind],
     "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
