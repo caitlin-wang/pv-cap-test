@@ -662,6 +662,10 @@ tab3_col3.write("Secondary filters per day:")
 tab3_col3.dataframe(count_secondary_filters_per_day, width=400)
 
 tab3.divider()
+tab3.header("Regression Coefficients")
+tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
+    "Measured": [fpoa, fpoa_poa_poa, fpoa_temp, fpoa_wind],
+    "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
 tab3.header("RC Values")
 tab3_col1, tab3_col2 = tab3.columns(2)
 tab3_col1.write(rc_conditions_table)
@@ -671,11 +675,6 @@ tab3_col2.write("Percent below RC after secondary filtering: " + str(secondary_b
 tab3.subheader("RC Threshold Loop")
 tab3.write(results_df)
 tab3.plotly_chart(fig5)
-
-tab3.header("Regression Coefficients")
-tab3.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_poa", "fpoa_temp", "fpoa_wind"],
-    "Measured": [fpoa, fpoa_poa_poa, fpoa_temp, fpoa_wind],
-    "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
 
 #tab3.write(f"Number of events POA is greater then minimum irradiance: {count_avail_poa}")
 #tab3.write(avail_counts_df)
