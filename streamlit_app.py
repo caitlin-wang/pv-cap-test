@@ -209,14 +209,14 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     #print(results_day)
     return results_df, fig
 
-if project is 'Liberty':
+if project == 'Liberty':
     scada_tags = 'SCADA Tags_Liberty.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_Liberty.CSV'
-elif project is 'Bayou Galion':
+elif project == 'Bayou Galion':
     scada_tags = 'SCADA Tags_BayouGalion.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_BayouGalion.CSV'
     meter_units = 'KW'
-elif project is 'North Fork':
+elif project == 'North Fork':
     scada_tags = 'SCADA Tags_NorthFork.xlsx'
     pvsyst_test_model_path = 'PVSyst Model_NorthFork1.CSV'
 
