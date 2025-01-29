@@ -669,6 +669,8 @@ tab3_col1.dataframe(pd.DataFrame({"Regression Coefficients": ["fpoa", "fpoa_poa_
     "PVSyst": [pvsyst_fpoa, pvsyst_fpoa_poa_poa, pvsyst_fpoa_temp, pvsyst_fpoa_wind]}).set_index("Regression Coefficients"))
 tab3_col2.header("RC Values")
 tab3_col2.write(rc_conditions_table)
+tab3_col3.write("")
+tab3_col3.write("")
 tab3_col3.write("Percent above RC after secondary filtering: " + str(secondary_above_rc_perc) + "%")
 tab3_col3.write("Percent below RC after secondary filtering: " + str(secondary_below_rc_perc) + "%")
 
