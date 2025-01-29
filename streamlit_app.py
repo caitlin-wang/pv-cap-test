@@ -312,7 +312,7 @@ for col in soiling_data.columns:
     soiling_cols.append(col)
     soiling_avgs.append(((merged_df['average_fpoa'] > min_poa_soiling) * soiling_data[col]).mean())
 avg_soiling_by_day = pd.DataFrame({'MET Stations': soiling_cols,
-                                  'Average Soiling': soiling_avgs})
+                                  'Average Soiling (%)': soiling_avgs})
 #avg_soiling_by_day = ((merged_df['average_fpoa'] > min_poa_soiling)*soiling_data).mean()
 
 count_avail_poa = ((merged_df['average_fpoa'] >= availability_min_fpoa)*merged_df['t_stamp_check']).sum()
