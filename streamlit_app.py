@@ -311,7 +311,7 @@ soiling_avgs = []
 for col in soiling_data.columns:
     soiling_cols.append(col)
     soiling_avgs.append(((merged_df['average_fpoa'] > min_poa_soiling) * soiling_data[col]).mean())
-avg_soiling_by_day = pd.Dataframe({'MET Stations': soiling_cols,
+avg_soiling_by_day = pd.DataFrame({'MET Stations': soiling_cols,
                                   'Average Soiling': soiling_avgs})
 #avg_soiling_by_day = ((merged_df['average_fpoa'] > min_poa_soiling)*soiling_data).mean()
 
