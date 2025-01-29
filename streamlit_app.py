@@ -184,15 +184,15 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     subplot_titles=("Total Number of Points vs RC Threshold", "Passing % vs RC Threshold"))
 
     fig.add_trace(go.Scatter(
-        x=results_df['Threshold'],
+        x=results_df.index,
         y=results_df['Total # points'],
         mode='lines+markers'),
         #name='Total # points',
         row=1, col=1)
     
     fig.add_trace(go.Scatter(
-        x=results_df['Threshold'],
-        y=results_df['Capacity Ratio Bifacial'],
+        x=results_df.index,
+        y=results_df['Capacity Ratio Bi'],
         mode='lines+markers'),
         #name='Total # points',
         row=2, col=1
