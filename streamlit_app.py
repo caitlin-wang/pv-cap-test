@@ -17,7 +17,7 @@ warnings.filterwarnings("ignore")
 #import math
 #import plotly.io as pio
 #import dask.dataframe as dd
-import vars, funcs, filters, figs
+import funcs, filters, figs
 
 # Page Setup
 
@@ -306,9 +306,13 @@ merged_df['sp. yield']=(merged_df['average_meter_data']/system_size_dc)
 merged_df['average_soiling'] = merged_df.apply(lambda row: funcs.average_if(row, soiling_data), axis=1)
 
 avg_soiling=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['average_soiling'])).mean()
+soiling_cols = []
+soiling_avgs = []
 for col in soiling_data.columns:
-    st.write(col)
-    st.write(((merged_df['average_fpoa'] > min_poa_soiling)*soiling_data[col]).mean())
+    soiling_cols.append(col)
+    soiling_avgs.append(((merged_df['average_fpoa'] > min_poa_soiling) * soiling_data[col]).mean())
+avg_soiling_by_day = pd.Dataframe({'MET Stations': soiling_cols,
+                                  'Average Soiling': soiling_avgs})
 #avg_soiling_by_day = ((merged_df['average_fpoa'] > min_poa_soiling)*soiling_data).mean()
 
 count_avail_poa = ((merged_df['average_fpoa'] >= availability_min_fpoa)*merged_df['t_stamp_check']).sum()
