@@ -306,7 +306,7 @@ merged_df['sp. yield']=(merged_df['average_meter_data']/system_size_dc)
 merged_df['average_soiling'] = merged_df.apply(lambda row: funcs.average_if(row, soiling_data), axis=1)
 
 avg_soiling=((merged_df['average_fpoa']>min_poa_soiling)*(merged_df['average_soiling'])).mean()
-avg_soiling_by_day = soiling_data[merged_df['average_fpoa'] > min_poa_soiling].mean()
+avg_soiling_by_day = ((merged_df['average_fpoa'] > min_poa_soiling)*soiling_data).mean()
 
 count_avail_poa = ((merged_df['average_fpoa'] >= availability_min_fpoa)*merged_df['t_stamp_check']).sum()
 
