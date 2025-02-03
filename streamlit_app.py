@@ -192,7 +192,7 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
     
     fig.add_trace(go.Scatter(
         x=results_df.index,
-        y=results_df['Capacity Ratio Bi'],
+        y=results_df['Capacity Ratio Bifacial'],
         mode='lines+markers'),
         #name='Total # points',
         row=2, col=1
