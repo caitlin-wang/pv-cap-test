@@ -647,7 +647,7 @@ tab3.plotly_chart(figs.create_fig8(merged_df, fpoa_data))
 tab3.plotly_chart(figs.create_fig9(merged_df, meter_data))
 tab3.plotly_chart(figs.create_fig10(merged_df, soiling_data))
 
-tab3.markdown('##')
+tab3.markdown('######')
 tab3.header("Number of Points by Filter")
 tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
 tab3_col1.dataframe(filter_results_df, height=563)
