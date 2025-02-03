@@ -162,8 +162,8 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
             'Excluding Count': count_excluding,
             'Secondary Above RC %': secondary_above_rc_perc,
             'Secondary Below RC %': secondary_below_rc_perc,
-            'Capacity Ratio Mono': Capcity_Ratio_Mono, 
-            'Capacity Ratio Bi': Capcity_Ratio_Bifacial 
+            'Capacity Ratio Monofacial': Capcity_Ratio_Mono, 
+            'Capacity Ratio Bifacial': Capcity_Ratio_Bifacial 
         }
         # 'FPOA Coeff' : fpoa, 
         # 'FPOAxFPOA Coeff' : fpoa_poa_poa, 
