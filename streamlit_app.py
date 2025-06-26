@@ -155,8 +155,8 @@ def loop_rc_threshold(min_rc, max_rc, step_size, rc_poa_total, merged_df):
         pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path, encoding="latin-1", header=0)
         #pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path, encoding="latin-1", skiprows=12, header=0)
         midpoint_date = test_start_date + (test_end_date - test_start_date) / 2
-        pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
-        pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
+        pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-15)
+        pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=15)
         pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
         pvsyst_test_model_selected_columns_df = pd.DataFrame()
         for column in pvsyst_selected_column:
@@ -604,8 +604,8 @@ pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path, encoding="latin-1")
 #pvsyst_test_model_df = pd.read_csv(pvsyst_test_model_path,encoding="latin-1",skiprows=12, header=0)
 
 midpoint_date = test_start_date + (test_end_date - test_start_date) / 2
-pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-45)
-pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=45)
+pvsyst_model_start_date = midpoint_date + datetime.timedelta(days=-15)
+pvsyst_model_end_date = midpoint_date + datetime.timedelta(days=15)
 
 pvsyst_selected_column = ["date", "E_Grid", "GlobInc", "WindVel", "FShdBm", "T_Amb", "IL_Pmax", "GlobBak", "BackShd"]
 pvsyst_test_model_selected_columns_df = pd.DataFrame()
