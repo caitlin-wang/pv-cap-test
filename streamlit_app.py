@@ -470,7 +470,7 @@ for idx, (filter_name, filter_function, filter_args) in enumerate(filter_registr
         "Filter Description": filter_name,
         "Initial Points": initial_points,
         "Points Lost": lost_points,
-        "Remaining Points": remaining_points,
+        "Remaining": remaining_points,
         #"Filter Description": filter_name,
     })
     
@@ -732,7 +732,7 @@ tab3.markdown('######')
 tab3.markdown('######')
 tab3.header("Number of Points by Filter")
 tab3_col1, tab3_col2, tab3_col3 = tab3.columns(3)
-tab3_col1.dataframe(filter_results_df, height=563, width=500)
+tab3_col1.dataframe(filter_results_df, height=563)
 tab3_col2.write("Primary filters per day:")
 tab3_col2.dataframe(count_primary_filters_per_day, width=400)
 tab3_col3.write("Secondary filters per day:")
