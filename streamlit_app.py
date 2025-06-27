@@ -760,6 +760,8 @@ tab3.subheader("Soiling")
 tab3.write("Average Soiling: " + str(avg_soiling) + "%")
 tab3.write(avg_soiling_by_day)
 
+tab3.write(len(pvsyst_filtered_df))
+
 #tab3.write(f"Number of events POA is greater then minimum irradiance: {count_avail_poa}")
 #tab3.write(avail_counts_df)
 
